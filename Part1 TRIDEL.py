@@ -13,15 +13,15 @@ import numpy as np
 """on définit nos variables de départ"""
 
 #habitants par région:
-#on a les habitants totaux du canton de Vaud
-habTotal = 
+#on a le nombre total  d'habitants du canton de Vaud
+habTotal = 815300
 
 #on a le pourcentage que représentent les habitants
 #d'une région vis-à-vis du canton
-prophabLausanne =
-prophabNord =
-prophabOuest = 
-prophabLaCote =
+prophabLausanne = 0.25
+prophabOuest = 0.25
+prophabLaCote = 0.14
+prophabNord = 0.10
 
 #On calcule simplement la quantité d'habitants par région
 #grâce aux données précédentes
@@ -30,9 +30,9 @@ habNord = habTotal *
 habOuest =
 habLaCote = 
 
-#déchets par habitant par région : wastehabRegion
-wastehabLausanne = 
-wastehabNord =
-wastehabOuest =  
-wastehabLaCote = 
+#déchets par habitant par région [kg/année] : wastehabRegion
+wastehabLausanne = 185.1
+wastehabNord = 151.4
+wastehabOuest = 130.8
+wastehabLaCote = 147.3
 
