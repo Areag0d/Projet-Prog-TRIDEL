@@ -14,10 +14,12 @@ import numpy as np
 
 #habitants par région:
 #on a le nombre total  d'habitants du canton de Vaud
+
 habTotal = 815300
 
 #on a le pourcentage que représentent les habitants
 #d'une région vis-à-vis du canton
+
 prophabLausanne = 0.25
 prophabOuest = 0.25
 prophabLaCote = 0.14
@@ -27,12 +29,14 @@ prophabNord = 0.10
 #par TRIDEL par région grâce aux données précédentes
 #ATTENTION: on pondère la quantité d'habitants par un facteur 1/2
 #pour les habitants des régions Nord et La Côte
+
 habLausanne  = habTotal * prophabLausanne
 habOuest = habTotal * prophabOuest
 habLaCote = 0.5 * habTotal * prophabLaCote
 habNord = 0.5 * habTotal * prophabNord
 
 #déchets par habitant par région [kg/année] : wastehabRegion
+
 wastehabLausanne = 185.1
 wastehabNord = 151.4
 wastehabOuest = 130.8
