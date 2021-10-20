@@ -34,6 +34,9 @@ habLausanne  = habTotal * prophabLausanne
 habOuest = habTotal * prophabOuest
 habLaCote = habTotal * 0.5 * prophabLaCote
 habNord = habTotal * 0.5 * prophabNord
+habChargTot = habLausanne + habOuest + habLaCote + habNord
+#print(f"habitants total pris en charge par TRIDEL = {habChargTot}")
+habChargLst = np.array([habLausanne, habOuest, habLaCote, habNord])
 
 #déchets par habitant par région [kg/année] : wastehabRegion
 
@@ -41,7 +44,16 @@ wastehabLausanne = 185.1
 wastehabNord = 151.4
 wastehabOuest = 130.8
 wastehabLaCote = 147.3
+wasteHabLst = np.array([wastehabLausanne, wastehabNord, wastehabOuest,  wastehabLaCote])
 
 """On peut calculer la moyenne des déchets par habitants
-pondérée par le nombre d'habitants"""
+pondérée par le nombre d'habitants de chaque ville"""
 
+wastePondLst = []
+
+for i in range (len(habChargLst)):
+    wastePondLst.append(wasteHabLst[i] * (habChargLst[i] / habChargTot))
+
+wastePondLst = np.array([wastePondLst])
+wasteAvg = np.sum(wastePondLst)
+#print(wastePondLst) 
