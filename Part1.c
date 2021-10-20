@@ -3,3 +3,4 @@
 #include <math.h>
 #include <string.h>
 /* This is the prog project about an incineration station */
+printf("this is a test")
