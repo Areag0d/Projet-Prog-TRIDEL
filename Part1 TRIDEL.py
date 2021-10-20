@@ -32,8 +32,8 @@ prophabNord = 0.10
 
 habLausanne  = habTotal * prophabLausanne
 habOuest = habTotal * prophabOuest
-habLaCote = 0.5 * habTotal * prophabLaCote
-habNord = 0.5 * habTotal * prophabNord
+habLaCote = habTotal * 0.5 * prophabLaCote
+habNord = habTotal * 0.5 * prophabNord
 
 #déchets par habitant par région [kg/année] : wastehabRegion
 
@@ -44,3 +44,4 @@ wastehabLaCote = 147.3
 
 """On peut calculer la moyenne des déchets par habitants
 pondérée par le nombre d'habitants"""
+
