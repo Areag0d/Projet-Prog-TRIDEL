@@ -23,12 +23,14 @@ prophabNord =
 prophabOuest = 
 prophabLaCote =
 
-#On calcule simplement la quantité d'habitants par région
-#grâce aux données précédentes
+#On calcule simplement la quantité d'habitants pris en echarge
+#par TRIDEL par région grâce aux données précédentes
+#ATTENTION: on pondère la quantité d'habitants par un facteur 1/2
+#pour les habitants des régions Nord et La Côte
 habLausanne  = habTotal * prophabLausanne
-habNord = habTotal *
-habOuest =
-habLaCote = 
+habOuest = habTotal * prophabOuest
+habLaCote = 0.5 * habTotal * prophabLaCote
+habNord = 0.5 * habTotal * prophabNord
 
 #déchets par habitant par région : wastehabRegion
 wastehabLausanne = 
@@ -36,3 +38,5 @@ wastehabNord =
 wastehabOuest =  
 wastehabLaCote = 
 
+"""On peut calculer la moyenne des déchets par habitants
+pondérée par le nombre d'habitants"""
