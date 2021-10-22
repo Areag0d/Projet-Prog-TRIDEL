@@ -68,4 +68,3 @@ et generons aleatoirement une valeur des dechets pour chaque jour [kg/jour]"""
 sigmaWasteAvg = 0.2 * wasteAvg
 wasteYearLst = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
 wasteDayLst = wasteYearLst / 365
-print(wasteDayLst)
