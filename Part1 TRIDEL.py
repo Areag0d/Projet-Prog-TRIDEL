@@ -62,13 +62,31 @@ wasteAvg = np.sum(wastePondLst)
 #print(wastePondLst, wasteAvg) 
 
 """On calcule la quantite totale de dechets par jour,
-pour cela nous estimons un sigma de 25% a wasteAvg, 
+pour cela nous estimons un sigma de 20% a wasteAvg, 
 et generons aleatoirement(mais selon une distribution normale)
 une valeur des dechets pour chaque jour [kg/jour]"""
 
 sigmaWasteAvg = 0.2 * wasteAvg
-wasteYearLst = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
-wasteDayLst = wasteYearLst / 365
+wasteYearArray = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
+wasteDayArray = wasteYearArray / 365
 
-#print(wasteDayLst)
+#converting the array to a list
+
+wasteDayLst = []
+
+for i in wasteDayArray:
+    wasteDayLst.append([i])
+
+print(wasteDayLst)
+
+"""On crée maintenant fichier csv à partir du jeu de données que nous avons"""
+
+import csv
+
+with open("wasteDayLst.csv", "w", newline= "") as file:
+    writer = csv.writer(file)
+    writer.writerows(wasteDayLst)
+
+
+
 
