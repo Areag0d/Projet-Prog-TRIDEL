@@ -77,5 +77,4 @@ wasteDayLst = wasteYearLst / 365
 <<<<<<< HEAD
 =======
 #print(wasteDayLst)
->>>>>>> 3d8137c624cde2b579c6e086205d6f7a311e64ac
->>>>>>> 045d84dc0ab882bbeb8764b594e3f35137145196
+
