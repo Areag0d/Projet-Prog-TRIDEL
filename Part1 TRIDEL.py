@@ -45,3 +45,7 @@ wastehabLaCote = 147.3
 """On peut calculer la moyenne des déchets par habitants
 pondérée par le nombre d'habitants"""
 
+
+
+
+
