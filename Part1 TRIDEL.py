@@ -77,7 +77,7 @@ wasteDayLst = []
 for i in wasteDayArray:
     wasteDayLst.append([i])
 
-print(wasteDayLst)
+#print(wasteDayLst)
 
 """On crée maintenant fichier csv à partir du jeu de données que nous avons"""
 
