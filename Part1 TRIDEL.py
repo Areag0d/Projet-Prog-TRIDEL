@@ -52,12 +52,6 @@ wasteHabLst = np.array([wastehabLausanne, wastehabNord, wastehabOuest,  wastehab
 """On peut calculer la moyenne des déchets par habitants
 pondérée par le nombre d'habitants de chaque ville par annee [kg/annee]"""
 
-<<<<<<< HEAD
-
-
-
-
-=======
 wastePondLst = []
 
 for i in range (n):
@@ -69,12 +63,12 @@ wasteAvg = np.sum(wastePondLst)
 
 """On calcule la quantite totale de dechets par jour,
 pour cela nous estimons un sigma de 25% a wasteAvg, 
-et generons aleatoirement une valeur des dechets pour chaque jour [kg/jour]"""
+et generons aleatoirement(mais selon une distribution normale)
+une valeur des dechets pour chaque jour [kg/jour]"""
 
 sigmaWasteAvg = 0.2 * wasteAvg
 wasteYearLst = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
 wasteDayLst = wasteYearLst / 365
-<<<<<<< HEAD
-=======
+
 #print(wasteDayLst)
 
