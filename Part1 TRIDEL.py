@@ -10,6 +10,7 @@ Part 1 of TRIDEL modelisation: data generation
 import math
 import numpy as np
 import random as rdm
+import csv
 
 """on définit nos variables de départ"""
 
@@ -49,7 +50,7 @@ wastehabLaCote = 147.3
 wasteHabLst = np.array([wastehabLausanne, wastehabNord, wastehabOuest,  wastehabLaCote])
 
 """On peut calculer la moyenne des déchets par habitants
-pondérée par le nombre d'habitants de chaque ville par annee"""
+pondérée par le nombre d'habitants de chaque ville par annee [kg/annee]"""
 
 wastePondLst = []
 
@@ -62,9 +63,9 @@ wasteAvg = np.sum(wastePondLst)
 
 """On calcule la quantite totale de dechets par jour,
 pour cela nous estimons un sigma de 25% a wasteAvg, 
-et generons aleatoirement une valeur des dechets pour chaque jour"""
+et generons aleatoirement une valeur des dechets pour chaque jour [kg/jour]"""
 
 sigmaWasteAvg = 0.2 * wasteAvg
 wasteYearLst = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
 wasteDayLst = wasteYearLst / 365
-#print(wasteDayLst)
+print(wasteDayLst)
