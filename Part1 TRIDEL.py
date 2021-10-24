@@ -39,7 +39,6 @@ habNord = habTotal * 0.5 * prophabNord
 habChargTot = habLausanne + habOuest + habLaCote + habNord
 #print(f"habitants total pris en charge par TRIDEL = {habChargTot}")
 habChargLst = np.array([habLausanne, habOuest, habLaCote, habNord])
-n = len(habChargLst)
 
 #déchets par habitant par région [kg/année] : wastehabRegion
 
@@ -52,12 +51,7 @@ wasteHabLst = np.array([wastehabLausanne, wastehabNord, wastehabOuest,  wastehab
 """On peut calculer la moyenne des déchets par habitants
 pondérée par le nombre d'habitants de chaque ville par annee [kg/annee]"""
 
-wastePondLst = []
-
-for i in range (n):
-    wastePondLst.append(wasteHabLst[i] * (habChargLst[i] / habChargTot))
-
-wastePondLst = np.array([wastePondLst])
+wastePondLst = (wasteHabLst * (habChargLst / habChargTot))
 wasteAvg = np.sum(wastePondLst)
 #print(wastePondLst, wasteAvg) 
 
@@ -76,17 +70,11 @@ wasteDayLst = []
 
 for i in wasteDayArray:
     wasteDayLst.append([i])
-
+    
 #print(wasteDayLst)
 
 """On crée maintenant fichier csv à partir du jeu de données que nous avons"""
 
-import csv
-
 with open("wasteDayLst.csv", "w", newline= "") as file:
     writer = csv.writer(file)
     writer.writerows(wasteDayLst)
-
-
-
-
