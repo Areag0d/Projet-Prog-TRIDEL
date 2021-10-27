@@ -27,10 +27,10 @@ prophabOuest = 0.25
 prophabLaCote = 0.14
 prophabNord = 0.10
 
-#On calcule simplement la quantité d'habitants pris en echarge
-#par TRIDEL par région grâce aux données précédentes
-#ATTENTION: on pondère la quantité d'habitants par un facteur 1/2
-#pour les habitants des régions Nord et La Côte
+"""On calcule simplement la quantité d'habitants pris en echarge
+par TRIDEL par région grâce aux données précédentes
+ATTENTION: on pondère la quantité d'habitants par un facteur 1/2
+pour les habitants des régions Nord et La Côte"""
 
 habLausanne  = habTotal * prophabLausanne
 habOuest = habTotal * prophabOuest
