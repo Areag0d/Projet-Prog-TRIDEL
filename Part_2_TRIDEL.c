@@ -36,6 +36,9 @@ void read_csv(char * filename, double * table) {
   fclose(file);
 }
 
+
+
+
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
