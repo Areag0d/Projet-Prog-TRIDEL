@@ -54,8 +54,8 @@ double mMoistEtmInert(moistProportion, inertProportion){
   double inertProportion = ;
 
   for(int i = 0; i < 366; i++){
-  double * mMoist [i] = mTable  * moistProportion;
-  double * mInert [i] = mTable * inertProportion;
+  double * mMoist [i] = mTable[i]  * moistProportion;
+  double * mInert [i] = mTable[i] * inertProportion;
   }
   return mMoist, mInert;
 }
