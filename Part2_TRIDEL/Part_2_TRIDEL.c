@@ -98,12 +98,48 @@ int main(int argc, char * argv[]) {
  //Point 2 du rapport: Q comb//
 
   //creer une fonction qui calcule les differents Q//
-  double QcombT = Qcalculator( , 1.9 , , );
-  double QcombFusion = Qcalculator( , 1.9 , , );
-  double Qcomb = QcombT + QcombFusion;
-  double Qinert = Qcalculator( , , , );
-  double Qmoist = Qcalculator( , 4184, 100 , 20);
 
-  double Qair = Qcomb + Qinert + Qmoist;
+  //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
+  //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
+  //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm, we have the following equations:
+
+  double mcomb = mwaste * comb_proportion;
+  double CmC2H4x = 1.9;
+  double ΔTignition = 350 - 20;
+  double QcombT = mcomb * CmC2H4x * ΔTignition;
+ //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
+
+  double Cmfus = 230;
+  double QcombFusion = - Cmfus * mcomb;
+  double Qcomb = QcombT + QcombFusion;
+
+
+
+  double Qinert = - minert * Cminert * ΔTignition;
+
+
+  double mmoist = mwaste * moist_proportion;
+  double Cmwater = 4184;
+  double Qmoist = - mmoist * Cmwater * (100-20);
+
+  double Qwaste = Qcomb + Qinert + Qmoist;
+
+
+  double Cvap = 2257;
+  double Qeva = - Cvap * mmoist;
+
+  double Csteam = 2000;
+  double Qsteam = - Csteam * mmoist;
+
+  double Qair = Qwaste + Qeva + Qsteam;
+  //Qair is the total energy 
+  
+
+  
+  
+  
+  
+  
+  
   return 0;
 }
