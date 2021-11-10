@@ -63,9 +63,10 @@ double mInert(double inertproportion, double waste, double inertProportion){
   return mInert;
 
 }
-//This function takes in argument proportions of the compostion of the machefer
-//Machefer is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3.
-//these are massic proportions
+//This function takes in argument the massic proportions of the compostion of
+//machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3.
+//Knowing relative proportions of components of the inert part of waste,
+//we can calculate its specific heat, which is essential for downstream calculus
 double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3){
   //the given proportions do not sum up to 100%,
   //because we neglect trace elements
@@ -80,7 +81,67 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double compFe2O3 = propFe2O3 + (v * propFe2O3/accountedsum);
   //Except for SiO2, which is glass, all the other components are
   //in their oxidized form, which means there were burnt.
-  //therefore we calculate
+  //therefore to calculate their proportions in incoming waste,
+  //we need to calculate their prportions before oxidation (metallic)
+
+  //for one gram of Machefer
+  //Glass (SiO2)
+  double mSiO2 = compSiO2 * 1; //[g]
+
+  //Aluminium
+  double mAl2O3 = compAl2O3 * 1; //[g]
+  double MMAl2O3 = 102; //tabulated Molar mass [g/mol]
+  double nAl2O3 = mAl2O3 / MMAl2O3; //moles quantity
+  //we obtain the number of moles of mettalic Aluminium
+  //from the oxidation reaction 2Al + 3O --> Al2O3
+  double nAl = 2 * nAl2O3;
+  double MMAl = 27; //tabulated Molar mass [g/mol]
+  double mAl = nAl * MMAl;
+
+  //Iron
+  double mFe2O3 = compFe2O3 * 1; //[g]
+  double MMFe2O3 = 159.6; //tabulated Molar mass [g/mol]
+  double nFe2O3 = mFe2O3 / MMFe2O3; //moles quantity
+  //we obtain the number of moles of mettalic Iron
+  //from the oxidation reaction 2Fe + 3O --> Fe2O3
+  double nFe = 2 * nFe2O3;
+  double MMFe = 55.8; //tabulated Molar mass [g/mol]
+  double mFe = nFe * MMFe;
+
+  //Calcium
+  double mCaO = compCaO * 1; //[g]
+  double MMCaO = 56; //tabulated Molar mass [g/mol]
+  double nCaO = mCaO / MMCaO; //moles quantity
+  //we obtain the number of moles of mettalic Calcium
+  //from the oxidation reaction Ca + O --> CaO
+  double nCa = nCaO;
+  double MMCa = 40; //tabulated Molar mass [g/mol]
+  double mCa = nCa * MMCa;
+
+  //initial mass of mixed metals that produced Machefer during combustion
+  double mInitialMix = compSiO2 + mAl + mFe + mCa;
+
+  //now we can determine the relative proportions of metals
+  //in the inert part of waste by normalizing each value
+  double inipropSiO2 = mSiO2 / mInitialMix;
+  double inipropAl = mAl / mInitialMix;
+  double inipropFe = mFe / mInitialMix;
+  double inipropCa = mCa / mInitialMix;
+
+  //Now that we have relative proportions, we can finally approximate
+  //its specific heat value by calculating the average of each heat capacity
+  //weighted by its importance (proportion) in the inert part
+
+  //we give specific heat values (tabulated) of each component [J/(g*K)]:
+  double CmSiO2 = 0.84;
+  double CmAl = 0.894;
+  double CmFe = 0.412;
+  double CmCa = 0.63;
+
+  //weighted average
+  double CmInert = (CmSiO2 * inipropSiO2) + (CmAl * inipropAl) + (CmFe * inipropFe) + (CmCa * inipropCa);
+
+  return CmInert;
 }
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
