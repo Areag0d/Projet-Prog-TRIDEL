@@ -42,22 +42,24 @@ double Qcalculator(double m, double Cm, double T2, double T1) {
 
   double deltaT = T2 - T1;
   double Q = m * Cm * deltaT;
+
   return Q;
 }
 
 //Creer une fonction qui calcule m moist et m inert pour chaque jour//
 
-double mMoistEtmInert(moistProportion, inertProportion){
+double mMoist(double moistProportion, double waste, double inertProportion){
 
-  double * mTable = wasteDayTable;
-  double moistProportion = 0.15;
-  double inertProportion = ;
+  double mMoist = waste * moistProportion;
+  return mMoist;
 
-  for(int i = 0; i < 366; i++){
-  double * mMoist [i] = mTable[i]  * moistProportion;
-  double * mInert [i] = mTable[i] * inertProportion;
-  }
-  return mMoist, mInert;
+}
+
+double mInert(double inertproportion, double waste, double inertProportion){
+
+  double mInert  = waste * inertProportion;
+  return mInert;
+
 }
 //This function takes in argument proportions of the compostion of the machefer
 //Machefer is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3.
