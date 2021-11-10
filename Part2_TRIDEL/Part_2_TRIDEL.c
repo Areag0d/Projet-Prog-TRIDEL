@@ -59,7 +59,23 @@ double mMoistEtmInert(moistProportion, inertProportion){
   }
   return mMoist, mInert;
 }
-
+//This function takes in argument proportions of the compostion of the machefer
+//Machefer is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3.
+//these are massic proportions
+double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3){
+  //the given proportions do not sum up to 100%,
+  //because we neglect trace elements
+  //therefore, we proceed to a conditionnal compensation
+  double accountedsum = propSiO2 + propAl2O3 + propCaO + propF;
+  double v = 100 - accountedsum;
+  //the Verbesserung is given to the measures proportionally to their weight
+  //their weight is defined by their relative importance
+  double compSiO2 = propSiO2 + (v * propSiO2/accountedsum);
+  double compAl2O3 = propAl2O3 + (v * propAl2O3/accountedsum);
+  double compCaO = propCaO + (v * propCaO/accountedsum);
+  double compFe2O3 = propFe2O3 + (v * propFe2O3/accountedsum);
+  
+}
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
@@ -81,7 +97,7 @@ int main(int argc, char * argv[]) {
   double Qcomb = QcombT + QcombFusion;
   double Qinert = Qcalculator( , , , );
   double Qmoist = Qcalculator( , 4184, 100 , 20);
-  
+
   double Qair = Qcomb + Qinert + Qmoist;
   return 0;
 }
