@@ -46,7 +46,7 @@ double Qcalculator(double m, double Cm, double T2, double T1) {
   return Q;
 }
 
-//Creer une fonction qui calcule m moist et m inert pour chaque jour//
+//Calculating the mass of the moisture in the waste//
 
 double mMoist(double moistProportion, double waste, double inertProportion){
 
@@ -54,6 +54,8 @@ double mMoist(double moistProportion, double waste, double inertProportion){
   return mMoist;
 
 }
+
+//Calculating the mass of the inert part of the waste //
 
 double mInert(double inertproportion, double waste, double inertProportion){
 
