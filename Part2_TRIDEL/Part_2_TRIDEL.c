@@ -70,7 +70,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //the given proportions do not sum up to 100%,
   //because we neglect trace elements
   //therefore, we proceed to a conditionnal compensation
-  double accountedsum = propSiO2 + propAl2O3 + propCaO + propF;
+  double accountedsum = propSiO2 + propAl2O3 + propCaO + propFe2O3;
   double v = 100 - accountedsum;
   //the Verbesserung is given to the measures proportionally to their weight
   //their weight is defined by their relative importance
@@ -78,7 +78,9 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double compAl2O3 = propAl2O3 + (v * propAl2O3/accountedsum);
   double compCaO = propCaO + (v * propCaO/accountedsum);
   double compFe2O3 = propFe2O3 + (v * propFe2O3/accountedsum);
-  
+  //Except for SiO2, which is glass, all the other components are
+  //in their oxidized form, which means there were burnt.
+  //therefore we calculate
 }
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
