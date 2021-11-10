@@ -36,8 +36,29 @@ void read_csv(char * filename, double * table) {
   fclose(file);
 }
 
+//Le point 2: creer une fonction qui calcule les differents Q//
 
+double Qcalculator(double m, double Cm, double T2, double T1) {
 
+  double deltaT = T2 - T1;
+  double Q = m * Cm * deltaT;
+  return Q;
+}
+
+//Creer une fonction qui calcule m moist et m inert pour chaque jour//
+
+double mMoistEtmInert(moistProportion, inertProportion){
+
+  double * mTable = wasteDayTable;
+  double moistProportion = 0.15;
+  double inertProportion = ;
+
+  for(int i = 0; i < 366; i++){
+  double * mMoist [i] = mTable  * moistProportion;
+  double * mInert [i] = mTable * inertProportion;
+  }
+  return mMoist, mInert;
+}
 
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
@@ -51,5 +72,16 @@ int main(int argc, char * argv[]) {
   for (int i = 0; i < 365; i++) {
     printf("line %d : %0.2f kg\n", i, wasteDayTable[i]);
   }*/
+
+ //Point 2 du rapport: Q comb//
+
+  //creer une fonction qui calcule les differents Q//
+  double QcombT = Qcalculator( , 1.9 , , );
+  double QcombFusion = Qcalculator( , 1.9 , , );
+  double Qcomb = QcombT + QcombFusion;
+  double Qinert = Qcalculator( , , , );
+  double Qmoist = Qcalculator( , 4184, 100 , 20);
+  
+  double Qair = Qcomb + Qinert + Qmoist;
   return 0;
 }
