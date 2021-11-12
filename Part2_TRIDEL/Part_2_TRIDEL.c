@@ -87,10 +87,10 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double v = 100 - accountedsum;
   //the Verbesserung is given to the measures proportionally to their weight
   //their weight is defined by their relative importance
-  double compSiO2 = propSiO2 + (v * propSiO2/accountedsum);
+  /*double compSiO2 = propSiO2 + (v * propSiO2/accountedsum);
   double compAl2O3 = propAl2O3 + (v * propAl2O3/accountedsum);
   double compCaO = propCaO + (v * propCaO/accountedsum);
-  double compFe2O3 = propFe2O3 + (v * propFe2O3/accountedsum);
+  double compFe2O3 = propFe2O3 + (v * propFe2O3/accountedsum);*/
   //Except for SiO2, which is glass, all the other components are
   //in their oxidized form, which means there were burnt.
   //therefore to calculate their proportions in incoming waste,
