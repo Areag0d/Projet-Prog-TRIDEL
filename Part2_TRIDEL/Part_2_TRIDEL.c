@@ -196,29 +196,29 @@ int main(int argc, char * argv[]) {
  //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
 
   double Cmfus = 230;
-  double QcombFusion = - Cmfus * mcomb;
+  double QcombFusion =  Cmfus * mcomb;
   double Qcomb = QcombT + QcombFusion;
 
 
 
-  double Qinert = - minert * Cminert * ΔTignition;
+  double Qinert =  minert * Cminert * ΔTignition;
 
 
   double mmoist = mwaste * moist_proportion;
   double Cmwater = 4184;
-  double Qmoist = - mmoist * Cmwater * (100-20);
+  double Qmoist =  mmoist * Cmwater * (100-20);
 
   double Qwaste = Qcomb + Qinert + Qmoist;
 
 
   double Cvap = 2257;
-  double Qeva = - Cvap * mmoist;
+  double Qeva =  Cvap * mmoist;
 
   double Csteam = 2000;
-  double Qsteam = - Csteam * mmoist;
+  double Qsteam = Csteam * mmoist;
 
   double Qair = Qwaste + Qeva + Qsteam;
-  //Qair is the total energy
+  //Qair is the total energy input used to start the combustion reaction
 
 
 
