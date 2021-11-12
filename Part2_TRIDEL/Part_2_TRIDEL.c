@@ -64,23 +64,19 @@ double mInert(double inertproportion, double waste, double inertProportion){
 
 }
 
-
-//This function calculates the mass of each pure metal in the Machefer.
-//Indeed, after the combustion, the metallic elements in the waste are oxydised,
-//So from the tabulated oxydised proportions of metals in Machefer, we can calculate the pure mass:
-//We first calculate the number of moles of the oxydised metals,
-// multiply it by the stoichiometric coefficient of the metal in the combustion reaction 
-//to get the number of moles of the pure metal originally present
-// in the waste before the combustion reaction
-//and then we multiply it by the Molecular weight of each metal to get it's mass.
+//This function calculates the relative mass of an element before a reaction,
+//in our case, an oxidation reaction (which occurs during the burning of waste)
+//So from the tabulated proportions of oxidized metals in Machefer, we
+//calculate the relative proportions of pure metals in the inert part of waste.
 double OriginalMass(double massOxy, double MWOxy, double MWPure, double StoichCoefficient){
+    //we first calculate the final number of moles
     double nbMolOxy  = massOxy / MWOxy;
+    //we calculate the inital number of moles, according to the oxidation reaction
     double nbMolPure = StoichCoefficient  * nbMolOxy;
+    //we get the initial mass of metal, before oxidation
     double PureMass = nbMolPure * MWPure;
     return PureMass;
 }
-
-
 
 //This function takes in argument the massic proportions of the compostion of
 //machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3 and trace elements.
