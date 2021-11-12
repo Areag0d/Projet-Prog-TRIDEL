@@ -83,7 +83,7 @@ double OriginalMass(double massOxy, double MWOxy, double MWPure, double StoichCo
 //Knowing relative proportions of components of the inert part of waste,
 //we can calculate its specific heat, which is essential for downstream calculus
 double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3){
-  //we group all trac elements under an only category: others.
+  //we group all trace elements under an only category: others.
   //we obtain the proportion of trace elements with a substraction
   double propOthers = 100 - (propSiO2 + propAl2O3 + propCaO + propFe2O3);
 
@@ -108,13 +108,13 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //Iron
   //Tabulated Molar Weight of Fe2O3 = 159.6 [g/mol],  Fe = 55.8 [g/mol]
   //Oxidation reaction: 2Fe + 3O --> Fe2O3
-  double mFe2O3 = compFe2O3 * 1; //[g]
+  double mFe2O3 = propFe2O3 * 1; //[g]
   double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2);
 
   //Calcium
   //Tabulated Molar Weight of CaO = 56 [g/mol], Ca = 40 [g/mol]
   //Oxidation reaction: Ca + O --> CaO
-  double mCaO = compCaO * 1; //[g]
+  double mCaO = propCaO * 1; //[g]
   double mCa = OriginalMass(mCaO, 56, 40, 1);
 
   //initial mass of mixed metals that produced Machefer during combustion
