@@ -76,32 +76,28 @@ double OriginalMass(double massOxy, double MWOxy, double MWPure, double StoichCo
 
 
 //This function takes in argument the massic proportions of the compostion of
-//machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3.
+//machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3 and trace elements.
 //Knowing relative proportions of components of the inert part of waste,
 //we can calculate its specific heat, which is essential for downstream calculus
 double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3){
-  //the given proportions do not sum up to 100%,
-  //because we neglect trace elements
-  //therefore, we proceed to a conditionnal compensation
-  double accountedsum = propSiO2 + propAl2O3 + propCaO + propFe2O3;
-  double v = 100 - accountedsum;
-  //the Verbesserung is given to the measures proportionally to their weight
-  //their weight is defined by their relative importance
-  /*double compSiO2 = propSiO2 + (v * propSiO2/accountedsum);
-  double compAl2O3 = propAl2O3 + (v * propAl2O3/accountedsum);
-  double compCaO = propCaO + (v * propCaO/accountedsum);
-  double compFe2O3 = propFe2O3 + (v * propFe2O3/accountedsum);*/
-  //Except for SiO2, which is glass, all the other components are
-  //in their oxidized form, which means there were burnt.
+  //we group all trac elements under an only category: others.
+  //we obtain the proportion of trace elements with a substraction
+  double propOthers = 100 - (propSiO2 + propAl2O3 + propCaO + propFe2O3);
+
+  //Except for SiO2, which is glass, and trace elements, all the other components
+  //are in their oxidized form, which means there were burnt.
   //therefore to calculate their proportions in incoming waste,
-  //we need to calculate their prportions before oxidation (metallic)
+  //we need to calculate their proportions before oxidation (metallic)
 
   //for one gram of Machefer
   //Glass (SiO2)
-  double mSiO2 = compSiO2 * 1; //[g]
+  double mSiO2 = propSiO2 * 1; //[g]
+
+  //Others
+  double mOthers = propOthers + 1; //[g]
 
   //Aluminium
-  double mAl2O3 = compAl2O3 * 1; //[g]
+  double mAl2O3 = propAl2O3 * 1; //[g]
   double MMAl2O3 = 102; //tabulated Molar mass [g/mol]
   double nAl2O3 = mAl2O3 / MMAl2O3; //moles quantity
   //we obtain the number of moles of mettalic Aluminium
@@ -203,14 +199,14 @@ int main(int argc, char * argv[]) {
   double Qsteam = - Csteam * mmoist;
 
   double Qair = Qwaste + Qeva + Qsteam;
-  //Qair is the total energy 
-  
+  //Qair is the total energy
 
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   return 0;
 }
