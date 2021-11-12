@@ -167,18 +167,18 @@ int main(int argc, char * argv[]) {
   //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm, we have the following equations:
 
   double mcomb = mwaste * comb_proportion;
-  double CmC2H4x = 1.9;
-  double ΔTignition = 350 - 20;
-  double QcombT = mcomb * CmC2H4x * ΔTignition;
+  double CmC2H4x = 2.25; //[KJ/Kg/K]
+  double deltaTignition = 350 - 20;
+  double QcombT = mcomb * CmC2H4x * deltaTignition;
  //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
 
-  double Cmfus = 230;
+  double Cmfus = 230;//[KJ/Kg]
   double QcombFusion =  Cmfus * mcomb;
   double Qcomb = QcombT + QcombFusion;
 
-
-
-  double Qinert =  minert * Cminert * ΔTignition;
+  
+  //double Cminert = Cm_Inert(); a ecrire apres
+  double Qinert =  minert * Cminert * deltaTignition;
 
 
   double mmoist = mwaste * moist_proportion;
