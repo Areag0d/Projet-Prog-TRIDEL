@@ -136,7 +136,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //Calcium
 
   double mCaO = compCaO * 1; //[g]
-  double mCa = OriginalMass(mAl2O3,)
+  double mCa = OriginalMass(mCaO, 56, 40, 1);
 
   /*
   double mCaO = compCaO * 1; //[g]
