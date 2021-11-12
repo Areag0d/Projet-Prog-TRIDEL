@@ -104,16 +104,25 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double mOthers = propOthers + 1; //[g]
 
   //Aluminium
+
   double mAl2O3 = propAl2O3 * 1; //[g]
+  double mAl = OriginalMass(mAl2O3, 102, 27, 2);
+  /*
   double MMAl2O3 = 102; //tabulated Molar mass [g/mol]
   double nAl2O3 = mAl2O3 / MMAl2O3; //moles quantity
   //we obtain the number of moles of mettalic Aluminium
   //from the oxidation reaction 2Al + 3O --> Al2O3
   double nAl = 2 * nAl2O3;
-  double MMAl = 27; //tabulated Molar mass [g/mol]
+  double MWAl = 27; //tabulated Molar mass [g/mol]
   double mAl = nAl * MMAl;
+  */
 
   //Iron
+
+  double mFe2O3 = compFe2O3 * 1; //[g]
+  double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2); 
+
+  /*
   double mFe2O3 = compFe2O3 * 1; //[g]
   double MMFe2O3 = 159.6; //tabulated Molar mass [g/mol]
   double nFe2O3 = mFe2O3 / MMFe2O3; //moles quantity
@@ -122,8 +131,14 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double nFe = 2 * nFe2O3;
   double MMFe = 55.8; //tabulated Molar mass [g/mol]
   double mFe = nFe * MMFe;
+  */
 
   //Calcium
+
+  double mCaO = compCaO * 1; //[g]
+  double mCa = OriginalMass(mAl2O3,)
+
+  /*
   double mCaO = compCaO * 1; //[g]
   double MMCaO = 56; //tabulated Molar mass [g/mol]
   double nCaO = mCaO / MMCaO; //moles quantity
@@ -132,6 +147,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double nCa = nCaO;
   double MMCa = 40; //tabulated Molar mass [g/mol]
   double mCa = nCa * MMCa;
+  */
 
   //initial mass of mixed metals that produced Machefer during combustion
   double mInitialMix = compSiO2 + mAl + mFe + mCa;
