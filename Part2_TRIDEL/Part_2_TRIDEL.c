@@ -63,6 +63,18 @@ double mInert(double inertproportion, double waste, double inertProportion){
   return mInert;
 
 }
+
+
+//combining the two fuctions in one while explaining what is happening is a lot easier than the function we have..
+double OriginalMass(double massOxy, double MWOxy, double MWPure, double StoichCoefficient){
+    double nbMolOxy  = massOxy / MWOxy;
+    double nbMolPure = StoichCoefficient  * nbMolOxy;
+    double PureMass = nbMolPure * MWPure;
+    return PureMass;
+}
+
+
+
 //This function takes in argument the massic proportions of the compostion of
 //machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3.
 //Knowing relative proportions of components of the inert part of waste,
@@ -157,8 +169,6 @@ int main(int argc, char * argv[]) {
   }*/
 
  //Point 2 du rapport: Q comb//
-
-  //creer une fonction qui calcule les differents Q//
 
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
   //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
