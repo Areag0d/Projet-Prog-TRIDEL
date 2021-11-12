@@ -137,9 +137,10 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double CmAl = 0.894;
   double CmFe = 0.412;
   double CmCa = 0.63;
+  double CmOthers = (0.710 + 0.48) / 2; //The average between the specific heat for Carbon, and that for Chlorine
 
   //weighted average
-  double CmInert = (CmSiO2 * inipropSiO2) + (CmAl * inipropAl) + (CmFe * inipropFe) + (CmCa * inipropCa);
+  double CmInert = (CmSiO2 * inipropSiO2) + (CmAl * inipropAl) + (CmFe * inipropFe) + (CmCa * inipropCa) + (CmOthers * inipropOthers);
 
   return CmInert;
 }
