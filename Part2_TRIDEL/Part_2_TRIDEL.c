@@ -100,53 +100,25 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double mOthers = propOthers + 1; //[g]
 
   //Aluminium
-
+  //Tabulated Molar Weight of Al2O3 = 102 [g/mol], Al = 27 [g/mol]
+  //Oxidation reaction: 2Al + 3O --> Al2O3
   double mAl2O3 = propAl2O3 * 1; //[g]
   double mAl = OriginalMass(mAl2O3, 102, 27, 2);
-  /*
-  double MMAl2O3 = 102; //tabulated Molar mass [g/mol]
-  double nAl2O3 = mAl2O3 / MMAl2O3; //moles quantity
-  //we obtain the number of moles of mettalic Aluminium
-  //from the oxidation reaction 2Al + 3O --> Al2O3
-  double nAl = 2 * nAl2O3;
-  double MWAl = 27; //tabulated Molar mass [g/mol]
-  double mAl = nAl * MMAl;
-  */
 
   //Iron
-
+  //Tabulated Molar Weight of Fe2O3 = 159.6 [g/mol],  Fe = 55.8 [g/mol]
+  //Oxidation reaction: 2Fe + 3O --> Fe2O3
   double mFe2O3 = compFe2O3 * 1; //[g]
-  double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2); 
-
-  /*
-  double mFe2O3 = compFe2O3 * 1; //[g]
-  double MMFe2O3 = 159.6; //tabulated Molar mass [g/mol]
-  double nFe2O3 = mFe2O3 / MMFe2O3; //moles quantity
-  //we obtain the number of moles of mettalic Iron
-  //from the oxidation reaction 2Fe + 3O --> Fe2O3
-  double nFe = 2 * nFe2O3;
-  double MMFe = 55.8; //tabulated Molar mass [g/mol]
-  double mFe = nFe * MMFe;
-  */
+  double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2);
 
   //Calcium
-
+  //Tabulated Molar Weight of CaO = 56 [g/mol], Ca = 40 [g/mol]
+  //Oxidation reaction: Ca + O --> CaO
   double mCaO = compCaO * 1; //[g]
   double mCa = OriginalMass(mCaO, 56, 40, 1);
 
-  /*
-  double mCaO = compCaO * 1; //[g]
-  double MMCaO = 56; //tabulated Molar mass [g/mol]
-  double nCaO = mCaO / MMCaO; //moles quantity
-  //we obtain the number of moles of mettalic Calcium
-  //from the oxidation reaction Ca + O --> CaO
-  double nCa = nCaO;
-  double MMCa = 40; //tabulated Molar mass [g/mol]
-  double mCa = nCa * MMCa;
-  */
-
   //initial mass of mixed metals that produced Machefer during combustion
-  double mInitialMix = compSiO2 + mAl + mFe + mCa;
+  double mInitialMix = mSiO2 + mAl + mFe + mCa + mOthers;
 
   //now we can determine the relative proportions of metals
   //in the inert part of waste by normalizing each value
@@ -154,6 +126,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   double inipropAl = mAl / mInitialMix;
   double inipropFe = mFe / mInitialMix;
   double inipropCa = mCa / mInitialMix;
+  double inipropOthers = mOthers / mInitialMix;
 
   //Now that we have relative proportions, we can finally approximate
   //its specific heat value by calculating the average of each heat capacity
