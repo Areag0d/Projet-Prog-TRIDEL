@@ -144,7 +144,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //weighted average
   double CmInert = (CmSiO2 * inipropSiO2) + (CmAl * inipropAl) + (CmFe * inipropFe);
   CmInert += (CmCa * inipropCa) + (CmC * inipropC) + (CmCl * inipropCl);
-
+ //given in [J/(g*K)]
   return CmInert;
 }
 int main(int argc, char * argv[]) {
