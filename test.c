@@ -60,10 +60,8 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
 
   
   double relmassTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
-  for (int i = 0; i < 6; i ++){
-    relmassTable[i] /= mInitialMix;
-  }
-
+  for (int i = 0; i < 6; i ++) relmassTable[i] /= mInitialMix;
+  
   //Now that we have relative proportions, we can finally approximate
   //its specific heat value by calculating the average of each heat capacity
   //weighted by its importance (proportion) in the inert part
@@ -75,9 +73,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //weighted average given in [J/(g*K)]
 
   double CmInert = 0;
-  for (int i = 0; i < 6; i ++){
-    CmInert += relmassTable[i] * CmTable[i];
-  }
+  for (int i = 0; i < 6; i ++) CmInert += relmassTable[i] * CmTable[i];
 
   return CmInert;
 }
