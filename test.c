@@ -72,7 +72,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
 
   double  CmTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
 
-  //weighted average
+  //weighted average given in [J/(g*K)]
 
   double CmInert = 0;
   for (int i = 0; i < 6; i ++){
