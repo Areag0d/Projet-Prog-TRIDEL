@@ -58,16 +58,17 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //now we can determine the relative proportions of metals
   //in the inert part of waste by normalizing each value
 
-  double massTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
+  
+  double relmassTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
   for (int i = 0; i < 6; i ++){
-    massTable[i] = massTable[i] / mInitialMix;
+    relmassTable[i] /= mInitialMix;
   }
 
   //Now that we have relative proportions, we can finally approximate
   //its specific heat value by calculating the average of each heat capacity
   //weighted by its importance (proportion) in the inert part
 
-  //we give specific heat values (tabulated) of each component [J/(g*K)]:
+  //we give specific heat values (tabulated) of each component: SiO2, Al, Fe, Ca, C, Cl respectively [J/(g*K)]:
 
   double  CmTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
 
@@ -75,7 +76,7 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
 
   double CmInert = 0;
   for (int i = 0; i < 6; i ++){
-    CmInert += massTable[i] * CmTable[i];
+    CmInert += relmassTable[i] * CmTable[i];
   }
 
   return CmInert;
