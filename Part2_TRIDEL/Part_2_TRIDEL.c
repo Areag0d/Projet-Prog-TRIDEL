@@ -130,9 +130,9 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
   return Qh;
 }
 
-double Qdrying(double mComb, double mMoist, double mInert){
+double Qignition(double mComb, double mMoist, double mInert){
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
-  //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
+  //Qignition = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
   //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
   //we have the following equations:
 
@@ -164,8 +164,9 @@ double Qdrying(double mComb, double mMoist, double mInert){
   double Csteam = 2000;
   double Qsteam = Csteam * mMoist;
 
-  double Qair = Qwaste + Qeva + Qsteam;
+  double Qignition = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
+  return Qignition
 }
 
 
@@ -195,8 +196,15 @@ int main(int argc, char * argv[]) {
     mMoistTable[i] = moistProportion * wasteDayTable[i];
     mInertTable[i] = inertProportion * wasteDayTable[i];
   }
-  //We need to write the code to be iterable
-  //Qdrying(double mComb, double mMoist, double mInert)
+
+  //Part 2: energy required to heat up waste to ignition
+
+  double QignitionTable[365];
+
+  for (int i = 0; i < 365; i++){
+    QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i])
+  }
+
   //Part 3: heat released by waste combustion
 
   //We assume the combustible part of waste is Polyethylene (PE)
@@ -212,7 +220,7 @@ int main(int argc, char * argv[]) {
   double mH2O = OriginalMass(massC2H4, 28, 18, 2);
 
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  double CmH2O = 1.996; //[kJ/kgK ], tabulated 
+  double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
   double dT = Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
 
