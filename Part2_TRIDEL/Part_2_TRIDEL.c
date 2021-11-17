@@ -38,9 +38,9 @@ void read_csv(char * filename, double * table) {
 
 //Le point 2: creer une fonction qui calcule les differents Q//
 
-double Qcalculator(double m, double Cm, double T2, double T1) {
+double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
 
-  double deltaT = T2 - T1;
+  double deltaT = Tfinal -Tinitial;
   double Q = m * Cm * deltaT;
 
   return Q;
