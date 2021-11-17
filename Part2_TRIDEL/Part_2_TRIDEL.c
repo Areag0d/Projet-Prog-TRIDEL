@@ -130,9 +130,9 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
   return Qh;
 }
 
-double Qdrying(double mComb, double mMoist, double mInert){
+double Qignition(double mComb, double mMoist, double mInert){
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
-  //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
+  //Qignition = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
   //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
   //we have the following equations:
 
@@ -164,8 +164,9 @@ double Qdrying(double mComb, double mMoist, double mInert){
   double Csteam = 2000;
   double Qsteam = Csteam * mMoist;
 
-  double Qair = Qwaste + Qeva + Qsteam;
+  double Qignition = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
+  return Qignition
 }
 
 
@@ -198,10 +199,10 @@ int main(int argc, char * argv[]) {
 
   //Part 2: energy required to heat up waste to ignition
 
-  double QdryingTable[365];
+  double QignitionTable[365];
 
   for (int i = 0; i < 365; i++){
-    QdryingTable[i] = Qdrying(mCombTable[i], mMoistTable[i], mInertTable[i])
+    QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i])
   }
 
   //Part 3: heat released by waste combustion
