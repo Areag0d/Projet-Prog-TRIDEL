@@ -58,10 +58,10 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //now we can determine the relative proportions of metals
   //in the inert part of waste by normalizing each value
 
-  
+
   double relmassTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
   for (int i = 0; i < 6; i ++) relmassTable[i] /= mInitialMix;
-  
+
   //Now that we have relative proportions, we can finally approximate
   //its specific heat value by calculating the average of each heat capacity
   //weighted by its importance (proportion) in the inert part
@@ -78,17 +78,45 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   return CmInert;
 }
 
+void read_csv(char * filename, double * table) {
+  FILE * file = fopen(filename, "r");
+
+  // verification
+  if (file == NULL) {
+    printf("Data file does not exist (or isn't accessible).\n");
+    }
+
+  // read line by line
+  char line[100]; // maybe we need to make it bigger if we add columns
+  int i = 0;
+  while(fgets(line, 100, file) != NULL) {
+    double value = atof(line);
+    table[i] = value;
+    i += 1;
+    //printf("value : %0.2f", table [i]);
+    }
+  fclose(file);
+}
+
 int main(int argc, char * argv[]) {
 
-double a = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
+/*double a = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
 
-printf("%f", a);
+printf("%f", a);*/
+
+double wasteDayTable[365];
+
+// calling the csv reader to produce wasteDayTable
+read_csv("wasteDayLst.csv", wasteDayTable);
+// printing the table to visualise
+for (int i = 0; i < 365; i++) {
+  printf("line %d : %0.2f kg\n", i + 1, wasteDayTable[i]);
+}
 
   return 0;
 }
 
 //Need to either compute propSiO2 and the others
 //either just make the masses directly saving 6 lines of code
-//From line 123 to 142 a lot better given the addition of the 
+//From line 123 to 142 a lot better given the addition of the
 //Carbon and Chlorine to the system..
-

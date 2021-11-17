@@ -123,10 +123,10 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   //now we can determine the relative proportions of metals
   //in the inert part of waste by normalizing each value
 
-  
+
   double relmassTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
   for (int i = 0; i < 6; i ++) relmassTable[i] /= mInitialMix;
-  
+
   //Now that we have relative proportions, we can finally approximate
   //its specific heat value by calculating the average of each heat capacity
   //weighted by its importance (proportion) in the inert part
@@ -147,7 +147,7 @@ int main(int argc, char * argv[]) {
   //importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
   //int years = 1;
-  double wasteDayTable[365 + 1];
+  double wasteDayTable[365];
 
   // calling the csv reader to produce wasteDayTable
   read_csv("wasteDayLst.csv", wasteDayTable);
@@ -155,8 +155,19 @@ int main(int argc, char * argv[]) {
   for (int i = 0; i < 365; i++) {
     printf("line %d : %0.2f kg\n", i, wasteDayTable[i]);
   }*/
+  //Part 1: waste composition
 
- //Point 2: energy required to heat up waste to ignition
+  //From the table of waste mass per day we have imported from CSV,
+  //we calculate the proportions of combustible, moisture and inert parts
+  //Hence we create a table for each component as it is the most convenient
+  double combPropTable[365];
+  double moistPropTable[365];
+  double inertPropTable[365];
+
+
+
+
+  //Part 2: energy required to heat up waste to ignition
 
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
   //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
