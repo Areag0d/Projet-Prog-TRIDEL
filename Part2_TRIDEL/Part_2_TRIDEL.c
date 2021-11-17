@@ -36,34 +36,6 @@ void read_csv(char * filename, double * table) {
   fclose(file);
 }
 
-//Le point 2: creer une fonction qui calcule les differents Q//
-
-double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
-
-  double deltaT = Tfinal -Tinitial;
-  double Q = m * Cm * deltaT;
-
-  return Q;
-}
-
-//Calculating the mass of the moisture in the waste//
-
-double mMoist(double moistProportion, double waste, double inertProportion){
-
-  double mMoist = waste * moistProportion;
-  return mMoist;
-
-}
-
-//Calculating the mass of the inert part of the waste //
-
-double mInert(double inertproportion, double waste, double inertProportion){
-
-  double mInert  = waste * inertProportion;
-  return mInert;
-
-}
-
 //This function calculates the relative mass of an element before a reaction,
 //in our case, an oxidation reaction (which occurs during the burning of waste)
 //So from the tabulated proportions of oxidized metals in Machefer, we
@@ -145,6 +117,55 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   return CmInert;
 }
 
+//Part 2: energy required to heat up waste to ignition
+
+double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
+
+  double deltaT = Tfinal -Tinitial;
+  double Qh = m * Cm * deltaT;
+
+  return Qh;
+}
+
+double Qdrying(double mComb, double mMoist, double mInert){
+  //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
+  //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
+  //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
+  //we have the following equations:
+
+  //Qcomb
+  double CmC2H4x = 2.25; //[KJ/Kg/K]
+  double deltaTignition = 350 - 20;
+  double QcombT = mComb * CmC2H4x * deltaTignition;
+ //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
+
+  double Cmfus = 230;//[KJ/Kg]
+  double QcombFusion =  Cmfus * mComb;
+  double Qcomb = QcombT + QcombFusion;
+
+  //Qinert
+  double Cminert = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
+  double Qinert =  mInert * Cminert * deltaTignition;
+
+  //Qmoist
+  double Cmwater = 4184;
+  double Qmoist =  mMoist * Cmwater * (100-20);
+
+  double Qwaste = Qcomb + Qinert + Qmoist;
+
+  //Qeva
+  double Cvap = 2257;
+  double Qeva =  Cvap * mMoist;
+
+  //Qsteam
+  double Csteam = 2000;
+  double Qsteam = Csteam * mMoist;
+
+  double Qair = Qwaste + Qeva + Qsteam;
+  //Qair is the total energy input used to start the combustion reaction
+}
+
+
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
@@ -162,63 +183,24 @@ int main(int argc, char * argv[]) {
   //From the table of waste mass per day we have imported from CSV,
   //we calculate the proportions of combustible, moisture and inert parts
   //Hence we create a table for each component as it is the most convenient
-  double combPropTable[365];
-  double moistPropTable[365];
-  double inertPropTable[365];
+  double mCombTable[365];
+  double mMoistTable[365];
+  double mInertTable[365];
 
-
-
-
-  //Part 2: energy required to heat up waste to ignition
-
-  //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
-  //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
-  //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
-  //we have the following equations:
-
-  //Qcomb
-  double mcomb = mWaste * comb_proportion;
-  double CmC2H4x = 2.25; //[KJ/Kg/K]
-  double deltaTignition = 350 - 20;
-  double QcombT = mcomb * CmC2H4x * deltaTignition;
- //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
-
-  double Cmfus = 230;//[KJ/Kg]
-  double QcombFusion =  Cmfus * mcomb;
-  double Qcomb = QcombT + QcombFusion;
-
-  //Qinert
-  double Cminert = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
-  double Qinert =  minert * Cminert * deltaTignition;
-
-  //Qmoist
-  double mmoist = mwaste * moist_proportion;
-  double Cmwater = 4184;
-  double Qmoist =  mmoist * Cmwater * (100-20);
-
-  double Qwaste = Qcomb + Qinert + Qmoist;
-
-  //Qeva
-  double Cvap = 2257;
-  double Qeva =  Cvap * mmoist;
-
-  //Qsteam
-  double Csteam = 2000;
-  double Qsteam = Csteam * mmoist;
-
-  double Qair = Qwaste + Qeva + Qsteam;
-  //Qair is the total energy input used to start the combustion reaction
-
-
-
-
+  for (int i = 0; i < 365; i++) {
+    mCombTable[i] = combProportion * wasteDayTable[i];
+    mMoistTable[i] = moistProportion * wasteDayTable[i];
+    mInertTable[i] = inertProportion * wasteDayTable[i];
+  }
+  //We need to write the code to be iterable
+  //Qdrying(double mComb, double mMoist, double mInert)
   //Part 3: heat released by waste combustion
 
   //We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47; //[kJ/g] tabulated value
 
   double Qheat = 0;
-  double Qair = 0; 
+  double Qair = 0;
   double Qnet = Qheat - Qair;
 
   //double combWasteMass corresponds to massC2H4 just below //apporte par Mica plus haut
