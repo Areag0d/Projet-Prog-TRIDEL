@@ -39,13 +39,14 @@ void read_csv(char * filename, double * table) {
 //This function calculates the relative mass of an element before a reaction,
 //in our case, an oxidation reaction (which occurs during the burning of waste)
 //So from the tabulated proportions of oxidized metals in Machefer, we
-//calculate the relative proportions of pure metals in the inert part of waste.
+//calculate the relative proportions of pure metals in the inert part of waste,
+//we proceed similarly in the calculation of CO2 and H2O produced from burning polyethylene in the waste.
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient){
     //we first calculate the final number of moles
     double nbMol1  = mass1 / MW1;
     //we calculate the inital number of moles, according to the oxidation reaction
     double nbMol2 = StoichCoefficient  * nbMol1;
-    //we get the initial mass of metal, before oxidation
+    //we get the initial mass of metal/gas, before oxidation/combustion
     double Mass2 = nbMol2 * MW2;
     return Mass2;
 }
