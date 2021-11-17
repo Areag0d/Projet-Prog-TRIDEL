@@ -221,7 +221,7 @@ int main(int argc, char * argv[]) {
   //Part 2: energy required to heat up waste to ignition
 
   double QignitionTable[365];
-  
+
   for (int i = 0; i < 365; i++){
     QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i])
   }
@@ -231,9 +231,27 @@ int main(int argc, char * argv[]) {
   //Tfinalcalculator implementation with iteration
 
   //Part 4 : energy harvesting
+
+  //We're calculating the energy flow according to this equation:
+  // Qflow = k * A * LMTD
+  //Where Q = Energy flow, k = heat transfer coefficient,
+  //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
+
   //heat transfer coefficient
 
-  double Tlog = T
+  //LMTD: Logarithmic Mean Temperature Difference
+  double ThotIn = Tfinal;
+  double ThotOut = 0.7 * ThotIn;
+  double TcoldIn = 100;
+  double TcoldOut = 570;
+
+  double dA = ThotIn - TcoldIn;
+  double dB = ThotOut - TcoldOut;
+
+  double LMTD = (dA - dB)/ log(dA / dB);
+
+  //Energy flow
+  double Qflow = k * A * LMTD;
 
 
   return 0;
