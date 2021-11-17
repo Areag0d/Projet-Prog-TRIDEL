@@ -202,14 +202,14 @@ int main(int argc, char * argv[]) {
   //We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47; //[kJ/g] tabulated value
 
-  double Qheat = 0;
-  double Qair = 0;
-  double Qnet = Qheat - Qair;
+  double Qheat = QcC2H4x * massC2H4;
+  double Qignition = 
+  double Qnet = Qheat - Qignition;
 
   //double combWasteMass corresponds to massC2H4 just below //apporte par Mica plus haut
 
   double mCO2 = OriginalMass(massC2H4, 28, 44, 2);
-  double mH2O = OriginalVolume(massC2H4, 28, 18, 2);
+  double mH2O = OriginalMass(massC2H4, 28, 18, 2);
 
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   double CmH2O = 1.996; //[kJ/kgK ], tabulated 
