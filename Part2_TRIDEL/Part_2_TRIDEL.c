@@ -195,8 +195,15 @@ int main(int argc, char * argv[]) {
     mMoistTable[i] = moistProportion * wasteDayTable[i];
     mInertTable[i] = inertProportion * wasteDayTable[i];
   }
-  //We need to write the code to be iterable
-  //Qdrying(double mComb, double mMoist, double mInert)
+
+  //Part 2: energy required to heat up waste to ignition
+
+  double QdryingTable[365];
+
+  for (int i = 0; i < 365; i++){
+    QdryingTable[i] = Qdrying(mCombTable[i], mMoistTable[i], mInertTable[i])
+  }
+
   //Part 3: heat released by waste combustion
 
   //We assume the combustible part of waste is Polyethylene (PE)
@@ -212,7 +219,7 @@ int main(int argc, char * argv[]) {
   double mH2O = OriginalVolume(massC2H4, 28, 18, 2);
 
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  double CmH2O = 1.996; //[kJ/kgK ], tabulated 
+  double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
   double dT = Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
 
