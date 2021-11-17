@@ -249,6 +249,7 @@ int main(int argc, char * argv[]) {
   double dB = ThotOut - TcoldOut;
 
   double LMTD = (dA - dB)/ log(dA / dB);
+  double A = 11 490; //[m^2]
 
   //Energy flow
   double Qflow = k * A * LMTD;
