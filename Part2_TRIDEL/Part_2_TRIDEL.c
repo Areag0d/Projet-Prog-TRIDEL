@@ -228,24 +228,9 @@ int main(int argc, char * argv[]) {
 
   //Part 3: heat released by waste combustion
 
-  //We assume the combustible part of waste is Polyethylene (PE)
-  double QcC2H4x = 47; //[kJ/g] tabulated value
-  double Qheat = QcC2H4x * massC2H4;
-  double Qignition =
-  double Qnet = Qheat - Qignition;
+  //Tfinalcalculator implementation with iteration
 
-  //double combWasteMass corresponds to massC2H4 just below //apporte par Mica plus haut
-
-  double mCO2 = OriginalMass(massC2H4, 28, 44, 2);
-  double mH2O = OriginalMass(massC2H4, 28, 18, 2);
-
-  double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  double CmH2O = 1.996; //[kJ/kgK ], tabulated
-
-  double dT = Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
-
-
-  //Part ... : energy harvesting
+  //Part 4 : energy harvesting
   //heat transfer coefficient
 
 
