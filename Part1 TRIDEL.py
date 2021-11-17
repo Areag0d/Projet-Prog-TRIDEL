@@ -53,10 +53,10 @@ pondérée par le nombre d'habitants de chaque ville par annee [kg/annee]"""
 
 wastePondLst = (wasteHabLst * (habChargLst / habChargTot))
 wasteAvg = np.sum(wastePondLst)
-#print(wastePondLst, wasteAvg) 
+#print(wastePondLst, wasteAvg)
 
 """On calcule la quantite totale de dechets par jour,
-pour cela nous estimons un sigma de 0.2% a wasteAvg, 
+pour cela nous estimons un sigma de 0.2% a wasteAvg,
 et generons aleatoirement(mais selon une distribution normale)
 une valeur des dechets pour chaque jour [kg/jour]"""
 
@@ -72,8 +72,8 @@ for i in wasteDayArray:
     wasteDayLst.append([i])
 
 
-    
-    
+
+
 #print(wasteDayLst)
 
 """On crée maintenant fichier csv à partir du jeu de données que nous avons"""

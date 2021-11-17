@@ -152,6 +152,9 @@ double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe
   return CmInert;
 }
 
+double Qdrying(){
+  
+}
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
@@ -169,11 +172,16 @@ int main(int argc, char * argv[]) {
   //From the table of waste mass per day we have imported from CSV,
   //we calculate the proportions of combustible, moisture and inert parts
   //Hence we create a table for each component as it is the most convenient
-  double combPropTable[365];
-  double moistPropTable[365];
-  double inertPropTable[365];
+  double mCombTable[365];
+  double mMoistTable[365];
+  double mInertTable[365];
 
-
+  for (int i = 0; i < 365; i++) {
+    mCombTable[i] = combProportion * wasteDayTable[i];
+    mMoistTable[i] = moistProportion * wasteDayTable[i];
+    mInertTable[i] = inertProportion * wasteDayTable[i];
+  }
+  //We need to write the code to be iterable
 
 
   //Part 2: energy required to heat up waste to ignition
@@ -225,7 +233,7 @@ int main(int argc, char * argv[]) {
   double QcC2H4x = 47; //[kJ/g] tabulated value
 
   double Qheat = 0;
-  double Qair = 0; 
+  double Qair = 0;
   double Qnet = Qheat - Qair;
 
   //double combWasteMass //apporte par Mica plus haut
@@ -235,6 +243,6 @@ int main(int argc, char * argv[]) {
 
   double CvCO2 = 28.96;	//[J/mol K]
   double CvH2O = 1.996; //[kJ/kgK ]
-  
+
   return 0;
 }
