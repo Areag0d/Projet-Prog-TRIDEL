@@ -78,6 +78,15 @@ double OriginalMass(double massOxy, double MWOxy, double MWPure, double StoichCo
     return PureMass;
 }
 
+
+double OriginalVolume(double massC2H4, double MWC2H4, double StoichCoefficient, double Tignition){
+    double nC2H4 = massC2H4 / MWC2H4;
+    double nGas = nC2H4 * StoichCoefficient;
+    double P = 1;
+    double vGas = (nGas * 8.314 * Tignition) / P; //P = 1 atm; //R = 8.314 [J/mol/K]
+    return vGas;
+}
+
 //This function takes in argument the massic proportions of the compostion of
 //machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
 //Knowing relative proportions of components of the inert part of waste,
@@ -164,7 +173,7 @@ int main(int argc, char * argv[]) {
   //we have the following equations:
 
   //Qcomb
-  double mcomb = mwaste * comb_proportion;
+  double mcomb = mWaste * comb_proportion;
   double CmC2H4x = 2.25; //[KJ/Kg/K]
   double deltaTignition = 350 - 20;
   double QcombT = mcomb * CmC2H4x * deltaTignition;
@@ -201,8 +210,11 @@ int main(int argc, char * argv[]) {
   //We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47; //[kJ/g] tabulated value
 
+  double Qheat = 0;
+  double Qair = 0; 
+  double Qnet = Qheat - Qair;
 
-
+  //double combWasteMass //apporte par Mica plus haut
 
 
   return 0;

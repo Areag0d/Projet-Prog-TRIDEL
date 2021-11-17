@@ -56,13 +56,13 @@ wasteAvg = np.sum(wastePondLst)
 #print(wastePondLst, wasteAvg) 
 
 """On calcule la quantite totale de dechets par jour,
-pour cela nous estimons un sigma de 20% a wasteAvg, 
+pour cela nous estimons un sigma de 0.2% a wasteAvg, 
 et generons aleatoirement(mais selon une distribution normale)
 une valeur des dechets pour chaque jour [kg/jour]"""
 
-sigmaWasteAvg = 0.2 * wasteAvg
+sigmaWasteAvg = 0.002 * wasteAvg
 wasteYearArray = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
-wasteDayArray = wasteYearArray / 365
+wasteDayArray = (wasteYearArray / 365) * habChargTot
 
 #converting the array to a list
 
@@ -70,6 +70,8 @@ wasteDayLst = []
 
 for i in wasteDayArray:
     wasteDayLst.append([i])
+
+
     
     
 #print(wasteDayLst)
