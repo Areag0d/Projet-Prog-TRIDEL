@@ -196,10 +196,10 @@ int main(int argc, char * argv[]) {
   double Qair = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
 
-  //Part 3: energy produced by waste
+  //Part 3: heat released by waste combustion
 
   //We assume the combustible part of waste is Polyethylene (PE)
-
+  double QcC2H4x = 47; //[kJ/g] tabulated value
 
 
 
