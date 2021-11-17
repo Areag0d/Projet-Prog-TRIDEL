@@ -173,8 +173,8 @@ double Qignition(double mComb, double mMoist, double mInert){
 double TfinalCalculator(double mC2H4){
 
   //We assume the combustible part of waste is Polyethylene (PE)
-  double QcC2H4x = 47; //[kJ/g] tabulated value
-  double Qheat = QcC2H4x * mC2H4;
+  double QcC2H4x = 47000; //[kJ/kg] tabulated value
+  double Qheat = QcC2H4x * mC2H4; //[KJ]
 
   double Qignit = Qignition(mC2H4, mMoist, mInert);//mComb = mC2H4
   double Qnet = Qheat - Qignit;
