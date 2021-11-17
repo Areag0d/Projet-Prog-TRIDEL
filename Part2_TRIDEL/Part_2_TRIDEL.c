@@ -166,13 +166,12 @@ double Qignition(double mComb, double mMoist, double mInert){
 
   double Qignition = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
-  return Qignition;
+  return Qignition
 }
-
 //Part 3: heat released by waste combustion
 
 double TfinalCalculator(double mC2H4){
-  
+
   //We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47; //[kJ/g] tabulated value
   double Qheat = QcC2H4x * mC2H4;
@@ -226,6 +225,30 @@ int main(int argc, char * argv[]) {
   for (int i = 0; i < 365; i++){
     QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i])
   }
+
+  //Part 3: heat released by waste combustion
+
+  //We assume the combustible part of waste is Polyethylene (PE)
+  double QcC2H4x = 47; //[kJ/g] tabulated value
+  double Qheat = QcC2H4x * massC2H4;
+  double Qignition =
+  double Qnet = Qheat - Qignition;
+
+  //double combWasteMass corresponds to massC2H4 just below //apporte par Mica plus haut
+
+  double mCO2 = OriginalMass(massC2H4, 28, 44, 2);
+  double mH2O = OriginalMass(massC2H4, 28, 18, 2);
+
+  double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
+  double CmH2O = 1.996; //[kJ/kgK ], tabulated
+
+  double dT = Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
+
+
+  //Part ... : energy harvesting
+  //heat transfer coefficient
+
+
 
   return 0;
 }
