@@ -179,7 +179,7 @@ int main(int argc, char * argv[]) {
   double Qcomb = QcombT + QcombFusion;
 
   //Qinert
-  //double Cminert = Cm_Inert(); a ecrire apres
+  double Cminert = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
   double Qinert =  minert * Cminert * deltaTignition;
 
   //Qmoist
@@ -201,6 +201,8 @@ int main(int argc, char * argv[]) {
   //Qair is the total energy input used to start the combustion reaction
 
   //Part 3: energy produced by waste
+
+  //We assume the combustible part of waste is Polyethylene (PE)
 
 
 
