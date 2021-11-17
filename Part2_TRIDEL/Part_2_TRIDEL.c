@@ -160,12 +160,14 @@ int main(int argc, char * argv[]) {
     printf("line %d : %0.2f kg\n", i, wasteDayTable[i]);
   }*/
 
- //Point 2 du rapport: Q comb//
+ //Point 2: energy required to heat up waste to ignition
 
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
   //Qair = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
-  //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm, we have the following equations:
+  //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
+  //we have the following equations:
 
+  //Qcomb
   double mcomb = mwaste * comb_proportion;
   double CmC2H4x = 2.25; //[KJ/Kg/K]
   double deltaTignition = 350 - 20;
@@ -176,28 +178,29 @@ int main(int argc, char * argv[]) {
   double QcombFusion =  Cmfus * mcomb;
   double Qcomb = QcombT + QcombFusion;
 
-  
+  //Qinert
   //double Cminert = Cm_Inert(); a ecrire apres
   double Qinert =  minert * Cminert * deltaTignition;
 
-
+  //Qmoist
   double mmoist = mwaste * moist_proportion;
   double Cmwater = 4184;
   double Qmoist =  mmoist * Cmwater * (100-20);
 
   double Qwaste = Qcomb + Qinert + Qmoist;
 
-
+  //Qeva
   double Cvap = 2257;
   double Qeva =  Cvap * mmoist;
 
+  //Qsteam
   double Csteam = 2000;
   double Qsteam = Csteam * mmoist;
 
   double Qair = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
 
-
+  //Part 3: energy produced by waste
 
 
 
