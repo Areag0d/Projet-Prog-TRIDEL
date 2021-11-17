@@ -151,17 +151,17 @@ double Qignition(double mComb, double mMoist, double mInert){
   double Qinert =  mInert * Cminert * deltaTignition;
 
   //Qmoist
-  double Cmwater = 4184;
+  double Cmwater = 4.184; //[kJ/kg]
   double Qmoist =  mMoist * Cmwater * (100-20);
 
   double Qwaste = Qcomb + Qinert + Qmoist;
 
   //Qeva
-  double Cvap = 2257;
+  double Cvap = 2257; //[kJ/kg]
   double Qeva =  Cvap * mMoist;
 
   //Qsteam
-  double Csteam = 2000;
+  double Csteam = 2; //[kJ/kg]
   double Qsteam = Csteam * mMoist;
 
   double Qignition = Qwaste + Qeva + Qsteam;
