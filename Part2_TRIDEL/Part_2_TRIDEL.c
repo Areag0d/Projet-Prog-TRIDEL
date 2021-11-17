@@ -231,8 +231,27 @@ int main(int argc, char * argv[]) {
   //Tfinalcalculator implementation with iteration
 
   //Part 4 : energy harvesting
+
+  //We're calculating the energy flow according to this equation:
+  // Qflow = k * A * LMTD
+  //Where Q = Energy flow, k = heat transfer coefficient,
+  //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
+
   //heat transfer coefficient
 
+  //LMTD: Logarithmic Mean Temperature Difference
+  double ThotIn = Tfinal;
+  double ThotOut = 0.7 * ThotIn;
+  double TcoldIn = 100;
+  double TcoldOut = 570;
+
+  double dA = ThotIn - TcoldIn;
+  double dB = ThotOut - TcoldOut;
+
+  double LMTD = (dA - dB)/ log(dA / dB);
+
+  //Energy flow
+  double Qflow = k * A * LMTD;
 
 
   return 0;
