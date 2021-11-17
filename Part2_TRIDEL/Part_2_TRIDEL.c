@@ -238,7 +238,9 @@ int main(int argc, char * argv[]) {
   //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
 
   //heat transfer coefficient
-
+  //plate thickness
+  //double thicc =
+  double k = 1/ ((1/alphaHot) + (delta/lambda) + (1/alphaCold));
   //LMTD: Logarithmic Mean Temperature Difference
   double ThotIn = Tfinal;
   double ThotOut = 0.7 * ThotIn;
