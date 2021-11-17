@@ -221,7 +221,7 @@ int main(int argc, char * argv[]) {
   //Part 2: energy required to heat up waste to ignition
 
   double QignitionTable[365];
-
+  
   for (int i = 0; i < 365; i++){
     QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i])
   }
@@ -233,6 +233,7 @@ int main(int argc, char * argv[]) {
   //Part 4 : energy harvesting
   //heat transfer coefficient
 
+  double Tlog = T
 
 
   return 0;
