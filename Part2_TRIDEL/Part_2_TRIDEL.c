@@ -40,24 +40,31 @@ void read_csv(char * filename, double * table) {
 //in our case, an oxidation reaction (which occurs during the burning of waste)
 //So from the tabulated proportions of oxidized metals in Machefer, we
 //calculate the relative proportions of pure metals in the inert part of waste.
-double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient){
+double OriginalMass(double massOxy, double MWOxy, double MWPure, double StoichCoefficient){
     //we first calculate the final number of moles
-    double nbMol1  = mass1 / MW1;
+    double nbMolOxy  = massOxy / MWOxy;
     //we calculate the inital number of moles, according to the oxidation reaction
-    double nbMol2 = StoichCoefficient  * nbMol1;
+    double nbMolPure = StoichCoefficient  * nbMolOxy;
     //we get the initial mass of metal, before oxidation
-    double Mass2 = nbMol2 * MW2;
-    return Mass2;
+    double PureMass = nbMolPure * MWPure;
+    return PureMass;
 }
 
 
+double OriginalVolume(double massC2H4, double MWC2H4, double StoichCoefficient, double Tignition){
+    double nC2H4 = massC2H4 / MWC2H4;
+    double nGas = nC2H4 * StoichCoefficient;
+    double P = 1;
+    double vGas = (nGas * 8.314 * Tignition) / P; //P = 1 atm; //R = 8.314 [J/mol/K]
+    return vGas;
+}
 
 //This function takes in argument the massic proportions of the compostion of
 //machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
 //Knowing relative proportions of components of the inert part of waste,
 //we can calculate its specific heat, which is essential for downstream calculus
 //We neglect the contribution of trace elements, as their proportion is insignificant.
-double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
+double Cm_Inert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
   //Except for SiO2, which is glass, Carbon and Chlorine, all the other components
   //are in their oxidized form, which means there were burnt.
   //therefore to calculate their proportions in incoming waste,
@@ -123,7 +130,6 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
 
   double deltaT = Tfinal -Tinitial;
   double Qh = m * Cm * deltaT;
-
   return Qh;
 }
 
@@ -135,9 +141,8 @@ double Qdrying(double mComb, double mMoist, double mInert){
 
   //Qcomb
   double CmC2H4x = 2.25; //[KJ/Kg/K]
-  double deltaTignition = 350 - 20;
-  double QcombT = mComb * CmC2H4x * deltaTignition;
- //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
+  // Tfinal = Tignition = 350 °C, Tinitial = 20°C
+  double QcombT = Qcalculator(mComb, CmC2H4x, 350, 20);
 
   double Cmfus = 230;//[KJ/Kg]
   double QcombFusion =  Cmfus * mComb;
@@ -145,11 +150,13 @@ double Qdrying(double mComb, double mMoist, double mInert){
 
   //Qinert
   double Cminert = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
-  double Qinert =  mInert * Cminert * deltaTignition;
+  // Tfinal = Tignition = 350 °C, Tinitial = 20°C
+  double Qinert = Qcalculator(mInert, Cminert, 350, 20);
 
   //Qmoist
   double Cmwater = 4184;
-  double Qmoist =  mMoist * Cmwater * (100-20);
+  // Tfinal = Tboiling = 100 °C, Tinitial = 20°C
+  double Qmoist = Qcalculator(mMoist, Cmwater, 100, 20);
 
   double Qwaste = Qcomb + Qinert + Qmoist;
 
@@ -203,15 +210,13 @@ int main(int argc, char * argv[]) {
   double Qair = 0;
   double Qnet = Qheat - Qair;
 
-  //double combWasteMass corresponds to massC2H4 just below //apporte par Mica plus haut
+  //double combWasteMass //apporte par Mica plus haut
 
-  double mCO2 = OriginalMass(massC2H4, 28, 44, 2);
-  double mH2O = OriginalVolume(massC2H4, 28, 18, 2);
+  double VCO2 = OriginalVolume(massC2H4, 28, 2, Tignition);
+  double VH2O = OriginalVolume(massC2H4, 28, 2, Tignition);
 
-  double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  double CmH2O = 1.996; //[kJ/kgK ], tabulated 
-
-  double dT = Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
+  double CvCO2 = 28.96;	//[J/mol K]
+  double CvH2O = 1.996; //[kJ/kgK ]
 
   return 0;
 }
