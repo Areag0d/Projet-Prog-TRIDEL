@@ -12,7 +12,6 @@ that way we obtain an energy (and maybe other products) output*/
 //read a line of only one column (must modify for several lines)
 // use strchr for several columns: check GPS exercise for template
 void read_line(char * line) {
-
 }
 */
 //read whole file
