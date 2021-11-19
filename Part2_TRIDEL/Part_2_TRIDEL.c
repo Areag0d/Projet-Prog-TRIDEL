@@ -272,6 +272,9 @@ int main(int argc, char * argv[]) {
 
   //Part 4 : energy harvesting
 
+  //We implement a function to model the heat exchanger: the energy flow
+  //going from the combustion flue gas and the water(steam) that will
+  //generate energy afterwards
 
   return 0;
 }
