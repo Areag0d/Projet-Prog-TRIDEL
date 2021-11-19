@@ -35,6 +35,7 @@ void read_csv(char * filename, double * table) {
   fclose(file);
 }
 
+
 //This function calculates the relative mass of an element before a reaction,
 //in our case, an oxidation reaction (which occurs during the burning of waste)
 //So from the tabulated proportions of oxidized metals in Machefer, we
