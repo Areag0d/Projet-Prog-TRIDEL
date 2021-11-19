@@ -165,7 +165,7 @@ double Qignition(double mComb, double mMoist, double mInert){
 
   double Qignition = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
-  return Qignition
+  return Qignition;
 }
 //Part 3: heat released by waste combustion
 
@@ -222,7 +222,7 @@ int main(int argc, char * argv[]) {
   double QignitionTable[365];
 
   for (int i = 0; i < 365; i++){
-    QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i])
+    QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i]);
   }
 
   //Part 3: heat released by waste combustion
@@ -250,7 +250,7 @@ int main(int argc, char * argv[]) {
   double dB = ThotOut - TcoldOut;
 
   double LMTD = (dA - dB)/ log(dA / dB);
-  double A = 11 490; //[m^2]
+  double A = 11490; //[m^2]
 
   //Energy flow
   double Qflow = k * A * LMTD;
