@@ -171,7 +171,7 @@ double Qignition(double mComb, double mMoist, double mInert){
 }
 //Part 3: heat released by waste combustion
 
-double TfinalCalculator(double mC2H4){
+double TfinalCalculator(double mC2H4, double mMoist, double mInert){
 
   //We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; //[kJ/kg] tabulated value
