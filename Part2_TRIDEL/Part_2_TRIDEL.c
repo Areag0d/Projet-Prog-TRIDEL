@@ -131,6 +131,10 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
 
   return Qh;
 }
+ //we define Tignition for PE to be 350°C
+ //we define it as a global variable, because we use it in different
+ //functions multiple times
+double Tignition = 350;
 
 double Qignition(double mC2H4, double mMoist, double mInert){
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
@@ -140,7 +144,6 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
   //Qcomb
   double CmC2H4x = 2.25; //[KJ/Kg/K]
-  double Tignition = 350; // for PE
   double Tinitial = 20; // T°C at which waste enters combustion room
   double QcombT = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
  //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
@@ -191,13 +194,12 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
-  double Tignition = 350; //Tignition for PE
   double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
 
   return Tfinal;
 }
 
- 
+
 //Part 4 : energy harvesting
 
 //We're calculating the energy flow according to this equation:
@@ -205,7 +207,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   //Where Q = Energy flow, k = heat transfer coefficient,
   //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
 
-double QdotCalculator(mC2H4, mMoist, mInert){
+double QdotCalculator(double mC2H4, double mMoist, double mInert){
 
   double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it is only made of steel
   double thickness = 0.00833;//plate thickness of the heat exchanger [m]
@@ -265,7 +267,7 @@ int main(int argc, char * argv[]) {
   //This is implemented in Qignition function, which is used
   //in the next part
 
-  //Part 3: heat released by waste combustion
+  //Part 3: heat released by waste combustion and final air temperature
 
   //We implemented the function TfinalCalculator which calculates
   //the heat released by the combustion, substracts to it the heat
@@ -273,6 +275,9 @@ int main(int argc, char * argv[]) {
 
   //Part 4 : energy harvesting
 
+  //We implement a function to model the heat exchanger: the energy flow
+  //going from the combustion flue gas and the water(steam) that will
+  //generate energy afterwards
 
   return 0;
 }
