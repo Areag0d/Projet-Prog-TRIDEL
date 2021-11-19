@@ -204,7 +204,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   //Where Q = Energy flow, k = heat transfer coefficient,
   //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
 
-double QdotCalculator(mC2H4, mMoist, mInert){
+double QdotCalculator(double mC2H4, double mMoist, double mInert){
 
   double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it is only made of steel
   double thickness = 0.00833;//plate thickness of the heat exchanger [m]
@@ -264,7 +264,7 @@ int main(int argc, char * argv[]) {
   //This is implemented in Qignition function, which is used
   //in the next part
 
-  //Part 3: heat released by waste combustion
+  //Part 3: heat released by waste combustion and final air temperature
 
   //We implemented the function TfinalCalculator which calculates
   //the heat released by the combustion, substracts to it the heat
