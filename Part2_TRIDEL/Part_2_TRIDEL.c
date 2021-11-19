@@ -264,13 +264,47 @@ int main(int argc, char * argv[]) {
   //This is implemented in Qignition function, which is used
   //in the next part
 
-
   //Part 3: heat released by waste combustion
 
-  //Tfinalcalculator implementation with iteration
+  //We implemented the function TfinalCalculator which calculates
+  //the heat released by the combustion, substracts to it the heat
+  //needed to heat up the waste, and outputs the final temperature
 
   //Part 4 : energy harvesting
 
+<<<<<<< HEAD
   
+=======
+  //We're calculating the energy flow according to this equation:
+  // Qflow = k * A * LMTD
+  //Where Q = Energy flow, k = heat transfer coefficient,
+  //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
+
+
+  //double thicc =
+  double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it isonly made of steel
+  double thickness = 0;//plate thickness
+  double alphaHot = 3500; //mean of the tabulated values
+  double alphaCold = 120; //mean of the tabulated values
+  double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
+
+  //LMTD: Logarithmic Mean Temperature Difference
+  double Tfinal = Tfinalcalculator(mC2H4);
+  double ThotIn = Tfinal;
+  double ThotOut = 0.7 * ThotIn;
+  double TcoldIn = 100;
+  double TcoldOut = 570;
+
+  double dA = ThotIn - TcoldIn;
+  double dB = ThotOut - TcoldOut;
+
+  double LMTD = (dA - dB)/ log(dA / dB);
+  double A = 11490; //[m^2]
+
+  //Energy flow
+  double Qflow = k * A * LMTD;
+
+
+>>>>>>> 9682f6b7b5d5b4fa8be5fde0f8379d91673027c2
   return 0;
 }
