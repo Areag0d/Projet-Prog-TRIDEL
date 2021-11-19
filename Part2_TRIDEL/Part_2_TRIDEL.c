@@ -186,6 +186,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
+  double Tignition = 350; //Tignition for PE
   double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
 
   return Tfinal;
@@ -236,11 +237,16 @@ int main(int argc, char * argv[]) {
   //Where Q = Energy flow, k = heat transfer coefficient,
   //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
 
-  //heat transfer coefficient
-  //plate thickness
+  
   //double thicc =
-  double k = 1/ ((1/alphaHot) + (delta/lambda) + (1/alphaCold));
+  double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it isonly made of steel
+  double thickness = 0;//plate thickness
+  double alphaHot = 3500; //mean of the tabulated values
+  double alphaCold = 120; //mean of the tabulated values
+  double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
+
   //LMTD: Logarithmic Mean Temperature Difference
+  double Tfinal = Tfinalcalculator(mC2H4);
   double ThotIn = Tfinal;
   double ThotOut = 0.7 * ThotIn;
   double TcoldIn = 100;
