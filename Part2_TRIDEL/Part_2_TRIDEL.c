@@ -225,10 +225,11 @@ int main(int argc, char * argv[]) {
   //This is implemented in Qignition function, which is used
   //in the next part
 
-
   //Part 3: heat released by waste combustion
 
-  //Tfinalcalculator implementation with iteration
+  //We implemented the function TfinalCalculator which calculates
+  //the heat released by the combustion, substracts to it the heat
+  //needed to heat up the waste, and outputs the final temperature
 
   //Part 4 : energy harvesting
 
@@ -237,7 +238,7 @@ int main(int argc, char * argv[]) {
   //Where Q = Energy flow, k = heat transfer coefficient,
   //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
 
-  
+
   //double thicc =
   double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it isonly made of steel
   double thickness = 0;//plate thickness
