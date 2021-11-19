@@ -218,7 +218,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
   double Tfinal = Tfinalcalculator(mC2H4, mMoist, mInert);
   double ThotIn = Tfinal;
   double ThotOut = 0.7 * ThotIn;
-  double TcoldIn = 100;
+  double TcoldIn = 30;
   double TcoldOut = 570;
 
   double dA = ThotIn - TcoldIn;
@@ -274,7 +274,7 @@ int main(int argc, char * argv[]) {
 
   //Part 4 : energy harvesting
 
-  //We implement a function to model the heat exchanger: the energy flow
+  //We implement QdotCalculator to model the heat exchanger: the energy flow
   //going from the combustion flue gas and the water(steam) that will
   //generate energy afterwards
 
