@@ -130,6 +130,10 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
 
   return Qh;
 }
+ //we define Tignition for PE to be 350°C
+ //we define it as a global variable, because we use it in different
+ //functions multiple times
+double Tignition = 350;
 
 double Qignition(double mC2H4, double mMoist, double mInert){
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
@@ -139,7 +143,6 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
   //Qcomb
   double CmC2H4x = 2.25; //[KJ/Kg/K]
-  double Tignition = 350; // for PE
   double Tinitial = 20; // T°C at which waste enters combustion room
   double QcombT = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
  //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
@@ -190,13 +193,12 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
-  double Tignition = 350; //Tignition for PE
   double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
 
   return Tfinal;
 }
 
- 
+
 //Part 4 : energy harvesting
 
 //We're calculating the energy flow according to this equation:
