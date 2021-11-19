@@ -49,6 +49,7 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
     double nbMol2 = StoichCoefficient  * nbMol1;
     //we get the initial mass of metal/gas, before oxidation/combustion
     double Mass2 = nbMol2 * MW2;
+
     return Mass2;
 }
 
@@ -119,6 +120,7 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   return CmInert;
 }
 
+
 //Part 2: energy required to heat up waste to ignition
 
 double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
@@ -129,7 +131,7 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
   return Qh;
 }
 
-double Qignition(double mComb, double mMoist, double mInert){
+double Qignition(double mC2H4, double mMoist, double mInert){
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
   //Qignition = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
   //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
@@ -139,11 +141,11 @@ double Qignition(double mComb, double mMoist, double mInert){
   double CmC2H4x = 2.25; //[KJ/Kg/K]
   double Tignition = 350; // for PE
   double Tinitial = 20; // T°C at which waste enters combustion room
-  double QcombT = Qcalculator(mcomb, CmC2H4x, Tignition, Tinitial);
+  double QcombT = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
  //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
 
   double Cmfus = 230;//[KJ/Kg]
-  double QcombFusion =  Cmfus * mComb;
+  double QcombFusion =  Cmfus * mC2H4;
   double Qcomb = QcombT + QcombFusion;
 
   //Qinert
@@ -169,6 +171,8 @@ double Qignition(double mComb, double mMoist, double mInert){
   //Qair is the total energy input used to start the combustion reaction
   return Qignition;
 }
+
+
 //Part 3: heat released by waste combustion
 
 double TfinalCalculator(double mC2H4, double mMoist, double mInert){
@@ -190,6 +194,41 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
 
   return Tfinal;
+}
+
+
+//Part 4 : energy harvesting
+
+//We're calculating the energy flow according to this equation:
+  // Qflow = k * A * LMTD
+  //Where Q = Energy flow, k = heat transfer coefficient,
+  //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
+
+double QdotCalculator(mC2H4, mMoist, mInert){
+  
+  double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it is only made of steel
+  double thickness = 0.00833;//plate thickness of the heat exchanger [m]
+  double alphaHot = 3500; //mean of the tabulated values
+  double alphaCold = 120; //mean of the tabulated values
+  double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
+
+  //LMTD: Logarithmic Mean Temperature Difference
+  double Tfinal = Tfinalcalculator(mC2H4, mMoist, mInert);
+  double ThotIn = Tfinal;
+  double ThotOut = 0.7 * ThotIn;
+  double TcoldIn = 100;
+  double TcoldOut = 570;
+
+  double dA = ThotIn - TcoldIn;
+  double dB = ThotOut - TcoldOut;
+
+  double LMTD = (dA - dB)/ log(dA / dB);
+  double A = 11490; //[m^2]
+
+  //Energy flow
+  double Qdotflow = k * A * LMTD;
+
+  return Qdotflow;
 }
 
 
@@ -232,35 +271,6 @@ int main(int argc, char * argv[]) {
 
   //Part 4 : energy harvesting
 
-  //We're calculating the energy flow according to this equation:
-  // Qflow = k * A * LMTD
-  //Where Q = Energy flow, k = heat transfer coefficient,
-  //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
-
   
-  //double thicc =
-  double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it isonly made of steel
-  double thickness = 0;//plate thickness
-  double alphaHot = 3500; //mean of the tabulated values
-  double alphaCold = 120; //mean of the tabulated values
-  double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
-
-  //LMTD: Logarithmic Mean Temperature Difference
-  double Tfinal = Tfinalcalculator(mC2H4);
-  double ThotIn = Tfinal;
-  double ThotOut = 0.7 * ThotIn;
-  double TcoldIn = 100;
-  double TcoldOut = 570;
-
-  double dA = ThotIn - TcoldIn;
-  double dB = ThotOut - TcoldOut;
-
-  double LMTD = (dA - dB)/ log(dA / dB);
-  double A = 11490; //[m^2]
-
-  //Energy flow
-  double Qflow = k * A * LMTD;
-
-
   return 0;
 }
