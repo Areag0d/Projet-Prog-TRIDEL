@@ -137,8 +137,9 @@ double Qignition(double mComb, double mMoist, double mInert){
 
   //Qcomb
   double CmC2H4x = 2.25; //[KJ/Kg/K]
-  double deltaTignition = 350 - 20;
-  double QcombT = mComb * CmC2H4x * deltaTignition;
+  double Tignition = 350; // for PE
+  double Tinitial = 20; // T°C at which waste enters combustion room
+  double QcombT = Qcalculator(mcomb, CmC2H4x, Tignition, Tinitial);
  //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
 
   double Cmfus = 230;//[KJ/Kg]
@@ -146,12 +147,13 @@ double Qignition(double mComb, double mMoist, double mInert){
   double Qcomb = QcombT + QcombFusion;
 
   //Qinert
-  double Cminert = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
-  double Qinert =  mInert * Cminert * deltaTignition;
+  double CmInert = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
+  double Qinert = Qcalculator(mInert, CmInert, Tignition, Tinitial);
 
   //Qmoist
-  double Cmwater = 4.184; //[kJ/kg]
-  double Qmoist =  mMoist * Cmwater * (100-20);
+  double CmWater = 4.184; //[kJ/kg]
+  double Tboiling = 100;
+  double Qmoist = Qcalculator(mMoist, CmWater, Tboiling, Tinitial);
 
   double Qwaste = Qcomb + Qinert + Qmoist;
 
@@ -169,7 +171,7 @@ double Qignition(double mComb, double mMoist, double mInert){
 }
 //Part 3: heat released by waste combustion
 
-double TfinalCalculator(double mC2H4){
+double TfinalCalculator(double mC2H4, double mMoist, double mInert){
 
   //We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; //[kJ/kg] tabulated value
