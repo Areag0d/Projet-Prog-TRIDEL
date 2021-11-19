@@ -221,11 +221,9 @@ int main(int argc, char * argv[]) {
 
   //Part 2: energy required to heat up waste to ignition
 
-  double QignitionTable[365];
+  //This is implemented in Qignition function, which is used
+  //in the next part
 
-  for (int i = 0; i < 365; i++){
-    QignitionTable[i] = Qignition(mCombTable[i], mMoistTable[i], mInertTable[i]);
-  }
 
   //Part 3: heat released by waste combustion
 
