@@ -196,7 +196,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   return Tfinal;
 }
 
-
+ 
 //Part 4 : energy harvesting
 
 //We're calculating the energy flow according to this equation:
