@@ -153,8 +153,8 @@ double Qignition(double mC2H4, double mMoist, double mInert){
   double Qcomb = QcombT + QcombFusion;
 
   //Qinert
-  double CmInert = Cm_Inert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
-  double Qinert = Qcalculator(mInert, CmInert, Tignition, Tinitial);
+  double Cminert = CmInert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
+  double Qinert = Qcalculator(mInert, Cminert, Tignition, Tinitial);
 
   //Qmoist
   double CmWater = 4.184; //[kJ/kg]
@@ -216,7 +216,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
   double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
 
   //LMTD: Logarithmic Mean Temperature Difference
-  double Tfinal = Tfinalcalculator(mC2H4, mMoist, mInert);
+  double Tfinal = TfinalCalculator(mC2H4, mMoist, mInert);
   double ThotIn = Tfinal;
   double ThotOut = 0.7 * ThotIn;
   double TcoldIn = 30;
