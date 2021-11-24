@@ -332,7 +332,8 @@ int main(int argc, char * argv[]) {
 
   //what is Cv?????
   //double Cv = 
-  //double Qnet =
+  // actually, do we need to write
+  // double Qnet =
   double nC2H4 = mC2H4 / MWC2H4;
   double nCO2 = 2 * nC2H4;
   double nH2O = 2 * nC2H4;
