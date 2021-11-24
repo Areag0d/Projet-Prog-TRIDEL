@@ -141,19 +141,18 @@ double Tignition = 350;
 
 double Qignition(double mC2H4, double mMoist, double mInert){
   //Starting from the global equation that gives the total heat required to evaporate moisture and heat up waste
-  //Qignition = Qwaste + Qeva + Qsteam = (Qcomb + Qinert + Qmoist) + Qeva + Qsteam
+  //Qignition = Qwaste + Qeva + Qsteam = (QC2H4 + Qinert + Qmoist) + Qeva + Qsteam
   //And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
   //we have the following equations:
 
-  //Qcomb
+  //QC2H4
   double CmC2H4x = 2.25; //[KJ/Kg/K]
   double Tinitial = 20; // T°C at which waste enters combustion room
-  double QcombT = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
- //double QcombT = Qcalculator() so can use this function to implement the diofferent Q's
+  double QC2H4T = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
 
   double Cmfus = 230;//[KJ/Kg]
-  double QcombFusion =  Cmfus * mC2H4;
-  double Qcomb = QcombT + QcombFusion;
+  double QC2H4Fusion =  Cmfus * mC2H4;
+  double QC2H4 = QC2H4T + QC2H4Fusion;
 
   //Qinert
   double Cminert = CmInert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
@@ -164,7 +163,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
   double Tboiling = 100;
   double Qmoist = Qcalculator(mMoist, CmWater, Tboiling, Tinitial);
 
-  double Qwaste = Qcomb + Qinert + Qmoist;
+  double Qwaste = QC2H4 + Qinert + Qmoist;
 
   //Qeva
   double Cvap = 2257; //[kJ/kg]
@@ -188,7 +187,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double QcC2H4x = 47000; //[kJ/kg] tabulated value
   double Qheat = QcC2H4x * mC2H4; //[KJ]
 
-  double Qignit = Qignition(mC2H4, mMoist, mInert);//mComb = mC2H4
+  double Qignit = Qignition(mC2H4, mMoist, mInert);//mCombustible = mC2H4
   double Qnet = Qheat - Qignit;
 
   double mCO2 = OriginalMass(mC2H4, 28, 44, 2);//massC2H4 est apporte dans le tableau dans le main
@@ -277,12 +276,17 @@ int main(int argc, char * argv[]) {
   //From the table of waste mass per day we have imported from CSV,
   //we calculate the proportions of combustible, moisture and inert parts
   //Hence we create a table for each component as it is the most convenient
-  double mCombTable[365];
+
+  double moistProportion = 0.195; //19.5 %, la moyenne arithmeti
+  double inertProportion = 0.15;
+  double C2H4Proportion = 1 - moistProportion - inertProportion;
+
+  double mC2H4Table[365];
   double mMoistTable[365];
   double mInertTable[365];
 
   for (int day = 0; day < 365; day++) {
-    mCombTable[day] = combProportion * wasteDayTable[day];
+    mC2H4Table[day] = C2H4Proportion * wasteDayTable[day];
     mMoistTable[day] = moistProportion * wasteDayTable[day];
     mInertTable[day] = inertProportion * wasteDayTable[day];
   }
@@ -315,7 +319,7 @@ int main(int argc, char * argv[]) {
   double WdotTable[365];
 
   for (int day = 0; day < 365; day++){
-    WdotTable[day] = WdotCalculator(mCombTable[day], mMoistTable[day], mInertTable[day]);
+    WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day]);
   }
 
   return 0;
