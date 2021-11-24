@@ -236,15 +236,19 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
 
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert){
-
-  double Qdot = QdotCalculator(mC2H4, mMoist, mInert); //[J / s]
-  double CmSteam = 2000; //[J / Kg / K]
+  //we know that Wdot = mdot * deltaH
+  //we can calculte mdot with mdot = Qdot / (CmSteam * dT)
+  double Qdot = QdotCalculator(mC2H4, mMoist, mInert); //[J/s]
+  double CmSteam = 2000; //[J/kg/K]
   double dT = 570 - 30; //[K]
-  double mdot = Qdot / (CmSteam * dT); //[Kg / s]
-
+  double mdot = Qdot / (CmSteam * dT); //[kg/s]
+  //delaH = Hi - Hf, which are given in tables for our specific temperatures
+  //The specific tempeartures were chosen upon what is common in litterture
+  //for steam engines.
+  //At 570°C and 10 bars, Hi = 3654 [kJ/kg]
+  //At 77°C and 2 bars, Hf = 293 [kJ/kg]
   double Hf = 3654, Hi = 314;
-  double deltaH = Hf - Hi; //
-
+  double deltaH = Hf - Hi;
   double Wdot = mdot * deltaH;
 
   return Wdot;
@@ -302,12 +306,8 @@ int main(int argc, char * argv[]) {
   //by a Rankine cycle, which is common for electricity generation from
   //steam turbines. To do so, we implemented WdotCalculator function.
 
-  //Hence, we know that Wdot = mdot * deltaH
-  //delaH = Hi - Hf, which are given in tables for our specific temperatures
-  //The specific tempeartures were chosen upon what is common in litterture
-  //for steam engines.
-  //At 570°C and 10 bars, Hi = 3654 [kJ/kg]
-  //At 77°C and 2 bars, Hf = 293 [kJ/kg]
+
+
 
 
 
