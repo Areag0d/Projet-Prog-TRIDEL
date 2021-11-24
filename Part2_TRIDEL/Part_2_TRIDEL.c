@@ -239,15 +239,19 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
 
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert){
-
-  double Qdot = QdotCalculator(mC2H4, mMoist, mInert); //[J / s]
-  double CmSteam = 2000; //[J / Kg / K]
+  //we know that Wdot = mdot * deltaH
+  //we can calculte mdot with mdot = Qdot / (CmSteam * dT)
+  double Qdot = QdotCalculator(mC2H4, mMoist, mInert); //[J/s]
+  double CmSteam = 2000; //[J/kg/K]
   double dT = 570 - 30; //[K]
-  double mdot = Qdot / (CmSteam * dT); //[Kg / s]
-
+  double mdot = Qdot / (CmSteam * dT); //[kg/s]
+  //delaH = Hi - Hf, which are given in tables for our specific temperatures
+  //The specific tempeartures were chosen upon what is common in litterture
+  //for steam engines.
+  //At 570°C and 10 bars, Hi = 3654 [kJ/kg]
+  //At 77°C and 2 bars, Hf = 293 [kJ/kg]
   double Hf = 3654, Hi = 314;
-  double deltaH = Hf - Hi; //
-
+  double deltaH = Hf - Hi;
   double Wdot = mdot * deltaH;
 
   return Wdot;
@@ -277,10 +281,10 @@ int main(int argc, char * argv[]) {
   double mMoistTable[365];
   double mInertTable[365];
 
-  for (int i = 0; i < 365; i++) {
-    mCombTable[i] = combProportion * wasteDayTable[i];
-    mMoistTable[i] = moistProportion * wasteDayTable[i];
-    mInertTable[i] = inertProportion * wasteDayTable[i];
+  for (int day = 0; day < 365; day++) {
+    mCombTable[day] = combProportion * wasteDayTable[day];
+    mMoistTable[day] = moistProportion * wasteDayTable[day];
+    mInertTable[day] = inertProportion * wasteDayTable[day];
   }
 
   //Part 2: energy required to heat up waste to ignition
@@ -294,25 +298,25 @@ int main(int argc, char * argv[]) {
   //the heat released by the combustion, substracts to it the heat
   //needed to heat up the waste, and outputs the final temperature
 
-  //Part 4 : energy transformation
+  //Part 4: energy transformation
 
   //We implement QdotCalculator to model the heat exchanger: the energy flow
   //going from the combustion flue gas and the water(steam) that will
   //generate energy afterwards
 
-  //Part 5 : energy harvesting
+  //Part 5: energy harvesting
   //To determine the work applied on the turbine, we model the heat engine
   //by a Rankine cycle, which is common for electricity generation from
   //steam turbines. To do so, we implemented WdotCalculator function.
 
-  //Hence, we know that Wdot = mdot * deltaH
-  //delaH = Hi - Hf, which are given in tables for our specific temperatures
-  //The specific tempeartures were chosen upon what is common in litterture
-  //for steam engines.
-  //At 570°C and 10 bars, Hi = 3654 [kJ/kg]
-  //At 77°C and 2 bars, Hf = 293 [kJ/kg]
+  //Part 6: Running the computations
+  //We iterate our final function (WdotCalculator) on all the entries
+  //of our table and fill up our output table
+  double WdotTable[365];
 
-
+  for (int day = 0; day < 365; day++){
+    Wdottable[day] = WdotCalculator(mCombTable[day], mMoistTable[day], mInertTable[day]);
+  }
 
   return 0;
 }
