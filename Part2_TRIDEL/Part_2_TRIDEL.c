@@ -229,9 +229,25 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
   double A = 11490; //[m^2]
 
   //Energy flow
-  double Qdotflow = k * A * LMTD;
+  double Qdot = k * A * LMTD;
 
-  return Qdotflow;
+  return Qdot;
+}
+
+
+double WdotCalculator(double mC2H4, double mMoist, double mInert){
+
+  double Qdot = QdotCalculator(mC2H4, mMoist, mInert); //[J / s]
+  double CmSteam = 2000; //[J / Kg / K]
+  double dT = 570 - 30; //[K]
+  double mdot = Qdot / (CmSteam * dT); //[Kg / s]
+
+  double Hf = 3654, Hi = 314;
+  double deltaH = Hf - Hi; //
+
+  double Wdot = mdot * deltaH;
+
+  return Wdot;
 }
 
 
