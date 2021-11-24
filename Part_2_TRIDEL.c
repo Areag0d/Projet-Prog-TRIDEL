@@ -116,12 +116,13 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
 
   double  CmTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
 
-  //weighted average given in [J/(g*K)]
+  //weighted average given in 
 
   double CmInert = 0;
   for (int i = 0; i < 6; i ++) CmInert += relmassTable[i] * CmTable[i];
 
-  return CmInert;
+  return CmInert; //[J/(g*K)]
+  
 }
 
 
@@ -196,9 +197,9 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
-  double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
+  //double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
 
-  return Tfinal;
+  //return Tfinal;
 }
 
 
@@ -316,11 +317,40 @@ int main(int argc, char * argv[]) {
   //Part 6: final energy output
   //We iterate our final function (WdotCalculator) on all the entries
   //of our table and fill up our output table
+
+  double massMoyC2H4 = 0;
+  for (int day = 0; day < 365; day++) {
+      massMoyC2H4 += mC2H4Table[day];
+  }
+  massMoyC2H4 /= 365;
+
+  double MWC2H4 = 18; 
+  double nbMolMoy = massMoyC2H4 / MWC2H4;
+  double R = 8.314;
+  double P = 1;
+  double Vprim = (nbMolMoy * R * Tignition) / P;
+
+  //what is Cv?????
+  //double Cv = 
+  //double Qnet =
+  double nC2H4 = mC2H4 / MWC2H4;
+  double nCO2 = 2 * nC2H4;
+  double nH2O = 2 * nC2H4;
+  //or double nCO2 = massCO2 * MWCO2
+
+  double a = (nCO2 + nH2O) * R/P;
+  double b = (Vprim - Tignition*(nCO2 + nH2O)*R/P);
+  double c = - Tignition*Vprim - Qnet/Cv;
+  double Tf = (-b + sqrt(b*b - 4*a*c)) / (2*a);
+
+
   double WdotTable[365];
 
   for (int day = 0; day < 365; day++){
     WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day]);
+    printf("%f\n", WdotTable[day]);
   }
+
 
   return 0;
 }
