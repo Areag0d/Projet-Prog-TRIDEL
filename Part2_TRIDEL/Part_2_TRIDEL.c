@@ -309,13 +309,13 @@ int main(int argc, char * argv[]) {
   //by a Rankine cycle, which is common for electricity generation from
   //steam turbines. To do so, we implemented WdotCalculator function.
 
-  //Part 6: Running the computations
+  //Part 6: final energy output
   //We iterate our final function (WdotCalculator) on all the entries
   //of our table and fill up our output table
   double WdotTable[365];
 
   for (int day = 0; day < 365; day++){
-    Wdottable[day] = WdotCalculator(mCombTable[day], mMoistTable[day], mInertTable[day]);
+    WdotTable[day] = WdotCalculator(mCombTable[day], mMoistTable[day], mInertTable[day]);
   }
 
   return 0;
