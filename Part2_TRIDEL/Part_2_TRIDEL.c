@@ -235,6 +235,8 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
 }
 
 
+
+
 int main(int argc, char * argv[]) {
   //importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
@@ -273,11 +275,25 @@ int main(int argc, char * argv[]) {
   //the heat released by the combustion, substracts to it the heat
   //needed to heat up the waste, and outputs the final temperature
 
-  //Part 4 : energy harvesting
+  //Part 4 : energy transformation
 
   //We implement QdotCalculator to model the heat exchanger: the energy flow
   //going from the combustion flue gas and the water(steam) that will
   //generate energy afterwards
+
+  //Part 5 : energy harvesting
+  //To determine the work applied on the turbine, we model the heat engine
+  //by a Rankine cycle, which is common for electricity generation from
+  //steam turbines. To do so, we implemented WdotCalculator function.
+
+  //Hence, we know that Wdot = mdot * deltaH
+  //delaH = Hi - Hf, which are given in tables for our specific temperatures
+  //The specific tempeartures were chosen upon what is common in litterture
+  //for steam engines.
+  //At 570°C and 10 bars, Hi = 3654 [kJ/kg]
+  //At 77°C and 2 bars, Hf = 293 [kJ/kg]
+
+
 
   return 0;
 }
