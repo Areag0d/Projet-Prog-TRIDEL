@@ -278,7 +278,7 @@ int main(int argc, char * argv[]) {
   //we calculate the proportions of combustible, moisture and inert parts
   //Hence we create a table for each component as it is the most convenient
 
-  double moistProportion = 0.195; //19.5 %, la moyenne arithmeti
+  double moistProportion = 0.195; //19.5 %, average of the  two bounds of the interval
   double inertProportion = 0.15;
   double C2H4Proportion = 1 - moistProportion - inertProportion;
 
