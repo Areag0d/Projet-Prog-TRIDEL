@@ -112,17 +112,18 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   //its specific heat value by calculating the average of each heat capacity
   //weighted by its importance (proportion) in the inert part
 
-  //we give specific heat values (tabulated) of each component: SiO2, Al, Fe, Ca, C, Cl respectively [J/(g*K)]:
+  //we give specific heat values (tabulated) of each component:
+  //SiO2, Al, Fe, Ca, C, Cl respectively [J/(g*K)]:
 
   double  CmTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
 
-  //weighted average given in 
+  //weighted average given in
 
   double CmInert = 0;
   for (int i = 0; i < 6; i ++) CmInert += relmassTable[i] * CmTable[i];
 
   return CmInert; //[J/(g*K)]
-  
+
 }
 
 
@@ -151,7 +152,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
   double Tinitial = 20; // T°C at which waste enters combustion room
   double QC2H4T = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
 
-  double Cmfus = 230;//[KJ/Kg]
+  double Cmfus = 230;//[kJ/Kg]
   double QC2H4Fusion =  Cmfus * mC2H4;
   double QC2H4 = QC2H4T + QC2H4Fusion;
 
@@ -176,6 +177,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
   double Qignition = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
+
   return Qignition;
 }
 
@@ -194,9 +196,12 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   //double mCO2 = OriginalMass(mC2H4, 28, 44, 2);//massC2H4 est apporte dans le tableau dans le main
   //double mH2O = OriginalMass(mC2H4, 28, 18, 2);
 
+
+
   //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   //double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
+<<<<<<< HEAD
   double MWC2H4 = 28; 
   double nC2H4 = mC2H4 / MWC2H4;
   double nC2H4Moy = massMoyC2H4 / MWC2H4;
@@ -227,6 +232,35 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //(double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);)
   //return Tfinal;
+=======
+  double MWC2H4 = 18;
+  double nbMolMoy = massMoyC2H4 / MWC2H4;
+  double R = 8.314;
+  double P = 1;
+  double Vprim = (1.5 * nbMolMoy * R * Tignition) / P; //1.5 to have margin, but details
+
+  double nC2H4 = mC2H4 / MWC2H4;
+  double nCO2 = 2 * nC2H4;
+  double nH2O = 2 * nC2H4;
+  //or double nCO2 = massCO2 * MWCO2
+
+  //what is Cv?????
+  double CvH2O = 3.18; // (kJ/(kg K))
+  double CvCO2 = 0.87; // (kJ/(kg K))
+  double Cv = CvH2O + CvCO2; // ???
+
+  double a = (nCO2 + nH2O) * R/P;
+  double b = (Vprim - Tignition * (nCO2 + nH2O) *R / P);
+  double c = - Tignition * Vprim - Qnet / Cv;
+  double delta = b*b - 4*a*c;
+
+  double Tfinal = (-b - sqrt(delta)) / (2*a);
+
+  //double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
+
+
+  return Tfinal;
+>>>>>>> b2c680c29e83cd70bb7f8ad2c380c1577c434696
 }
 
 
@@ -349,16 +383,33 @@ int main(int argc, char * argv[]) {
   double massMoyC2H4 = 0;
   for (int day = 0; day < 365; day++) massMoyC2H4 += mC2H4Table[day];
   massMoyC2H4 /= 365;
- 
+
 
   double WdotTable[365];
+<<<<<<< HEAD
    for (int day = 0; day < 365; day++){
     WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Tfinal = TfinalCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Qdot = QdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     //printf("%f\n", Tfinal);
     //printf("%f\n", Qdot);
+=======
+
+  for (int day = 0; day < 365; day++){
+
+    WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day]);
+    //printf("%f\n", WdotTable[day]);
+
+    WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    WdotTable[day] = fabs(WdotTable[day]);
+    printf("%f\n", WdotTable[day]);
+
+>>>>>>> b2c680c29e83cd70bb7f8ad2c380c1577c434696
   }
+  //debugging
+
+
+
 
 
   return 0;
