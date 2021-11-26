@@ -197,31 +197,36 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   //double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
-  double MWC2H4 = 18; 
-  double nbMolMoy = massMoyC2H4 / MWC2H4;
+  double MWC2H4 = 28; 
+  double nC2H4 = mC2H4 / MWC2H4;
+  double nC2H4Moy = massMoyC2H4 / MWC2H4;
   double R = 8.314;
   double P = 1;
-  double Vprim = (1.5 * nbMolMoy * R * Tignition) / P; //1.5 to have margin, but details
+  //double Vprim = 1.5 nC2H4; //1.5 to have margin, but details
+  //double MWN2 = 28;
+  //double MWO2 = 32;
+  //double MWprim = 0.79 * MWN2 + 0.21 * MWO2;
+  //double mprim = 1.5 * nC2H4 * MWprim;
 
-  double nC2H4 = mC2H4 / MWC2H4;
-  double nCO2 = 2 * nC2H4;
-  double nH2O = 2 * nC2H4;
-  //or double nCO2 = massCO2 * MWCO2
+  //double nC2H4 = mC2H4 / MWC2H4;
+  //double nCO2 = 2 * nC2H4;
+  //double nH2O = 2 * nC2H4;
+  //(or double nCO2 = massCO2 * MWCO2)
 
-  //what is Cv?????
-  double CvH2O = 3.18; // (kJ/(kg K))
-  double CvCO2 = 0.87; // (kJ/(kg K))
-  double Cv = CvH2O + CvCO2; // ???
+  //(what is Cv?????)
+  //double CvH2O = 3.18; // (kJ/(kg K))
+  //double CvCO2 = 0.87; // (kJ/(kg K))
+  //double Cv = CvH2O + CvCO2; // (???)
 
-  double a = (nCO2 + nH2O) * R/P;
-  double b = (Vprim - Tignition * (nCO2 + nH2O) *R / P);
-  double c = - Tignition * Vprim - Qnet / Cv;
-  double delta = b*b - 4*a*c;
+  //double a = (nCO2 + nH2O) * R/P;
+  //double b = (Vprim - Tignition * (nCO2 + nH2O) *R / P);
+  //double c = - Tignition * Vprim - Qnet / Cv;
+  //double delta = b*b - 4*a*c;
 
-  double Tfinal = (-b - sqrt(delta)) / (2*a);
+  //double Tfinal = (-b + sqrt(delta)) / (2*a);
 
-  //double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
-  return Tfinal;
+  //(double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);)
+  //return Tfinal;
 }
 
 
@@ -239,18 +244,19 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double alphaHot = 3500; //mean of the tabulated values
   double alphaCold = 120; //mean of the tabulated values
   double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
-
+  //printf("%F\n", k);
   //LMTD: Logarithmic Mean Temperature Difference
   double Tfinal = TfinalCalculator(mC2H4, mMoist, mInert, massMoyC2H4);
   double ThotIn = Tfinal;
   double ThotOut = 0.7 * ThotIn;
   double TcoldIn = 30;
   double TcoldOut = 570;
-
+  
   double dA = ThotIn - TcoldIn;
   double dB = ThotOut - TcoldOut;
 
   double LMTD = (dA - dB)/ log(dA / dB);
+  printf("%F\n", LMTD);
   double A = 11490; //[m^2]
 
   //Energy flow
@@ -346,11 +352,12 @@ int main(int argc, char * argv[]) {
  
 
   double WdotTable[365];
-
-  for (int day = 0; day < 365; day++){
+   for (int day = 0; day < 365; day++){
     WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    WdotTable[day] = fabs(WdotTable[day]);
-    printf("%f\n", WdotTable[day]);
+    double Tfinal = TfinalCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    double Qdot = QdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    //printf("%f\n", Tfinal);
+    //printf("%f\n", Qdot);
   }
 
 
