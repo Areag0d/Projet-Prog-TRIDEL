@@ -197,11 +197,6 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   //double mH2O = OriginalMass(mC2H4, 28, 18, 2);
 
 
-  double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  double CmH2O = 1.996; //[kJ/kgK], tabulated
-
-  double Tfinal = Tignition + (Qnet / ((CmCO2 * mCO2) + (CmH2O * mH2O)));
-  printf("%f, %f, %f\n", Qnet, (CmCO2 * mCO2) + (CmH2O * mH2O), Qnet / ((CmCO2 * mCO2) + (CmH2O * mH2O)));
 
   //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   //double CmH2O = 1.996; //[kJ/kgK ], tabulated
@@ -230,6 +225,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double Tfinal = (-b - sqrt(delta)) / (2*a);
 
   //double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
+
 
   return Tfinal;
 }
