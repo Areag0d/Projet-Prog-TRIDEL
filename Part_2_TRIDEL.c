@@ -117,12 +117,13 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
 
   double  CmTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
 
-  //weighted average given in [J/(g*K)]
+  //weighted average given in
 
   double CmInert = 0;
   for (int i = 0; i < 6; i ++) CmInert += relmassTable[i] * CmTable[i];
 
-  return CmInert;
+  return CmInert; //[J/(g*K)]
+
 }
 
 
@@ -183,7 +184,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
 //Part 3: heat released by waste combustion
 
-double TfinalCalculator(double mC2H4, double mMoist, double mInert){
+double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
   //We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; //[kJ/kg] tabulated value
@@ -192,14 +193,44 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double Qignit = Qignition(mC2H4, mMoist, mInert);//mCombustible = mC2H4
   double Qnet = Qheat - Qignit;
 
-  double mCO2 = OriginalMass(mC2H4, 28, 44, 2);//massC2H4 est apporte dans le tableau dans le main
-  double mH2O = OriginalMass(mC2H4, 28, 18, 2);
+  //double mCO2 = OriginalMass(mC2H4, 28, 44, 2);//massC2H4 est apporte dans le tableau dans le main
+  //double mH2O = OriginalMass(mC2H4, 28, 18, 2);
+
 
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   double CmH2O = 1.996; //[kJ/kgK], tabulated
 
   double Tfinal = Tignition + (Qnet / ((CmCO2 * mCO2) + (CmH2O * mH2O)));
   printf("%f, %f, %f\n", Qnet, (CmCO2 * mCO2) + (CmH2O * mH2O), Qnet / ((CmCO2 * mCO2) + (CmH2O * mH2O)));
+
+  //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
+  //double CmH2O = 1.996; //[kJ/kgK ], tabulated
+
+  double MWC2H4 = 18;
+  double nbMolMoy = massMoyC2H4 / MWC2H4;
+  double R = 8.314;
+  double P = 1;
+  double Vprim = (1.5 * nbMolMoy * R * Tignition) / P; //1.5 to have margin, but details
+
+  double nC2H4 = mC2H4 / MWC2H4;
+  double nCO2 = 2 * nC2H4;
+  double nH2O = 2 * nC2H4;
+  //or double nCO2 = massCO2 * MWCO2
+
+  //what is Cv?????
+  double CvH2O = 3.18; // (kJ/(kg K))
+  double CvCO2 = 0.87; // (kJ/(kg K))
+  double Cv = CvH2O + CvCO2; // ???
+
+  double a = (nCO2 + nH2O) * R/P;
+  double b = (Vprim - Tignition * (nCO2 + nH2O) *R / P);
+  double c = - Tignition * Vprim - Qnet / Cv;
+  double delta = b*b - 4*a*c;
+
+  double Tfinal = (-b - sqrt(delta)) / (2*a);
+
+  //double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
+
   return Tfinal;
 }
 
@@ -211,7 +242,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   //Where Q = Energy flow, k = heat transfer coefficient,
   //A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
 
-double QdotCalculator(double mC2H4, double mMoist, double mInert){
+double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
   double lambda = 45; //λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it is only made of steel
   double thickness = 0.00833;//plate thickness of the heat exchanger [m]
@@ -220,7 +251,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
   double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
 
   //LMTD: Logarithmic Mean Temperature Difference
-  double Tfinal = TfinalCalculator(mC2H4, mMoist, mInert);
+  double Tfinal = TfinalCalculator(mC2H4, mMoist, mInert, massMoyC2H4);
   double ThotIn = Tfinal;
   double ThotOut = 0.7 * ThotIn;
   double TcoldIn = 30;
@@ -239,10 +270,10 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert){
 }
 
 
-double WdotCalculator(double mC2H4, double mMoist, double mInert){
+double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
   //we know that Wdot = mdot * deltaH
   //we can calculte mdot with mdot = Qdot / (CmSteam * dT)
-  double Qdot = QdotCalculator(mC2H4, mMoist, mInert); //[J/s]
+  double Qdot = QdotCalculator(mC2H4, mMoist, mInert, massMoyC2H4); //[J/s]
   double CmSteam = 2000; //[J/kg/K]
   double dT = 570 - 30; //[K]
   double mdot = Qdot / (CmSteam * dT); //[kg/s]
@@ -279,7 +310,7 @@ int main(int argc, char * argv[]) {
   //we calculate the proportions of combustible, moisture and inert parts
   //Hence we create a table for each component as it is the most convenient
 
-  double moistProportion = 0.195; //19.5 %, la moyenne arithmeti
+  double moistProportion = 0.195; //19.5 %, average of the  two bounds of the interval
   double inertProportion = 0.15;
   double C2H4Proportion = 1 - moistProportion - inertProportion;
 
@@ -318,13 +349,26 @@ int main(int argc, char * argv[]) {
   //Part 6: final energy output
   //We iterate our final function (WdotCalculator) on all the entries
   //of our table and fill up our output table
+
+  double massMoyC2H4 = 0;
+  for (int day = 0; day < 365; day++) massMoyC2H4 += mC2H4Table[day];
+  massMoyC2H4 /= 365;
+
+
   double WdotTable[365];
 
   for (int day = 0; day < 365; day++){
+
     WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day]);
     //printf("%f\n", WdotTable[day]);
+
+    WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    WdotTable[day] = fabs(WdotTable[day]);
+    printf("%f\n", WdotTable[day]);
+
   }
   //debugging
+
 
 
 
