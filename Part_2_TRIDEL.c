@@ -327,7 +327,7 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 
   //printf("%f\n", Wdot);
 
-  return Wdot;
+  return Wdot; //[kJ/day]
 }
 
 //Part 7: creating a CSV writer
@@ -413,9 +413,7 @@ int main(int argc, char * argv[]) {
   double PowerTable[365];
    for (int day = 0; day < 365; day++){
     double WorkOutput = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput / (3600 * 1000); //[MW]
-    double Tfinal = TfinalCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    double Qdot = QdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    PowerTable[day] = WorkOutput / (3600 * 1000 * 24); //[MW]
 
   }
 
