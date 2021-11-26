@@ -198,9 +198,10 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
 
 
-  //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  //double CmH2O = 1.996; //[kJ/kgK ], tabulated
+  //double CpCO2 = 0.849;	//[kJ/kgK], tabulated value
+  //double CpH2O = 1.996; //[kJ/kgK ], tabulated
 
+<<<<<<< HEAD
   double MWC2H4 = 28; 
   double nC2H4 = mC2H4 / MWC2H4;
   double nC2H4Moy = massMoyC2H4 / MWC2H4;
@@ -231,6 +232,21 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //(double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);)
   //return Tfinal;
+=======
+
+  double MWC2H4 = 28;
+  double nC2H4 = mC2H4 / MWC2H4;
+  double nC2H4Moy = massMoyC2H4 / MWC2H4;
+  double R = 8.314; // J / (K * mol)
+  double P = 1;
+
+  double MWN2 = 28;
+  double MWO2 = 32;
+
+
+  return Tfinal;
+
+>>>>>>> 4c51bd224df315d60155d87955fa974d77475c5a
 }
 
 
@@ -255,7 +271,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double ThotOut = 0.7 * ThotIn;
   double TcoldIn = 30;
   double TcoldOut = 570;
-  
+
   double dA = ThotIn - TcoldIn;
   double dB = ThotOut - TcoldOut;
 
