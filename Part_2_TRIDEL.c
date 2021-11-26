@@ -323,9 +323,9 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double deltaH = Hf - Hi;
   double Wdot = mdot * deltaH;
 
-  printf("%f\n", Wdot/(24*3600*1000)); //[kJ/day]
+  printf("%f\n", Wdot/(3600*1000*24)); //[kJ/day]
 
-  printf("%f\n", Wdot);
+  //printf("%f\n", Wdot);
 
   return Wdot;
 }
@@ -338,7 +338,7 @@ void write_csv(char * filename, double * table) {
 
   //iterating on the whole table
   for (int i = 0; i < 365; i++) {
-    fprintf(file, "%f", table[i]);
+    //fprintf(file, "%f", table[i]);
     //printf("hi");
   }
   fclose(file);
