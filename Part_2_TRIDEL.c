@@ -204,41 +204,6 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double mCO2 = OriginalMass(1000*mC2H4, MWC2H4, 44, 2)/1000; //[kg]
   double mH2O = OriginalMass(1000*mC2H4, MWC2H4, 18, 2)/1000; //[kg]
 
-<<<<<<< HEAD
-  //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  //double CmH2O = 1.996; //[kJ/kgK ], tabulated
-
-  double MWC2H4 = 28;
-  double nC2H4 = mC2H4 / MWC2H4;
-  double nC2H4Moy = massMoyC2H4 / MWC2H4;
-  double R = 8.314;
-  double P = 1;
-  //double Vprim = 1.5 nC2H4; //1.5 to have margin, but details
-  //double MWN2 = 28;
-  //double MWO2 = 32;
-  //double MWprim = 0.79 * MWN2 + 0.21 * MWO2;
-  //double mprim = 1.5 * nC2H4 * MWprim;
-
-  //double nC2H4 = mC2H4 / MWC2H4;
-  //double nCO2 = 2 * nC2H4;
-  //double nH2O = 2 * nC2H4;
-  //(or double nCO2 = massCO2 * MWCO2)
-
-  //(what is Cv?????)
-  //double CvH2O = 3.18; // (kJ/(kg K))
-  //double CvCO2 = 0.87; // (kJ/(kg K))
-  //double Cv = CvH2O + CvCO2; // (???)
-
-  //double a = (nCO2 + nH2O) * R/P;
-  //double b = (Vprim - Tignition * (nCO2 + nH2O) *R / P);
-  //double c = - Tignition * Vprim - Qnet / Cv;
-  //double delta = b*b - 4*a*c;
-
-  //double Tfinal = (-b + sqrt(delta)) / (2*a);
-
-  //(double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);)
-  //return Tfinal;
-=======
   double mflue = mCO2 + mH2O; //[kg]
 
   //finding mprim = mass of primary air
@@ -302,11 +267,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
 
   return Tfinal;
-<<<<<<< HEAD
 
-=======
->>>>>>> dc8d12532f4a8f05243ff49d637357bb567336b7
->>>>>>> 53738c24a838429b92bb7048ae2e7f50095085ec
 }
 
 
@@ -330,7 +291,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double ThotIn = Tfinal;
   double ThotOut = 0.7 * ThotIn;
   double TcoldIn = 30;
-  double TcoldOut = 570;
+  double TcoldOut = 450;
 
   double dA = ThotIn - TcoldIn;
   double dB = ThotOut - TcoldOut;
@@ -351,29 +312,30 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   //we can calculte mdot with mdot = Qdot / (CmSteam * dT)
   double Qdot = QdotCalculator(mC2H4, mMoist, mInert, massMoyC2H4); //[J/s]
   double CmSteam = 2000; //[J/kg/K]
-  double dT = 570 - 30; //[K]
+  double dT = 450 - 30; //[K]
   double mdot = Qdot / (CmSteam * dT); //[kg/s]
   //delaH = Hi - Hf, which are given in tables for our specific temperatures
   //The specific tempeartures were chosen upon what is common in litterture
   //for steam engines.
-  //At 570°C and 10 bars, Hi = 3654 [kJ/kg]
+  //At 450°C and 50 bars, Hi = 3316 [kJ/kg]
   //At 77°C and 2 bars, Hf = 293 [kJ/kg]
-  double Hf = 3654, Hi = 314;
+  double Hf = 3316, Hi = 314;
   double deltaH = Hf - Hi;
   double Wdot = mdot * deltaH;
-  printf("%f\n", Wdot);
+  printf("%f\n", Wdot/(24*3600*1000)); //[kJ/day]
   return Wdot;
 }
 
 //Part 7: creating a CSV writer
 
 void write_csv(char * filename, double * table) {
-  printf("\n Creating a %s.csv file", filename);
+  printf("\n Creating a %s file", filename);
   FILE * file = fopen(filename, "+w");
 
   //iterating on the whole table
   for (int i = 0; i < 365; i++) {
     fprintf(file, "%f", table[i]);
+    //printf("hi");
   }
   fclose(file);
 }
@@ -441,10 +403,13 @@ int main(int argc, char * argv[]) {
   for (int day = 0; day < 365; day++) massMoyC2H4 += mC2H4Table[day];
   massMoyC2H4 /= 365;
 
-
+  //We convert our kJ per day in kW:
+  //W = J/s --> kJ / s = kW. So we divide again by 1000 to get MegaWatts:
+  //PowerOutput = W / (3600 * 1000) [MW]
   double PowerTable[365];
    for (int day = 0; day < 365; day++){
-    PowerTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    double WorkOutput = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    PowerTable[day] = WorkOutput / (3600 * 1000); //[MW]
     double Tfinal = TfinalCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Qdot = QdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
 
@@ -452,7 +417,7 @@ int main(int argc, char * argv[]) {
 
   //Part 7: Outputing a CSV file
   //we take our Power Table and write a CSV file
-
+  write_csv("PowerTable.csv", PowerTable);
 
 
 
