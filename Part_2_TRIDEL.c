@@ -84,22 +84,22 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   //Tabulated Molar Weight of Al2O3 = 102 [g/mol], Al = 27 [g/mol]
   //Oxidation reaction: 2Al + 3O --> Al2O3
   double mAl2O3 = propAl2O3 * 1; //[g]
-  double mAl = OriginalMass(mAl2O3, 102, 27, 2);
+  double mAl = OriginalMass(mAl2O3, 102, 27, 2); //[g]
 
   //Iron
   //Tabulated Molar Weight of Fe2O3 = 159.6 [g/mol],  Fe = 55.8 [g/mol]
   //Oxidation reaction: 2Fe + 3O --> Fe2O3
   double mFe2O3 = propFe2O3 * 1; //[g]
-  double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2);
+  double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2); //[g]
 
   //Calcium
   //Tabulated Molar Weight of CaO = 56 [g/mol], Ca = 40 [g/mol]
   //Oxidation reaction: Ca + O --> CaO
   double mCaO = propCaO * 1; //[g]
-  double mCa = OriginalMass(mCaO, 56, 40, 1);
+  double mCa = OriginalMass(mCaO, 56, 40, 1); //[g]
 
   //initial mass of mixed metals that produced Machefer during combustion
-  double mInitialMix = mSiO2 + mAl + mFe + mCa + mC + mCl;
+  double mInitialMix = mSiO2 + mAl + mFe + mCa + mC + mCl; //[g]
 
   //now we can determine the relative proportions of metals
   //in the inert part of waste by normalizing each value
@@ -193,11 +193,17 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double Qignit = Qignition(mC2H4, mMoist, mInert);//mCombustible = mC2H4
   double Qnet = Qheat - Qignit;
 
-  //double mCO2 = OriginalMass(mC2H4, 28, 44, 2);//massC2H4 est apporte dans le tableau dans le main
-  //double mH2O = OriginalMass(mC2H4, 28, 18, 2);
+  //To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
 
+  //Calculations of Mtot = mflue + mprim
 
+  //mflue = mass of flue gases
+  double MWC2H4 = 28;
+  //mC2H4 is given in main
+  double mCO2 = OriginalMass(mC2H4, MWC2H4, 44, 2) * 1000; //[kg]
+  double mH2O = OriginalMass(mC2H4, MWC2H4, 18, 2) * 1000; //[kg]
 
+<<<<<<< HEAD
   //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
   //double CmH2O = 1.996; //[kJ/kgK ], tabulated
 
@@ -231,6 +237,71 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //(double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);)
   //return Tfinal;
+=======
+  double mflue = mCO2 + mH2O; //[kg]
+
+  //finding mprim = mass of primary air
+  //from the ocmubstion equation: 3O2 + C2H4x --> 2CO2 + 2H2O
+  //we have to multiply massMoyC2H4 by 1000 because it is given in [kg]
+  double nC2H4Moy = 1000 * massMoyC2H4 / MWC2H4; //[mol]
+  double nO2 = 3 * nC2H4Moy; //[mol]
+
+  //to ensure a good combustion, we'll overshoot the moles of primary air needed
+  //by 50%, as it is suggested in litterature
+  double nO2prim = 1.5 * nO2; //[mol]
+
+  //We know air is not only composed by oxygen, but also N2
+  //we neglect all other trace elements
+  //we know volumetric proportions of air: 21% O2, 79%N2
+  //So from Ideal gases law : V = n * R * T / P
+
+  double R = 8.2057; //[m3*atm/mol*K]
+  double P = 1;
+  double VO2prim = nO2prim * R * Tignition / P;
+
+  //Because within Ideal Gas Law all gases take up the same volume for
+  //a given number of moles, we find VN2 with a "règle de trois":
+  double VN2 = (VO2prim/21) * 79;
+
+  //we calculate mass of each part of air:
+  //mass of O2 is simply mO2prim = nO2prim * MWO2
+  double MWO2 = 16; //g/mol
+  //we divide by 1000 because we do molar calculations in [g],
+  //and we want [kg]
+  double mO2prim = nO2prim * MWO2 / 1000; //[kg]
+
+  //to get mass of N2, we first calulate nN2 with Ideal Gas law
+  //nN2 = P * V / (R * Tignition)
+  double nN2 = P * VN2 / (R * Tignition); //[mol]
+
+  //then we get mass as usual from mN2 = nN2 * MW (units!!!)
+  double MWN2 = 28;
+  double mN2 = nN2 *  MWN2 /1000;
+
+  //we can finally get mprim:
+  double mprim = mO2prim + mN2;
+
+  //We can add mflue and mprim to get total air: Mtot
+  double Mtot = mflue + mprim;
+
+  //To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
+  //we need to find Cp of our mixture:
+  //to do so, we calculate the average of Cp of our components
+  //weighted by their massic proportions:
+  //tables made for O2, N2, CO2, H2O
+  double massTable [] = {mO2prim, mN2, mCO2, mH2O};
+  double CmTable [] = {0.919, 1.04, 0.844, 1.93};
+  double Cptot = 0;
+  for (int i = 0; i < 4; i++) {
+    Cptot += massTable[i] * CmTable[i];
+    Cptot /= Mtot;
+  }
+
+  //We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
+  double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
+  printf("%f, %f\n", Qnet, Tfinal);
+  return Tfinal;
+>>>>>>> dc8d12532f4a8f05243ff49d637357bb567336b7
 }
 
 
