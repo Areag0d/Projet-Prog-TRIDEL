@@ -201,38 +201,13 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   //double CpCO2 = 0.849;	//[kJ/kgK], tabulated value
   //double CpH2O = 1.996; //[kJ/kgK ], tabulated
 
-<<<<<<< HEAD
-  double MWC2H4 = 28; 
+
+  double MWC2H4 = 28;
   double nC2H4 = mC2H4 / MWC2H4;
   double nC2H4Moy = massMoyC2H4 / MWC2H4;
   double R = 8.314;
   double P = 1;
-  //double Vprim = 1.5 nC2H4; //1.5 to have margin, but details
-  //double MWN2 = 28;
-  //double MWO2 = 32;
-  //double MWprim = 0.79 * MWN2 + 0.21 * MWO2;
-  //double mprim = 1.5 * nC2H4 * MWprim;
 
-  //double nC2H4 = mC2H4 / MWC2H4;
-  //double nCO2 = 2 * nC2H4;
-  //double nH2O = 2 * nC2H4;
-  //(or double nCO2 = massCO2 * MWCO2)
-
-  //(what is Cv?????)
-  //double CvH2O = 3.18; // (kJ/(kg K))
-  //double CvCO2 = 0.87; // (kJ/(kg K))
-  //double Cv = CvH2O + CvCO2; // (???)
-
-  //double a = (nCO2 + nH2O) * R/P;
-  //double b = (Vprim - Tignition * (nCO2 + nH2O) *R / P);
-  //double c = - Tignition * Vprim - Qnet / Cv;
-  //double delta = b*b - 4*a*c;
-
-  //double Tfinal = (-b + sqrt(delta)) / (2*a);
-
-  //(double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);)
-  //return Tfinal;
-=======
 
   double MWC2H4 = 28;
   double nC2H4 = mC2H4 / MWC2H4;
@@ -246,7 +221,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   return Tfinal;
 
->>>>>>> 4c51bd224df315d60155d87955fa974d77475c5a
+
 }
 
 
