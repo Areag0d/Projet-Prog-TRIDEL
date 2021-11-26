@@ -199,15 +199,10 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   //Calculations of Mtot = mflue + mprim
 
   //mflue = mass of flue gases
-  double MWC2H4 = 28; 
+  double MWC2H4 = 28;
   //mC2H4 is given in main
-<<<<<<< HEAD
-  double mCO2 = (OriginalMass((mC2H4 * 1000), MWC2H4, 44, 2)) / 1000; //[kg]
-  double mH2O = (OriginalMass((mC2H4 * 1000), MWC2H4, 18, 2)) / 1000; //[kg]
-=======
   double mCO2 = OriginalMass(1000*mC2H4, MWC2H4, 44, 2)/1000; //[kg]
   double mH2O = OriginalMass(1000*mC2H4, MWC2H4, 18, 2)/1000; //[kg]
->>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
 
   double mflue = mCO2 + mH2O; //[kg]
 
@@ -270,20 +265,9 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
-<<<<<<< HEAD
   //printf(" %f\n", Tfinal);
   return Tfinal;
-=======
 
-  return Tfinal;
-
-<<<<<<< HEAD
-=======
-=======
->>>>>>> dc8d12532f4a8f05243ff49d637357bb567336b7
->>>>>>> 53738c24a838429b92bb7048ae2e7f50095085ec
->>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
->>>>>>> 9a36c631cc55d6cac81e6eb419b997fb630ddb21
 }
 
 
@@ -337,17 +321,12 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   //At 77°C and 2 bars, Hf = 293 [kJ/kg]
   double Hf = 3316, Hi = 314;
   double deltaH = Hf - Hi;
-<<<<<<< HEAD
-  double Wdot = mdot * deltaH; //[kW]
-
-=======
   double Wdot = mdot * deltaH;
-<<<<<<< HEAD
+
   printf("%f\n", Wdot/(24*3600*1000)); //[kJ/day]
-=======
+
   printf("%f\n", Wdot);
->>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
->>>>>>> 9a36c631cc55d6cac81e6eb419b997fb630ddb21
+
   return Wdot;
 }
 
@@ -437,19 +416,12 @@ int main(int argc, char * argv[]) {
     PowerTable[day] = WorkOutput / (3600 * 1000); //[MW]
     double Tfinal = TfinalCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Qdot = QdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-<<<<<<< HEAD
-    printf("%f\n", Tfinal);
-    printf("%f\n", WdotTable[day]);
-=======
 
->>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
   }
 
   //Part 7: Outputing a CSV file
   //we take our Power Table and write a CSV file
   write_csv("PowerTable.csv", PowerTable);
-
-
 
   return 0;
 }
