@@ -267,6 +267,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
 
   return Tfinal;
+
 }
 
 
