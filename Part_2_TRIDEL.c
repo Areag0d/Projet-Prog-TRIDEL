@@ -198,46 +198,11 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   //Calculations of Mtot = mflue + mprim
 
   //mflue = mass of flue gases
-  double MWC2H4 = 28;
+  double MWC2H4 = 28; 
   //mC2H4 is given in main
-  double mCO2 = OriginalMass(mC2H4, MWC2H4, 44, 2) * 1000; //[kg]
-  double mH2O = OriginalMass(mC2H4, MWC2H4, 18, 2) * 1000; //[kg]
+  double mCO2 = (OriginalMass((mC2H4 * 1000), MWC2H4, 44, 2)) / 1000; //[kg]
+  double mH2O = (OriginalMass((mC2H4 * 1000), MWC2H4, 18, 2)) / 1000; //[kg]
 
-<<<<<<< HEAD
-  //double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  //double CmH2O = 1.996; //[kJ/kgK ], tabulated
-
-  double MWC2H4 = 28;
-  double nC2H4 = mC2H4 / MWC2H4;
-  double nC2H4Moy = massMoyC2H4 / MWC2H4;
-  double R = 8.314;
-  double P = 1;
-  //double Vprim = 1.5 nC2H4; //1.5 to have margin, but details
-  //double MWN2 = 28;
-  //double MWO2 = 32;
-  //double MWprim = 0.79 * MWN2 + 0.21 * MWO2;
-  //double mprim = 1.5 * nC2H4 * MWprim;
-
-  //double nC2H4 = mC2H4 / MWC2H4;
-  //double nCO2 = 2 * nC2H4;
-  //double nH2O = 2 * nC2H4;
-  //(or double nCO2 = massCO2 * MWCO2)
-
-  //(what is Cv?????)
-  //double CvH2O = 3.18; // (kJ/(kg K))
-  //double CvCO2 = 0.87; // (kJ/(kg K))
-  //double Cv = CvH2O + CvCO2; // (???)
-
-  //double a = (nCO2 + nH2O) * R/P;
-  //double b = (Vprim - Tignition * (nCO2 + nH2O) *R / P);
-  //double c = - Tignition * Vprim - Qnet / Cv;
-  //double delta = b*b - 4*a*c;
-
-  //double Tfinal = (-b + sqrt(delta)) / (2*a);
-
-  //(double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);)
-  //return Tfinal;
-=======
   double mflue = mCO2 + mH2O; //[kg]
 
   //finding mprim = mass of primary air
@@ -265,7 +230,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //we calculate mass of each part of air:
   //mass of O2 is simply mO2prim = nO2prim * MWO2
-  double MWO2 = 16; //g/mol
+  double MWO2 = 32; //g/mol
   //we divide by 1000 because we do molar calculations in [g],
   //and we want [kg]
   double mO2prim = nO2prim * MWO2 / 1000; //[kg]
@@ -299,9 +264,8 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
-  printf("%f, %f\n", Qnet, Tfinal);
+  //printf(" %f\n", Tfinal);
   return Tfinal;
->>>>>>> dc8d12532f4a8f05243ff49d637357bb567336b7
 }
 
 
@@ -331,7 +295,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double dB = ThotOut - TcoldOut;
 
   double LMTD = (dA - dB)/ log(dA / dB);
-  printf("%F\n", LMTD);
+  //printf("%F\n", LMTD);
   double A = 11490; //[m^2]
 
   //Energy flow
@@ -355,7 +319,7 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   //At 77°C and 2 bars, Hf = 293 [kJ/kg]
   double Hf = 3654, Hi = 314;
   double deltaH = Hf - Hi;
-  double Wdot = mdot * deltaH;
+  double Wdot = mdot * deltaH; //[kW]
 
   return Wdot;
 }
@@ -431,8 +395,8 @@ int main(int argc, char * argv[]) {
     WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Tfinal = TfinalCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Qdot = QdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    //printf("%f\n", Tfinal);
-    //printf("%f\n", Qdot);
+    printf("%f\n", Tfinal);
+    printf("%f\n", WdotTable[day]);
   }
   //debugging
 

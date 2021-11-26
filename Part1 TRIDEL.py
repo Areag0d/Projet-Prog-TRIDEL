@@ -60,7 +60,7 @@ pour cela nous estimons un sigma de 0.2% a wasteAvg,
 et generons aleatoirement(mais selon une distribution normale)
 une valeur des dechets pour chaque jour [kg/jour]"""
 
-sigmaWasteAvg = 0.002 * wasteAvg
+sigmaWasteAvg = 0.02 * wasteAvg
 wasteYearArray = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
 wasteDayArray = (wasteYearArray / 365) * habChargTot
 
