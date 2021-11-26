@@ -112,7 +112,8 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   //its specific heat value by calculating the average of each heat capacity
   //weighted by its importance (proportion) in the inert part
 
-  //we give specific heat values (tabulated) of each component: SiO2, Al, Fe, Ca, C, Cl respectively [J/(g*K)]:
+  //we give specific heat values (tabulated) of each component:
+  //SiO2, Al, Fe, Ca, C, Cl respectively [J/(g*K)]:
 
   double  CmTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
 
@@ -150,7 +151,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
   double Tinitial = 20; // T°C at which waste enters combustion room
   double QC2H4T = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
 
-  double Cmfus = 230;//[KJ/Kg]
+  double Cmfus = 230;//[kJ/Kg]
   double QC2H4Fusion =  Cmfus * mC2H4;
   double QC2H4 = QC2H4T + QC2H4Fusion;
 
@@ -175,6 +176,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
   double Qignition = Qwaste + Qeva + Qsteam;
   //Qair is the total energy input used to start the combustion reaction
+
   return Qignition;
 }
 
@@ -194,10 +196,10 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert){
   double mH2O = OriginalMass(mC2H4, 28, 18, 2);
 
   double CmCO2 = 0.849;	//[kJ/kgK], tabulated value
-  double CmH2O = 1.996; //[kJ/kgK ], tabulated
+  double CmH2O = 1.996; //[kJ/kgK], tabulated
 
-  double Tfinal = Tignition + Qnet / (CmCO2 * mCO2 + CmH2O * mH2O);
-
+  double Tfinal = Tignition + (Qnet / ((CmCO2 * mCO2) + (CmH2O * mH2O)));
+  printf("%f, %f, %f\n", Qnet, (CmCO2 * mCO2) + (CmH2O * mH2O), Qnet / ((CmCO2 * mCO2) + (CmH2O * mH2O)));
   return Tfinal;
 }
 
@@ -320,7 +322,12 @@ int main(int argc, char * argv[]) {
 
   for (int day = 0; day < 365; day++){
     WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day]);
+    //printf("%f\n", WdotTable[day]);
   }
+  //debugging
+
+
+
 
   return 0;
 }
