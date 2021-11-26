@@ -263,7 +263,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   }
 
   //We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
-  double Tfinal = Qnet / (Cptot * Mtot);
+  double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
   printf("%f, %f\n", Qnet, Tfinal);
   return Tfinal;
 }
