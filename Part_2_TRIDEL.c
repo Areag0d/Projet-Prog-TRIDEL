@@ -22,7 +22,7 @@ void read_csv(char * filename, double * table) {
   if (file == NULL) {
     printf("Data file does not exist (or isn't accessible).\n");
     }
-
+  else {
   // read line by line
   char line[100]; // maybe we need to make it bigger if we add columns
   int i = 0;
@@ -30,8 +30,9 @@ void read_csv(char * filename, double * table) {
     double value = atof(line);
     table[i] = value;
     i += 1;
-    //printf("value : %0.2f", table [i]);
+
     }
+  }
   fclose(file);
 }
 
@@ -200,8 +201,13 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   //mflue = mass of flue gases
   double MWC2H4 = 28; 
   //mC2H4 is given in main
+<<<<<<< HEAD
   double mCO2 = (OriginalMass((mC2H4 * 1000), MWC2H4, 44, 2)) / 1000; //[kg]
   double mH2O = (OriginalMass((mC2H4 * 1000), MWC2H4, 18, 2)) / 1000; //[kg]
+=======
+  double mCO2 = OriginalMass(1000*mC2H4, MWC2H4, 44, 2)/1000; //[kg]
+  double mH2O = OriginalMass(1000*mC2H4, MWC2H4, 18, 2)/1000; //[kg]
+>>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
 
   double mflue = mCO2 + mH2O; //[kg]
 
@@ -264,8 +270,18 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
+<<<<<<< HEAD
   //printf(" %f\n", Tfinal);
   return Tfinal;
+=======
+
+  return Tfinal;
+<<<<<<< HEAD
+
+=======
+>>>>>>> dc8d12532f4a8f05243ff49d637357bb567336b7
+>>>>>>> 53738c24a838429b92bb7048ae2e7f50095085ec
+>>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
 }
 
 
@@ -319,12 +335,28 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   //At 77°C and 2 bars, Hf = 293 [kJ/kg]
   double Hf = 3654, Hi = 314;
   double deltaH = Hf - Hi;
+<<<<<<< HEAD
   double Wdot = mdot * deltaH; //[kW]
 
+=======
+  double Wdot = mdot * deltaH;
+  printf("%f\n", Wdot);
+>>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
   return Wdot;
 }
 
+//Part 7: creating a CSV writer
 
+void write_csv(char * filename, double * table) {
+  printf("\n Creating a %s.csv file", filename);
+  FILE * file = fopen(filename, "+w");
+
+  //iterating on the whole table
+  for (int i = 0; i < 365; i++) {
+    fprintf(file, "%f", table[i]);
+  }
+  fclose(file);
+}
 
 
 int main(int argc, char * argv[]) {
@@ -390,16 +422,21 @@ int main(int argc, char * argv[]) {
   massMoyC2H4 /= 365;
 
 
-  double WdotTable[365];
+  double PowerTable[365];
    for (int day = 0; day < 365; day++){
-    WdotTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    PowerTable[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Tfinal = TfinalCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     double Qdot = QdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+<<<<<<< HEAD
     printf("%f\n", Tfinal);
     printf("%f\n", WdotTable[day]);
-  }
-  //debugging
+=======
 
+>>>>>>> 35f919cd5ba24b8581b59ae19794b21c022352f2
+  }
+
+  //Part 7: Outputing a CSV file
+  //we take our Power Table and write a CSV file
 
 
 
