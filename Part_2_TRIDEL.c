@@ -313,19 +313,20 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double Qdot = QdotCalculator(mC2H4, mMoist, mInert, massMoyC2H4); //[J/s]
   double CmSteam = 2000; //[J/kg/K]
   double dT = 450 - 30; //[K]
-  double mdot = Qdot / (CmSteam * dT); //[kg/s]
+  double mdot = Qdot / (CmSteam * dT) ; //[kg/s]
+
   //delaH = Hi - Hf, which are given in tables for our specific temperatures
   //The specific tempeartures were chosen upon what is common in litterture
   //for steam engines.
   //At 450°C and 50 bars, Hi = 3316 [kJ/kg]
-  //At 77°C and 2 bars, Hf = 293 [kJ/kg]
+  //At 77°C and 2 bars, Hf = 314 [kJ/kg]
   double Hf = 3316, Hi = 314;
   double deltaH = Hf - Hi;
   double Wdot = mdot * deltaH;
 
-  printf("%f\n", Wdot/(3600*1000*24)); //[kJ/day]
+  //printf("%f\n", Wdot/(3600)); //[kJ/day]
 
-  //printf("%f\n", Wdot);
+  //printf("%f\n", (Wdot / 1000));
 
   return Wdot; //[kJ/day]
 }
@@ -411,11 +412,14 @@ int main(int argc, char * argv[]) {
   //W = J/s --> kJ / s = kW. So we divide again by 1000 to get MegaWatts:
   //PowerOutput = W / (3600 * 1000) [MW]
   double PowerTable[365];
-   for (int day = 0; day < 365; day++){
-    double WorkOutput = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput / (3600 * 1000 * 24); //[MW]
+  double WorkOutput[365];
+  for (int day = 0; day < 365; day++){
 
+    WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
+    PowerTable[day] = WorkOutput[day] / 1000; //[MW]
+    printf("%f\n", PowerTable[day]);
   }
+
 
   //Part 7: Outputing a CSV file
   //we take our Power Table and write a CSV file
