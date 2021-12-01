@@ -12,6 +12,10 @@ wasteDayLst /= 1000 # conversion from [kg] to [tonnes]
 """Part 2: initializing reference values"""
 # These values are given in [MWh] for per month
 TridelValues = np.array([4942.84, 4909.77, 4959.43, 5041.34, 5876.92, 1396.43, 7550.33, 8926.98, 8242.48, 6819.23, 5744.39, 5439.18]) #[MWh / month]
+<<<<<<< HEAD
+=======
+
+>>>>>>> ff7cf5a66682a8db5a007eeb910a7ecde9c22668
 TridelValues = TridelValues / (30.4 * 24) # converting [MWh] to [MW]
 
 # Modifying the dimension of the arrays, in order for it to be possible
