@@ -13,7 +13,7 @@ wasteDayLst = np.genfromtxt('wasteDayLst.csv', delimiter = ',', dtype = 'float64
 wasteDayLst /= 1000 #[tonnes]
 
 TridelValues = np.array([4942.84, 4909.77, 4959.43, 5041.34, 5876.92, 1396.43, 7550.33, 8926.98, 8242.48, 6819.23, 5744.39, 5439.18]) #[MWh / month]
-TridelValues = TridelValues / (30 * 24) #[MW] ecrire une boucle pour le diviser par 1000.
+TridelValues = TridelValues / (30 * 24) #[MW] 
 
 # rendre ces valeurs par jours: copier chaque valeur le nombre de jours
 # dans le mois correspondant
@@ -28,26 +28,31 @@ for i in range(len(TridelValues)):
 #print(DayTridelVal)
 
 
-"""Part 2 energy output plot"""
+"""Part 3 energy output plot"""
 
-x = np.array([day + 1 for day in range(365)])
+#We divide our plot into two subplots:
+#we start by plotting our energy output vs the official energy output of Tridel
 
-y = np.array(wasteDayLst)
-z = PowerTable
+days = np.array([day + 1 for day in range(365)])
 
-#plt.title('Daily Waste Weight')
+wstDay = np.array(wasteDayLst)
+Pwr = PowerTable
+TridelDay = DayTridelVal
+
 plt.figure()
-e = DayTridelVal
+
 plt.subplot(2, 1, 1)
-plt.plot(x, e, label = 'Daily given Power production')
-plt.plot(x, z, label = 'Daily calculated Power production')
-#plt.xlabel("Days")
+plt.plot(days, TridelDay, label = 'Official daily Power production')
+plt.plot(days, Pwr, label = 'Daily calculated Power production')
 plt.ylabel("[MW]")
 plt.legend()
 
+#We then plot the total waste taken up by TRIDEL as a function of
+#the number of people chosen by the user in part 1.
+
 plt.subplot(2, 1, 2)
 
-plt.plot(x, y, label = 'Daily Waste weight [tons]')
+plt.plot(days, wstDay, label = 'Daily Waste weight [tons]')
 plt.legend()
 plt.xlabel("Days")
 plt.ylabel("[tons]")
