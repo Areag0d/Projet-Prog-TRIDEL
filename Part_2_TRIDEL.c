@@ -413,7 +413,7 @@ int main(int argc, char * argv[]) {
 
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     PowerTable[day] = WorkOutput[day] / (3600*24*1000); //[MW] a discuter...
-    printf("%f\n", PowerTable[day]);
+    //printf("%f\n", PowerTable[day]);
   }
 
 
