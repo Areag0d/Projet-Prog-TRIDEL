@@ -12,18 +12,6 @@ import csv
 
 """We define our starting variables"""
 
-<<<<<<< HEAD
-#habitants par région:
-#inputing the number of inhabitants
-print("Donnez le nombre d'habitants actuels du canton de Vaud.")
-habTotal = input("Si vous ne savez pas, appuyez sur Enter: ")
-print("")
-
-if habTotal == "":
-    habTotal = 815300
-    print("Pas d'input reçu, la valeur pour l'année 2020 sera prise:")
-    print("Celle-ci est de 815300 habitants.\n")
-=======
 # inhabitants per region:
 # inputting the number of inhabitants
 print("Estimate the current population of the canton of Vaud.")
@@ -32,7 +20,6 @@ habTotal = input("If you do not care.. press Enter: ")
 if habTotal == "":
     habTotal = 815300
     print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
->>>>>>> 39dcb086ccac72f015231b35b0eb9bd4c73e2568
 
 habTotal = float(habTotal)
 # we have the inhabitance percentage of the inhabitants
@@ -75,7 +62,7 @@ wasteAvg = np.sum(wastePondLst)
 
 """We compute the total waste quantity per day,
 for that, we estimate a sigma of 0.02% times wasteAvg,
-and randomly (but following a normal distribution) generate 
+and randomly (but following a normal distribution) generate
 a value of the total waste quantity each day [kg/day]"""
 
 
@@ -101,12 +88,7 @@ with open("wasteDayLst.csv", "w", newline= "") as file:
 
 """We run the second part of the code, written in C."""
 
-<<<<<<< HEAD
 print("Running the program computing the values...\n")
-=======
-print("Running the part of the program computing the values...")
-
->>>>>>> 39dcb086ccac72f015231b35b0eb9bd4c73e2568
 import os
 
 os.startfile(r"Part_2_TRIDEL.exe")
