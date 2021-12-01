@@ -31,8 +31,8 @@ for i in range(len(TridelValues)):
 
 """Part 3 energy output plot"""
 
-#We divide our plot into two subplots:
-#we start by plotting our energy output vs the official energy output of Tridel
+# We divide our plot into two subplots:
+# we start by plotting our energy output vs the official energy output of Tridel
 
 days = np.array([day + 1 for day in range(365)])
 
@@ -48,8 +48,8 @@ plt.plot(days, Pwr, label = 'Daily calculated Power production')
 plt.ylabel("[MW]")
 plt.legend()
 
-#We then plot the total waste taken up by TRIDEL as a function of
-#the number of people chosen by the user in part 1.
+# We then plot the total waste taken up by TRIDEL as a function of
+# the number of people chosen by the user in part 1.
 
 plt.subplot(2, 1, 2)
 
