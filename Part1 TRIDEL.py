@@ -19,7 +19,7 @@ habTotal = input("Si vous ne savez pas, appuyez sur Enter: ")
 
 if habTotal == "":
     habTotal = 815300
-    print("Pas d'input reçu, la valeur de 2020 qui est de 815300 habitants.")
+    print("Pas d'input reçu, la valeur de 2020 qui est de 815300 habitants.\n")
 
 habTotal = float(habTotal)
 #on a le pourcentage que représentent les habitants
@@ -77,7 +77,7 @@ for i in wasteDayArray:
 
 """On crée maintenant fichier csv à partir du jeu de données que nous avons"""
 
-print("Creating a CSV file for the generated values of waste per day...")
+print("Creating a CSV file for the generated values of waste per day...\n")
 with open("wasteDayLst.csv", "w", newline= "") as file:
     writer = csv.writer(file)
     writer.writerows(wasteDayLst)
@@ -88,5 +88,5 @@ with open("wasteDayLst.csv", "w", newline= "") as file:
 print("Running the part of the program computing the values...")
 import os
 
-os.startfile(r"C:\Users\mimag\github\Projet-Prog-TRIDEL\Part_2_TRIDEL.exe")
+os.startfile(r"Part_2_TRIDEL.exe")
 

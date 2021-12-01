@@ -265,7 +265,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   //We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
-  //printf(" %f\n", Tfinal);
+
   return Tfinal;
 
 }
@@ -285,7 +285,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double alphaHot = 3500; //mean of the tabulated values
   double alphaCold = 120; //mean of the tabulated values
   double k = 1/ ((1/alphaHot) + (thickness/lambda) + (1/alphaCold)); //heat transfer coefficient
-  //printf("%F\n", k);
+
   //LMTD: Logarithmic Mean Temperature Difference
   double Tfinal = TfinalCalculator(mC2H4, mMoist, mInert, massMoyC2H4);
   double ThotIn = Tfinal;
@@ -297,7 +297,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double dB = ThotOut - TcoldOut;
 
   double LMTD = (dA - dB)/ log(dA / dB);
-  //printf("%F\n", LMTD);
+
   double A = 11490; //[m^2]
 
   //Energy flow
@@ -324,10 +324,6 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   double deltaH = Hf - Hi;
   double Wdot = mdot * deltaH;
 
-  //printf("%f\n", Wdot/(3600)); //[kJ/day]
-
-  //printf("%f\n", (Wdot / 1000));
-
   return Wdot; //[kJ/day]
 }
 
@@ -340,7 +336,7 @@ void write_csv(char * filename, double * table) {
   //iterating on the whole table
   for (int i = 0; i < 365; i++) {
     fprintf(file, "%f\n", table[i]);
-    //printf("hi");
+
   }
   fclose(file);
 }
