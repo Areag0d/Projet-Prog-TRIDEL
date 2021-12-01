@@ -1,22 +1,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import csv
-import math as ma
 
-"""Part 1 CSV file creation""" 
-# 1st we need to import the Csv file into a table 
+"""Part 1: CSV file reading""" 
+# 1st we need to import the CSV file of Power outputs into a table 
 
-PowerTable = np.genfromtxt('PowerTable.csv', delimiter = ',', dtype = 'float64') #[MW]
-#PowerTable *= 1000000 #[W]
+PowerTable = np.genfromtxt('PowerTable.csv', delimiter = ',', dtype = 'float64') # [MW]
 
-wasteDayLst = np.genfromtxt('wasteDayLst.csv', delimiter = ',', dtype = 'float64') #[Kg]
-wasteDayLst /= 1000 #[tonnes]
+wasteDayLst = np.genfromtxt('wasteDayLst.csv', delimiter = ',', dtype = 'float64') # [Kg]
+wasteDayLst /= 1000 # conversion from [kg] to [tonnes]
 
+"""Part 2: initializing reference values"""
+# These values are given in [MWh] for per month
 TridelValues = np.array([4942.84, 4909.77, 4959.43, 5041.34, 5876.92, 1396.43, 7550.33, 8926.98, 8242.48, 6819.23, 5744.39, 5439.18]) #[MWh / month]
-TridelValues = TridelValues / (30 * 24) #[MW] ecrire une boucle pour le diviser par 1000.
+TridelValues = TridelValues / (30.4 * 24) # converting [MWh] to [MW]
 
-# rendre ces valeurs par jours: copier chaque valeur le nombre de jours
-# dans le mois correspondant
+# Modifying the dimension of the arrays, in order for it to be possible
+# to plot official and calculated values together
 
 daysInMonths = [31, 28, 30, 31, 30, 31, 31, 31, 30, 31, 30, 31]
 DayTridelVal = []
@@ -24,8 +23,6 @@ DayTridelVal = []
 for i in range(len(TridelValues)):
     repeatedValue = np.repeat(TridelValues[i], daysInMonths[i])
     DayTridelVal = np.concatenate((DayTridelVal, repeatedValue))
-
-#print(DayTridelVal)
 
 
 """Part 2 energy output plot"""
