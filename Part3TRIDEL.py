@@ -21,8 +21,14 @@ x = np.array([day + 1 for day in range(365)])
 
 #y = np.array(PowerTable)
 y = np.array(wasteDayLst)
-z = TridelValues
 
+plt.xlabel('Day')
+plt.ylabel('WasteDay [Kg]')
+plt.zlabel('')
+plt.title('Daily Waste Weight')
 plt.plot(x, y)
 
 plt.show()
+
+d = [i for i in range(13)]
+z = TridelValues
