@@ -13,10 +13,15 @@ import csv
 """on définit nos variables de départ"""
 
 #habitants par région:
-#on a le nombre total  d'habitants du canton de Vaud
+#inputing the number of inhabitants
+print("Donnez le nombre d'habitants actuels du canton de Vaud.")
+habTotal = input("Si vous ne savez pas, appuyez sur Enter: ")
 
-habTotal = 815300
+if habTotal == "":
+    habTotal = 815300
+    print("Pas d'input reçu, la valeur de 2020 qui est de 815300 habitants.")
 
+habTotal = float(habTotal)
 #on a le pourcentage que représentent les habitants
 #d'une région vis-à-vis du canton
 
@@ -70,12 +75,18 @@ for i in wasteDayArray:
     wasteDayLst.append([i])
 
 
-
-
-#print(wasteDayLst)
-
 """On crée maintenant fichier csv à partir du jeu de données que nous avons"""
 
+print("Creating a CSV file for the generated values of waste per day...")
 with open("wasteDayLst.csv", "w", newline= "") as file:
     writer = csv.writer(file)
     writer.writerows(wasteDayLst)
+
+
+"""On lance la deuxième partie du programme, en C."""
+
+print("Running the part of the program computing the values...")
+import os
+
+os.startfile(r"C:\Users\mimag\github\Projet-Prog-TRIDEL\Part_2_TRIDEL.exe")
+
