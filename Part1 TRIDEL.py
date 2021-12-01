@@ -16,10 +16,12 @@ import csv
 #inputing the number of inhabitants
 print("Donnez le nombre d'habitants actuels du canton de Vaud.")
 habTotal = input("Si vous ne savez pas, appuyez sur Enter: ")
+print("")
 
 if habTotal == "":
     habTotal = 815300
-    print("Pas d'input reçu, la valeur de 2020 qui est de 815300 habitants.\n")
+    print("Pas d'input reçu, la valeur pour l'année 2020 sera prise:")
+    print("Celle-ci est de 815300 habitants.\n")
 
 habTotal = float(habTotal)
 #on a le pourcentage que représentent les habitants
@@ -85,8 +87,9 @@ with open("wasteDayLst.csv", "w", newline= "") as file:
 
 """On lance la deuxième partie du programme, en C."""
 
-print("Running the part of the program computing the values...")
+print("Running the program computing the values...\n")
 import os
 
 os.startfile(r"Part_2_TRIDEL.exe")
 
+print("Creating a CSV file of calculated Power output...\n")
