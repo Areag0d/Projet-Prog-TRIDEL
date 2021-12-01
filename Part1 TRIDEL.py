@@ -4,14 +4,15 @@ Created on Wed Oct 20 15:57:44 2021
 
 @author: Mike and Seif
 
-Part 1 of TRIDEL modelisation: data generation
+Part 1 of TRIDEL simulation: data generation
 """
 
 import numpy as np
 import csv
 
-"""on définit nos variables de départ"""
+"""We define our starting variables"""
 
+<<<<<<< HEAD
 #habitants par région:
 #inputing the number of inhabitants
 print("Donnez le nombre d'habitants actuels du canton de Vaud.")
@@ -22,30 +23,41 @@ if habTotal == "":
     habTotal = 815300
     print("Pas d'input reçu, la valeur pour l'année 2020 sera prise:")
     print("Celle-ci est de 815300 habitants.\n")
+=======
+# inhabitants per region:
+# inputting the number of inhabitants
+print("Estimate the current population of the canton of Vaud.")
+habTotal = input("If you do not care.. press Enter: ")
+
+if habTotal == "":
+    habTotal = 815300
+    print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
+>>>>>>> 39dcb086ccac72f015231b35b0eb9bd4c73e2568
 
 habTotal = float(habTotal)
-#on a le pourcentage que représentent les habitants
-#d'une région vis-à-vis du canton
+# we have the inhabitance percentage of the inhabitants
+# of a region with respect to the canton
 
 prophabLausanne = 0.25
 prophabOuest = 0.25
 prophabLaCote = 0.14
 prophabNord = 0.10
 
-"""On calcule simplement la quantité d'habitants pris en echarge
-par TRIDEL par région grâce aux données précédentes
-ATTENTION: on pondère la quantité d'habitants par un facteur 1/2
-pour les habitants des régions Nord et La Côte"""
+"""We can easily calculate the number of people from which
+TRIDEL collects waste from the previous data.
+WARNING: we weigh the number of inhabitants by a factor of 1/2
+for the inhabitants of Nord and La Côte regions"""
+
 
 habLausanne  = habTotal * prophabLausanne
 habOuest = habTotal * prophabOuest
 habLaCote = habTotal * 0.5 * prophabLaCote
 habNord = habTotal * 0.5 * prophabNord
 habChargTot = habLausanne + habOuest + habLaCote + habNord
-#print(f"habitants total pris en charge par TRIDEL = {habChargTot}")
+
 habChargLst = np.array([habLausanne, habOuest, habLaCote, habNord])
 
-#déchets par habitant par région [kg/année] : wastehabRegion
+#waste per person per region [kg/year] : wastehabRegion
 
 wastehabLausanne = 185.1
 wastehabNord = 151.4
@@ -53,17 +65,19 @@ wastehabOuest = 130.8
 wastehabLaCote = 147.3
 wasteHabLst = np.array([wastehabLausanne, wastehabNord, wastehabOuest,  wastehabLaCote])
 
-"""On peut calculer la moyenne des déchets par habitants
-pondérée par le nombre d'habitants de chaque ville par annee [kg/annee]"""
+"""we can calculate the inhabitants' waste average,
+weighted by the number of inhabitants of each city per year [kg/year]"""
+
 
 wastePondLst = (wasteHabLst * (habChargLst / habChargTot))
 wasteAvg = np.sum(wastePondLst)
 #print(wastePondLst, wasteAvg)
 
-"""On calcule la quantite totale de dechets par jour,
-pour cela nous estimons un sigma de 0.2% a wasteAvg,
-et generons aleatoirement(mais selon une distribution normale)
-une valeur des dechets pour chaque jour [kg/jour]"""
+"""We compute the total waste quantity per day,
+for that, we estimate a sigma of 0.02% times wasteAvg,
+and randomly (but following a normal distribution) generate 
+a value of the total waste quantity each day [kg/day]"""
+
 
 sigmaWasteAvg = 0.02 * wasteAvg
 wasteYearArray = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
@@ -77,7 +91,7 @@ for i in wasteDayArray:
     wasteDayLst.append([i])
 
 
-"""On crée maintenant fichier csv à partir du jeu de données que nous avons"""
+"""We now create a CSV file containing the data we have generated"""
 
 print("Creating a CSV file for the generated values of waste per day...\n")
 with open("wasteDayLst.csv", "w", newline= "") as file:
@@ -85,9 +99,14 @@ with open("wasteDayLst.csv", "w", newline= "") as file:
     writer.writerows(wasteDayLst)
 
 
-"""On lance la deuxième partie du programme, en C."""
+"""We run the second part of the code, written in C."""
 
+<<<<<<< HEAD
 print("Running the program computing the values...\n")
+=======
+print("Running the part of the program computing the values...")
+
+>>>>>>> 39dcb086ccac72f015231b35b0eb9bd4c73e2568
 import os
 
 os.startfile(r"Part_2_TRIDEL.exe")
