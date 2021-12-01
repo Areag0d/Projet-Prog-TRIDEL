@@ -335,11 +335,11 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 
 void write_csv(char * filename, double * table) {
   printf("\n Creating a %s file", filename);
-  FILE * file = fopen(filename, "+w");
+  FILE * file = fopen(filename, "w");
 
   //iterating on the whole table
   for (int i = 0; i < 365; i++) {
-    //fprintf(file, "%f", table[i]);
+    fprintf(file, "%f\n", table[i]);
     //printf("hi");
   }
   fclose(file);
@@ -416,7 +416,7 @@ int main(int argc, char * argv[]) {
   for (int day = 0; day < 365; day++){
 
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / 1000; //[MW]
+    PowerTable[day] = WorkOutput[day] / (3600*24*1000); //[MW] a discuter...
     printf("%f\n", PowerTable[day]);
   }
 
