@@ -7,9 +7,7 @@ Created on Wed Oct 20 15:57:44 2021
 Part 1 of TRIDEL modelisation: data generation
 """
 
-import math
 import numpy as np
-import random as rdm
 import csv
 
 """on définit nos variables de départ"""
