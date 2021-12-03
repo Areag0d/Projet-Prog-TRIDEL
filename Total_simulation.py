@@ -15,13 +15,21 @@ import csv
 # inhabitants per region:
 # inputting the number of inhabitants
 print("Estimate the current population of the canton of Vaud.")
-habTotal = input("If you do not care.. press Enter: ")
+habTotalEstim = input("If you do not care.. press Enter: ")
+habTotal = 815300
 
-if habTotal == "":
-    habTotal = 815300
+if (habTotalEstim == ""):
     print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
+    habTotalEstim = habTotal
 
-habTotal = float(habTotal)
+elif np.abs(float(habTotalEstim) - habTotal) > 100000:
+        print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
+        habTotalEstim = habTotal
+
+elif type(habTotalEstim) != int:
+    print("Invalid value: you can not have a decimal citizen!")
+
+habTotalEstim = int(habTotalEstim)
 # we have the inhabitance percentage of the inhabitants
 # of a region with respect to the canton
 
@@ -99,7 +107,7 @@ print("Creating a CSV file of calculated Power output...\n")
 # before running the last part
 
 import time
-time.sleep(2)
+time.sleep(0.5)
 
 ###########################################################################
 
