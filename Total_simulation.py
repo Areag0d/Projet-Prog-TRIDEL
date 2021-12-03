@@ -18,6 +18,7 @@ print("Estimate the current population of the canton of Vaud.")
 habTotalEstim = input("If you do not care.. press Enter: ")
 habTotal = 815300
 
+# making sure that the population value input is relevant
 if (habTotalEstim == ""):
     print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
@@ -30,9 +31,9 @@ elif type(habTotalEstim) != int:
     print("Invalid value: you can not have a decimal citizen!")
 
 habTotalEstim = int(habTotalEstim)
+
 # we have the inhabitance percentage of the inhabitants
 # of a region with respect to the canton
-
 prophabLausanne = 0.25
 prophabOuest = 0.25
 prophabLaCote = 0.14
