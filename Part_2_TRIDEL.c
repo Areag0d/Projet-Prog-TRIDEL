@@ -258,7 +258,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
-
+  printf("%f\n", Tfinal);
   return Tfinal;
 
 }
@@ -282,12 +282,12 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   // LMTD: Logarithmic Mean Temperature Difference
   double Tfinal = TfinalCalculator(mC2H4, mMoist, mInert, massMoyC2H4);
   double ThotIn = Tfinal;
-  double ThotOut = 0.7 * ThotIn;
+  double ThotOut = 0.9 * ThotIn;
   double TcoldIn = 30;
   double TcoldOut = 450;
 
-  double dA = ThotIn - TcoldIn;
-  double dB = ThotOut - TcoldOut;
+  double dA = ThotIn - TcoldOut;
+  double dB = ThotOut - TcoldIn;
 
   double LMTD = (dA - dB)/ log(dA / dB);
 
@@ -402,7 +402,8 @@ int main(int argc, char * argv[]) {
   for (int day = 0; day < 365; day++){
 
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW] a discuter...
+    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
+    //printf("%f\n", PowerTable[day]);
   }
 
 

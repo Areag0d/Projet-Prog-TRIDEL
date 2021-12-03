@@ -165,7 +165,7 @@ plt.legend()
 
 plt.subplot(2, 1, 2)
 
-plt.plot(days, wstDay, label = 'Daily Waste weight [tons]')
+plt.plot(days, wstDay, label = 'Daily Waste weight')
 plt.legend()
 plt.xlabel("Days")
 plt.ylabel("[tons]")
