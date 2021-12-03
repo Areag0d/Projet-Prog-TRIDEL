@@ -17,7 +17,7 @@ and each function that go along with each of these steps
 
 // So we start by defining all the functions before the main
 
-void read_csv(char * filename, double * table);
+void read_csv(char * filename, double * table); //do I put the parts here too..?
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
 double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
 double Qcalculator(double m, double Cm, double Tfinal, double Tinitial);
