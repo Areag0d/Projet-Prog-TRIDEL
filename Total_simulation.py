@@ -75,7 +75,7 @@ and randomly (but following a normal distribution) generate
 a value of the total waste quantity each day [kg/day]"""
 
 
-sigmaWasteAvg = 0.02 * wasteAvg
+sigmaWasteAvg = 0.2 * wasteAvg
 wasteYearArray = np.random.normal(wasteAvg, sigmaWasteAvg, size=(365))
 wasteDayArray = (wasteYearArray / 365) * habChargTot
 
