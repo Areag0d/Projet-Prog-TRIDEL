@@ -10,7 +10,7 @@ that way we obtain an energy output*/
 
 
 /* In our main function we will put the general backbone
-of the function along with a commentary of the different
+of the functions along with a commentary of the different
 steps that will lead us to the final output calculation,
 and each function that go along with each of these steps 
 */
@@ -355,13 +355,8 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   }
 
   // We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
-<<<<<<< HEAD
-  double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
-  printf("%f\n", Tfinal);
-=======
   double Tfinal = Qnet / (Cptot * mprim) + Tignition;
 
->>>>>>> e3d5e4fc1efa8d3720cf1d16aec1c94b485e1226
   return Tfinal;
 
 }
@@ -436,86 +431,3 @@ void write_csv(char * filename, double * table) {
   }
   fclose(file);
 }
-<<<<<<< HEAD
-
-
-int main(int argc, char * argv[]) {
-  // importing data from csv file into a table
-  // create a recieving table for data of dimension 365 * years
-  // int years = 1;
-  double wasteDayTable[365];
-
-  // calling the csv reader to produce wasteDayTable
-  read_csv("wasteDayLst.csv", wasteDayTable);
-
-  // Part 1: waste composition
-
-  // From the table of waste mass per day we have imported from CSV,
-  // we calculate the proportions of combustible, moisture and inert parts
-  // Hence we create a table for each component as it is the most convenient
-
-  double moistProportion = 0.195; // 19.5 %, average of the  two bounds of the interval
-  double inertProportion = 0.15;
-  double C2H4Proportion = 1 - moistProportion - inertProportion;
-
-  double mC2H4Table[365];
-  double mMoistTable[365];
-  double mInertTable[365];
-
-  for (int day = 0; day < 365; day++) {
-    mC2H4Table[day] = C2H4Proportion * wasteDayTable[day];
-    mMoistTable[day] = moistProportion * wasteDayTable[day];
-    mInertTable[day] = inertProportion * wasteDayTable[day];
-  }
-
-  // Part 2: energy required to heat up waste to ignition
-
-  // This is implemented in Qignition function, which is used
-  // in the next part
-
-  // Part 3: heat released by waste combustion and final air temperature
-
-  // We implemented the function TfinalCalculator which calculates
-  // the heat released by the combustion, substracts to it the heat
-  // needed to heat up the waste, and outputs the final temperature
-
-  // Part 4: energy transformation
-
-  // We implement QdotCalculator to model the heat exchanger: the energy flow
-  // going from the combustion flue gas and the water(steam) that will
-  // generate energy afterwards
-
-  // Part 5: energy harvesting
-  // To determine the work applied on the turbine, we model the heat engine
-  // by a Rankine cycle, which is common for electricity generation from
-  // steam turbines. To do so, we implemented WdotCalculator function.
-
-  // Part 6: final energy output
-  // We iterate our final function (WdotCalculator) on all the entries
-  // of our table and fill up our output table
-
-  double massMoyC2H4 = 0;
-  for (int day = 0; day < 365; day++) massMoyC2H4 += mC2H4Table[day];
-  massMoyC2H4 /= 365;
-
-  // We convert our kJ per day in kW:
-  // W = J/s --> kJ / s = kW. So we divide again by 1000 to get MegaWatts:
-  // PowerOutput = W / (3600 * 1000) [MW]
-  double PowerTable[365];
-  double WorkOutput[365];
-  for (int day = 0; day < 365; day++){
-
-    WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
-    //printf("%f\n", PowerTable[day]);
-  }
-
-
-  // Part 7: Outputing a CSV file
-  // we take our Power Table and write a CSV file
-  write_csv("PowerTable.csv", PowerTable);
-
-  return 0;
-}
-=======
->>>>>>> e3d5e4fc1efa8d3720cf1d16aec1c94b485e1226
