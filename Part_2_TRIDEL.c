@@ -95,7 +95,7 @@ int main(int argc, char * argv[]) {
   for (int day = 0; day < 365; day++){
 
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW] a discuter...
+    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
   }
 
 
