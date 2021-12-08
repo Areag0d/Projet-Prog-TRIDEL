@@ -10,7 +10,7 @@ that way we obtain an energy output*/
 
 
 /* In our main function we will put the general backbone
-of the function along with a commentary of the different
+of the functions along with a commentary of the different
 steps that will lead us to the final output calculation,
 and each function that go along with each of these steps
 */
@@ -98,7 +98,7 @@ int main(int argc, char * argv[]) {
   for (int day = 0; day < 365; day++){
 
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW] a discuter...
+    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
   }
 
 
@@ -361,7 +361,11 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   }
 
   // We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
+<<<<<<< HEAD
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
+=======
+  double Tfinal = Qnet / (Cptot * mprim) + Tignition;
+>>>>>>> c6b4ef253f27e7a254bce95df9c650021aa00c2e
 
   return Tfinal;
 
