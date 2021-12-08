@@ -19,13 +19,13 @@ habTotalEstim = input("If you do not care.. press Enter: ")
 habTotal = 815300
 
 # making sure that the population value input is relevant
-if (habTotalEstim == ""):
+if habTotalEstim == "":
     print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
 elif np.abs(float(habTotalEstim) - habTotal) > 100000:
-        print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
-        habTotalEstim = habTotal
+    print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
+    habTotalEstim = habTotal
 
 elif type(habTotalEstim) != int:
     print("Invalid value: you can not have a decimal citizen!")
@@ -169,7 +169,29 @@ plt.plot(days, wstDay, label = 'Daily Waste weight')
 plt.legend()
 plt.xlabel("Days")
 plt.ylabel("[tons]")
+
 plt.show()
 
 
+# Finally, we plot the power output with the variance 
+# we imposed, which is directly related to the inner working
+# of the TRIDEL incineration plant. 
+
+
+a, b = 0
+print(a, b)
+plt.subplot(2, 2, 1)
+plt.plot(a, b, label = 'Daily Power production with Variance')
+plt.legend()
+plt.xlabel('')
+plt.ylabel('')
+
+c, d = 0
+plt.subplot(2, 2, 2)
+plt.plot(c, d, label = 'Daily Power production with Variance')
+plt.legend()
+plt.xlabel('')
+plt.ylabel('')
+
+plt.show
 
