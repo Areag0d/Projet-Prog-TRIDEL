@@ -124,6 +124,7 @@ PowerTable = np.genfromtxt('PowerTable.csv', delimiter = ',', dtype = 'float64')
 wasteDayLst = np.genfromtxt('wasteDayLst.csv', delimiter = ',', dtype = 'float64') # [Kg]
 wasteDayLst /= 1000 # conversion from [kg] to [tonnes]
 
+varPowerTable = np.genfromtxt('varPowerTable.csv', delimiter = ',', dtype = 'float64') # [MW]
 
 """Part 2: initializing reference values"""
 # These values are given in [MWh] per month
@@ -178,20 +179,22 @@ plt.show()
 # of the TRIDEL incineration plant. 
 
 
-a, b = 0
-print(a, b)
+plt.figure()
+
+
 plt.subplot(2, 2, 1)
-plt.plot(a, b, label = 'Daily Power production with Variance')
+plt.plot(days, varPowerTable, label = 'Daily Power production with Variance')
 plt.legend()
 plt.xlabel('')
 plt.ylabel('')
 
+"""
 c, d = 0
 plt.subplot(2, 2, 2)
 plt.plot(c, d, label = 'Daily Power production with Variance')
 plt.legend()
 plt.xlabel('')
 plt.ylabel('')
-
+"""
 plt.show
 
