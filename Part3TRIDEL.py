@@ -54,3 +54,26 @@ plt.legend()
 plt.xlabel("Days")
 plt.ylabel("[tons]")
 plt.show()
+
+
+# Finally, we plot the power output with the variance 
+# we imposed, which is directly related to the inner working
+# of the TRIDEL incineration plant. 
+
+
+a, b = 0
+print(a, b)
+plt.subplot(2, 2, 1)
+plt.plot(a, b, label = 'Daily Power production with Variance')
+plt.legend()
+plt.xlabel('')
+plt.ylabel('')
+
+c, d = 0
+plt.subplot(2, 2, 2)
+plt.plot(c, d, label = 'Daily Power production with Variance')
+plt.legend()
+plt.xlabel('')
+plt.ylabel('')
+
+plt.show
