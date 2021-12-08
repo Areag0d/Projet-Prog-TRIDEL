@@ -12,7 +12,7 @@ that way we obtain an energy output*/
 /* In our main function we will put the general backbone
 of the function along with a commentary of the different
 steps that will lead us to the final output calculation,
-and each function that go along with each of these steps 
+and each function that go along with each of these steps
 */
 
 // So we start by defining all the functions before the main
@@ -62,19 +62,22 @@ int main(int argc, char * argv[]) {
   // This is implemented in Qignition function, which is used
   // in the next part
 
-  // Part 3: heat released by waste combustion and final air temperature
+  // Part 3: Final air temperature
 
   // We implemented the function TfinalCalculator which calculates
   // the heat released by the combustion, substracts to it the heat
   // needed to heat up the waste, and outputs the final temperature
+  // 3.1 : heat released by PE combustion
+  // 3.2 : finding composition of final gas
+  // 3.3 : final temperature
 
-  // Part 4: energy transformation
+  // Part 4: Heat exchanger
 
   // We implement QdotCalculator to model the heat exchanger: the energy flow
   // going from the combustion flue gas and the water(steam) that will
   // generate energy afterwards
 
-  // Part 5: energy harvesting
+  // Part 5: Energy harvesting
   // To determine the work applied on the turbine, we model the heat engine
   // by a Rankine cycle, which is common for electricity generation from
   // steam turbines. To do so, we implemented WdotCalculator function.
@@ -277,7 +280,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 // Part 3: heat released by waste combustion
 
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
-
+  // 3.1 : heat released by PE combustion
   // We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; // [kJ/kg] tabulated value
   double Qheat = QcC2H4x * mC2H4; // [KJ]
@@ -287,7 +290,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
 
-  // Calculations of Mtot = mflue + mprim
+  // 3.2 Calculations of Mtot = mflue + mprim
 
   // mflue = mass of flue gases
   double MWC2H4 = 28;
@@ -305,7 +308,9 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // to ensure a good combustion, we'll overshoot the moles of primary air needed
   // by 50%, as it is suggested in litterature
-  double nO2prim = 1.5 * nO2; // [mol]
+  // in the end, 50% of primary air's ideal molarity will find itself
+  // in combustion chamber, as it hasn't been burnt
+  double nO2prim = 0.5 * nO2; // [mol]
 
   // We know air is not only composed by oxygen, but also N2
   // we neglect all other trace elements
@@ -327,7 +332,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // and we want [kg]
   double mO2prim = nO2prim * MWO2 / 1000; // [kg]
 
-  // to get mass of N2, we first calulate nN2 with Ideal Gas law
+  // to get mass of N2, we first calculate nN2 with Ideal Gas law
   // nN2 = P * V / (R * Tignition)
   double nN2 = P * VN2 / (R * Tignition); // [mol]
 
@@ -341,6 +346,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // We can add mflue and mprim to get total air: Mtot
   double Mtot = mflue + mprim;
 
+  // 3.3 : final temperature
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
   // we need to find Cp of our mixture:
   // to do so, we calculate the average of Cp of our components
@@ -355,19 +361,14 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   }
 
   // We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
-<<<<<<< HEAD
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
-  printf("%f\n", Tfinal);
-=======
-  double Tfinal = Qnet / (Cptot * mprim) + Tignition;
 
->>>>>>> e3d5e4fc1efa8d3720cf1d16aec1c94b485e1226
   return Tfinal;
 
 }
 
 
-// Part 4 : energy harvesting
+// Part 4 : Heat exchanger
 
 // We're calculating the energy flow according to this equation:
   // Qflow = k * A * LMTD
@@ -402,6 +403,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   return Qdot;
 }
 
+// Part 5 : Energy harvesting
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
   // we know that Wdot = mdot * deltaH
@@ -436,86 +438,3 @@ void write_csv(char * filename, double * table) {
   }
   fclose(file);
 }
-<<<<<<< HEAD
-
-
-int main(int argc, char * argv[]) {
-  // importing data from csv file into a table
-  // create a recieving table for data of dimension 365 * years
-  // int years = 1;
-  double wasteDayTable[365];
-
-  // calling the csv reader to produce wasteDayTable
-  read_csv("wasteDayLst.csv", wasteDayTable);
-
-  // Part 1: waste composition
-
-  // From the table of waste mass per day we have imported from CSV,
-  // we calculate the proportions of combustible, moisture and inert parts
-  // Hence we create a table for each component as it is the most convenient
-
-  double moistProportion = 0.195; // 19.5 %, average of the  two bounds of the interval
-  double inertProportion = 0.15;
-  double C2H4Proportion = 1 - moistProportion - inertProportion;
-
-  double mC2H4Table[365];
-  double mMoistTable[365];
-  double mInertTable[365];
-
-  for (int day = 0; day < 365; day++) {
-    mC2H4Table[day] = C2H4Proportion * wasteDayTable[day];
-    mMoistTable[day] = moistProportion * wasteDayTable[day];
-    mInertTable[day] = inertProportion * wasteDayTable[day];
-  }
-
-  // Part 2: energy required to heat up waste to ignition
-
-  // This is implemented in Qignition function, which is used
-  // in the next part
-
-  // Part 3: heat released by waste combustion and final air temperature
-
-  // We implemented the function TfinalCalculator which calculates
-  // the heat released by the combustion, substracts to it the heat
-  // needed to heat up the waste, and outputs the final temperature
-
-  // Part 4: energy transformation
-
-  // We implement QdotCalculator to model the heat exchanger: the energy flow
-  // going from the combustion flue gas and the water(steam) that will
-  // generate energy afterwards
-
-  // Part 5: energy harvesting
-  // To determine the work applied on the turbine, we model the heat engine
-  // by a Rankine cycle, which is common for electricity generation from
-  // steam turbines. To do so, we implemented WdotCalculator function.
-
-  // Part 6: final energy output
-  // We iterate our final function (WdotCalculator) on all the entries
-  // of our table and fill up our output table
-
-  double massMoyC2H4 = 0;
-  for (int day = 0; day < 365; day++) massMoyC2H4 += mC2H4Table[day];
-  massMoyC2H4 /= 365;
-
-  // We convert our kJ per day in kW:
-  // W = J/s --> kJ / s = kW. So we divide again by 1000 to get MegaWatts:
-  // PowerOutput = W / (3600 * 1000) [MW]
-  double PowerTable[365];
-  double WorkOutput[365];
-  for (int day = 0; day < 365; day++){
-
-    WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
-    //printf("%f\n", PowerTable[day]);
-  }
-
-
-  // Part 7: Outputing a CSV file
-  // we take our Power Table and write a CSV file
-  write_csv("PowerTable.csv", PowerTable);
-
-  return 0;
-}
-=======
->>>>>>> e3d5e4fc1efa8d3720cf1d16aec1c94b485e1226
