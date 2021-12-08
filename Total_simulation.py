@@ -104,6 +104,7 @@ os.startfile(r"Part_2_TRIDEL.exe")
 
 print("Creating a CSV file of calculated Power output...\n")
 
+
 # waiting for the PowerOutput CSV file to be written
 # before running the last part
 
@@ -155,7 +156,7 @@ TridelDay = DayTridelVal
 
 plt.figure()
 
-plt.subplot(2, 1, 1)
+plt.subplot(1, 1, 1)
 plt.plot(days, TridelDay, label = 'Official daily Power production')
 plt.plot(days, Pwr, label = 'Daily calculated Power production')
 plt.ylabel("[MW]")
@@ -164,14 +165,14 @@ plt.legend()
 # We then plot the total waste taken up by TRIDEL as a function of
 # the number of people chosen by the user in part 1.
 
-plt.subplot(2, 1, 2)
+plt.subplot(1, 2, 1)
 
 plt.plot(days, wstDay, label = 'Daily Waste weight')
 plt.legend()
 plt.xlabel("Days")
 plt.ylabel("[tons]")
 
-plt.show()
+
 
 
 # Finally, we plot the power output with the variance 
@@ -179,10 +180,10 @@ plt.show()
 # of the TRIDEL incineration plant. 
 
 
-plt.figure()
 
 
-plt.subplot(2, 2, 1)
+
+plt.subplot(2, 1, 1)
 plt.plot(days, varPowerTable, label = 'Daily Power production with Variance')
 plt.legend()
 plt.xlabel('')
@@ -190,11 +191,11 @@ plt.ylabel('')
 
 """
 c, d = 0
-plt.subplot(2, 2, 2)
+plt.subplot(2, 2, 1)
 plt.plot(c, d, label = 'Daily Power production with Variance')
 plt.legend()
 plt.xlabel('')
 plt.ylabel('')
 """
-plt.show
+plt.show()
 
