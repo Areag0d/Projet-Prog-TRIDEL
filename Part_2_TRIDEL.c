@@ -25,6 +25,7 @@ double Qignition(double mC2H4, double mMoist, double mInert);
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+double stochastiser(double value);
 void write_csv(char * filename, double * table);
 
 
@@ -100,12 +101,17 @@ int main(int argc, char * argv[]) {
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
   }
+  // Part 7: Implementing a variance following a normal distribution
+  double varPowerTable[365];
+  for (int day = 0; day < 365; day++)
 
+    varPowerTable[day] = stochastiser(PowerTable[day]);
 
-  // Part 7: Outputing a CSV file
-  // we take our Power Table and write a CSV file
+  // Part 8: Outputing CSV files
+  // CSV file for PowerTable
   write_csv("PowerTable.csv", PowerTable);
-
+  // CSV file for varPowerTable
+  write_csv("varPowerTable.csv", varPowerTable);
   return 0;
 }
 
@@ -361,11 +367,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   }
 
   // We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
-<<<<<<< HEAD
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
-=======
-  double Tfinal = Qnet / (Cptot * mprim) + Tignition;
->>>>>>> c6b4ef253f27e7a254bce95df9c650021aa00c2e
 
   return Tfinal;
 
@@ -429,7 +431,19 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   return Wdot; // [kJ/day]
 }
 
-// Part 7: creating a CSV writer
+//Part 7: creating a new table adding variance
+double stochastiser(double mu){
+  double TAU = 8 * atan(1);
+  float max = 0, sigma=1.25, r;
+  double * F = calloc(365, sizeof(double));
+  r=sqrt(-2*log(rand()/(RAND_MAX+1.0)))*cos(TAU*rand()/(RAND_MAX+1.0));
+  r=r*sigma+mu;
+  return r;
+}
+
+
+
+// Part 8: creating a CSV writer
 
 void write_csv(char * filename, double * table) {
   printf("\n Creating a %s file", filename);
