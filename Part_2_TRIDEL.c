@@ -12,7 +12,7 @@ that way we obtain an energy output*/
 /* In our main function we will put the general backbone
 of the functions along with a commentary of the different
 steps that will lead us to the final output calculation,
-and each function that go along with each of these steps 
+and each function that go along with each of these steps
 */
 
 // So we start by defining all the functions before the main
@@ -62,19 +62,22 @@ int main(int argc, char * argv[]) {
   // This is implemented in Qignition function, which is used
   // in the next part
 
-  // Part 3: heat released by waste combustion and final air temperature
+  // Part 3: Final air temperature
 
   // We implemented the function TfinalCalculator which calculates
   // the heat released by the combustion, substracts to it the heat
   // needed to heat up the waste, and outputs the final temperature
+  // 3.1 : heat released by PE combustion
+  // 3.2 : finding composition of final gas
+  // 3.3 : final temperature
 
-  // Part 4: energy transformation
+  // Part 4: Heat exchanger
 
   // We implement QdotCalculator to model the heat exchanger: the energy flow
   // going from the combustion flue gas and the water(steam) that will
   // generate energy afterwards
 
-  // Part 5: energy harvesting
+  // Part 5: Energy harvesting
   // To determine the work applied on the turbine, we model the heat engine
   // by a Rankine cycle, which is common for electricity generation from
   // steam turbines. To do so, we implemented WdotCalculator function.
@@ -277,7 +280,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 // Part 3: heat released by waste combustion
 
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
-
+  // 3.1 : heat released by PE combustion
   // We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; // [kJ/kg] tabulated value
   double Qheat = QcC2H4x * mC2H4; // [KJ]
@@ -287,7 +290,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
 
-  // Calculations of Mtot = mflue + mprim
+  // 3.2 Calculations of Mtot = mflue + mprim
 
   // mflue = mass of flue gases
   double MWC2H4 = 28;
@@ -305,7 +308,9 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // to ensure a good combustion, we'll overshoot the moles of primary air needed
   // by 50%, as it is suggested in litterature
-  double nO2prim = 1.5 * nO2; // [mol]
+  // in the end, 50% of primary air's ideal molarity will find itself
+  // in combustion chamber, as it hasn't been burnt
+  double nO2prim = 0.5 * nO2; // [mol]
 
   // We know air is not only composed by oxygen, but also N2
   // we neglect all other trace elements
@@ -327,7 +332,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // and we want [kg]
   double mO2prim = nO2prim * MWO2 / 1000; // [kg]
 
-  // to get mass of N2, we first calulate nN2 with Ideal Gas law
+  // to get mass of N2, we first calculate nN2 with Ideal Gas law
   // nN2 = P * V / (R * Tignition)
   double nN2 = P * VN2 / (R * Tignition); // [mol]
 
@@ -341,6 +346,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // We can add mflue and mprim to get total air: Mtot
   double Mtot = mflue + mprim;
 
+  // 3.3 : final temperature
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
   // we need to find Cp of our mixture:
   // to do so, we calculate the average of Cp of our components
@@ -355,14 +361,18 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   }
 
   // We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
+<<<<<<< HEAD
+  double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
+=======
   double Tfinal = Qnet / (Cptot * mprim) + Tignition;
+>>>>>>> c6b4ef253f27e7a254bce95df9c650021aa00c2e
 
   return Tfinal;
 
 }
 
 
-// Part 4 : energy harvesting
+// Part 4 : Heat exchanger
 
 // We're calculating the energy flow according to this equation:
   // Qflow = k * A * LMTD
@@ -397,6 +407,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   return Qdot;
 }
 
+// Part 5 : Energy harvesting
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
   // we know that Wdot = mdot * deltaH
