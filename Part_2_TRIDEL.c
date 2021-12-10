@@ -17,20 +17,30 @@ and each function that goes along with each of these steps
 
 // So we start by defining all the functions before the main
 
-void read_csv(char * filename, double * table); //do I put the parts here too..?
+//Importing the WasteDay table created in python to start
+void read_csv(char * filename, double * table); 
+
+//Part 1
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
 double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
+//Part 2
 double Qcalculator(double m, double Cm, double Tfinal, double Tinitial);
 double Qignition(double mC2H4, double mMoist, double mInert);
+//Part 3
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+//Part 4
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+//Part 5
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+//(Part 6: in the main) Part 7: creating a new table adding variance 
 void stochastiser(double value, double * PowerVarTable, double * negativeOutputSum);
 double NeededPetrol(double negativeOutputSum);
+// Part 8: creating a CSV writer
 void write_csv(char * filename, double * table);
 
 
 int main(int argc, char * argv[]) {
+
   // importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
   // int years = 1;
@@ -107,11 +117,11 @@ int main(int argc, char * argv[]) {
 
   // Part 7: Implementing a variance following a normal distribution
 
-  double PowerVarTable[365];
+  double VarPowerTable[365];
   double PetrolNeededDay[365];
 
   for (int day = 0; day < 365; day++){
-    stochastiser(PowerTable[day], &PowerVarTable[day], &PetrolNeededDay[day]);
+    stochastiser(PowerTable[day], &VarPowerTable[day], &PetrolNeededDay[day]);
   }
 
   // Part 8: Outputing CSV files
@@ -119,7 +129,7 @@ int main(int argc, char * argv[]) {
   // CSV file for PowerTable
   write_csv("PowerTable.csv", PowerTable);
   // CSV file for varPowerTable
-  write_csv("varPowerTable.csv", PowerVarTable);
+  write_csv("VarPowerTable.csv", VarPowerTable);
   // CSV file for negative outputs
   write_csv("PetrolNeededDay.csv", PetrolNeededDay);
   return 0;
@@ -176,6 +186,7 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
 // we can calculate its specific heat, which is essential for downstream calculus
 // We neglect the contribution of trace elements, as their proportion is insignificant.
 double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
+
   // Except for SiO2, which is glass, Carbon and Chlorine, all the other components
   // are in their oxidized form, which means there were burnt.
   // therefore to calculate their proportions in incoming waste,
@@ -253,6 +264,7 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
 double Tignition = 350;
 
 double Qignition(double mC2H4, double mMoist, double mInert){
+
   // Starting from the global equation that gives the total heat required
   // to evaporate moisture and heat up waste:
   // Qignition = Qwaste + Qeva + Qsteam = (QC2H4 + Qinert + Qmoist) + Qeva + Qsteam
@@ -297,7 +309,9 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 // Part 3: heat released by waste combustion
 
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
+
   // 3.1 : heat released by PE combustion
+
   // We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; // [kJ/kg] tabulated value
   double Qheat = QcC2H4x * mC2H4; // [KJ]
@@ -364,6 +378,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double Mtot = mflue + mprim;
 
   // 3.3 : final temperature
+
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
   // we need to find Cp of our mixture:
   // to do so, we calculate the average of Cp of our components
@@ -424,6 +439,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 // Part 5 : Energy harvesting
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
+
   // we know that Wdot = mdot * deltaH
   // we can calculte mdot with mdot = Qdot / (CmSteam * dT)
   double Qdot = QdotCalculator(mC2H4, mMoist, mInert, massMoyC2H4); // [J/s]
