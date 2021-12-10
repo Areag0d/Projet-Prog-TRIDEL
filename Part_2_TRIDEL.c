@@ -12,7 +12,7 @@ that way we obtain an energy output*/
 /* In our main function we will put the general backbone
 of the functions along with a commentary of the different
 steps that will lead us to the final output calculation,
-and each function that go along with each of these steps
+and each function that goes along with each of these steps
 */
 
 // So we start by defining all the functions before the main
@@ -25,7 +25,8 @@ double Qignition(double mC2H4, double mMoist, double mInert);
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
-double stochastiser(double value);
+void stochastiser(double value, double *negativeOutput, double * PowerVarTable, double * negativeOutputSum);
+double NeededPetrol(double negativeOutputSum);
 void write_csv(char * filename, double * table);
 
 
@@ -79,11 +80,13 @@ int main(int argc, char * argv[]) {
   // generate energy afterwards
 
   // Part 5: Energy harvesting
+
   // To determine the work applied on the turbine, we model the heat engine
   // by a Rankine cycle, which is common for electricity generation from
   // steam turbines. To do so, we implemented WdotCalculator function.
 
   // Part 6: final energy output
+  
   // We iterate our final function (WdotCalculator) on all the entries
   // of our table and fill up our output table
 
@@ -101,17 +104,30 @@ int main(int argc, char * argv[]) {
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
     PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
   }
-  // Part 7: Implementing a variance following a normal distribution
-  double varPowerTable[365];
-  for (int day = 0; day < 365; day++)
 
-    varPowerTable[day] = stochastiser(PowerTable[day]);
+  // Part 7: Implementing a variance following a normal distribution
+
+  double PowerVarTable[365];
+  double negativeOutput[365];
+  double negativeOutputSum;
+
+  for (int day = 0; day < 365; day++){
+    stochastiser(PowerTable[day], &negativeOutput[day], &PowerVarTable[day], &negativeOutputSum);
+  }
+  printf("negative output sum = %f\n", negativeOutputSum);
+  double PetrolQuantity;
+  PetrolQuantity = NeededPetrol(negativeOutputSum);
+  printf("%f\n", PetrolQuantity);
 
   // Part 8: Outputing CSV files
+
   // CSV file for PowerTable
   write_csv("PowerTable.csv", PowerTable);
   // CSV file for varPowerTable
-  write_csv("varPowerTable.csv", varPowerTable);
+  write_csv("varPowerTable.csv", PowerVarTable);
+  // CSV file for negative outputs
+  write_csv("negativeOutput.csv", negativeOutput);
+  
   return 0;
 }
 
@@ -432,15 +448,35 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 }
 
 //Part 7: creating a new table adding variance
-double stochastiser(double mu){
+void stochastiser(double mu, double *negativeOutput, double *PowerVarTable, double *negativeOutputSum){
+
   double TAU = 8 * atan(1);
-  float max = 0, sigma=1.25, r;
-  double * F = calloc(365, sizeof(double));
-  r=sqrt(-2*log(rand()/(RAND_MAX+1.0)))*cos(TAU*rand()/(RAND_MAX+1.0));
-  r=r*sigma+mu;
-  return r;
+  double max = 0, sigma=1.25, r;
+
+  r = sqrt(-2*log(rand()/(RAND_MAX+1.0))) * cos(TAU*rand()/(RAND_MAX+1.0));
+  r = r * sigma + mu;
+
+  *PowerVarTable = r;
+
+  if (r < 0){
+    *negativeOutput = fabs(r);
+    *negativeOutputSum += r;
+  }
+
+  else{
+    *negativeOutput = 0;
+  }
+
 }
 
+
+double NeededPetrol(double negativeOutputSum){
+
+  negativeOutputSum = fabs(negativeOutputSum);
+  double NeededPetrol = negativeOutputSum / 46; //[kg]
+
+  return NeededPetrol;
+}
 
 
 // Part 8: creating a CSV writer

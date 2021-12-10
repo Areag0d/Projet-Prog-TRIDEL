@@ -10,14 +10,14 @@ that way we obtain an energy output*/
 
 
 /* In our main function we will put the general backbone
-of the function along with a commentary of the different
+of the functions along with a commentary of the different
 steps that will lead us to the final output calculation,
-and each function that go along with each of these steps
+and each function that goes along with each of these steps
 */
 
 // So we start by defining all the functions before the main
 
-void read_csv(char * filename, double * table);
+void read_csv(char * filename, double * table); //do I put the parts here too..?
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
 double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
 double Qcalculator(double m, double Cm, double Tfinal, double Tinitial);
@@ -25,6 +25,8 @@ double Qignition(double mC2H4, double mMoist, double mInert);
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+void stochastiser(double value, double *negativeOutput, double * PowerVarTable, double * negativeOutputSum);
+double NeededPetrol(double negativeOutputSum);
 void write_csv(char * filename, double * table);
 
 
@@ -62,24 +64,29 @@ int main(int argc, char * argv[]) {
   // This is implemented in Qignition function, which is used
   // in the next part
 
-  // Part 3: heat released by waste combustion and final air temperature
+  // Part 3: Final air temperature
 
   // We implemented the function TfinalCalculator which calculates
   // the heat released by the combustion, substracts to it the heat
   // needed to heat up the waste, and outputs the final temperature
+  // 3.1 : heat released by PE combustion
+  // 3.2 : finding composition of final gas
+  // 3.3 : final temperature
 
-  // Part 4: energy transformation
+  // Part 4: Heat exchanger
 
   // We implement QdotCalculator to model the heat exchanger: the energy flow
   // going from the combustion flue gas and the water(steam) that will
   // generate energy afterwards
 
-  // Part 5: energy harvesting
+  // Part 5: Energy harvesting
+
   // To determine the work applied on the turbine, we model the heat engine
   // by a Rankine cycle, which is common for electricity generation from
   // steam turbines. To do so, we implemented WdotCalculator function.
 
   // Part 6: final energy output
+  
   // We iterate our final function (WdotCalculator) on all the entries
   // of our table and fill up our output table
 
@@ -95,16 +102,34 @@ int main(int argc, char * argv[]) {
   for (int day = 0; day < 365; day++){
 
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW] a discuter...
+    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
   }
 
+  // Part 7: Implementing a variance following a normal distribution
 
-  // Part 7: Outputing a CSV file
-  // we take our Power Table and write a CSV file
+  double PowerVarTable[365];
+  double negativeOutput[365];
+  double negativeOutputSum;
+
+  for (int day = 0; day < 365; day++){
+    stochastiser(PowerTable[day], &negativeOutput[day], &PowerVarTable[day], &negativeOutputSum);
+  }
+  printf("negative output sum = %f\n", negativeOutputSum);
+  double PetrolQuantity;
+  PetrolQuantity = NeededPetrol(negativeOutputSum);
+  printf("%f\n", PetrolQuantity);
+
+  // Part 8: Outputing CSV files
+
+  // CSV file for PowerTable
   write_csv("PowerTable.csv", PowerTable);
-
+  // CSV file for varPowerTable
+  write_csv("varPowerTable.csv", PowerVarTable);
+  // CSV file for negative outputs
+  write_csv("negativeOutput.csv", negativeOutput);
   return 0;
 }
+
 
 
 // CSV file lecture
@@ -148,8 +173,6 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
     double Mass2 = nbMol2 * MW2;
     return Mass2;
 }
-
-
 
 
 // This function takes in argument the massic proportions of the compostion of
@@ -278,7 +301,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 // Part 3: heat released by waste combustion
 
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
-
+  // 3.1 : heat released by PE combustion
   // We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; // [kJ/kg] tabulated value
   double Qheat = QcC2H4x * mC2H4; // [KJ]
@@ -288,7 +311,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
 
-  // Calculations of Mtot = mflue + mprim
+  // 3.2 Calculations of Mtot = mflue + mprim
 
   // mflue = mass of flue gases
   double MWC2H4 = 28;
@@ -306,7 +329,9 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // to ensure a good combustion, we'll overshoot the moles of primary air needed
   // by 50%, as it is suggested in litterature
-  double nO2prim = 1.5 * nO2; // [mol]
+  // in the end, 50% of primary air's ideal molarity will find itself
+  // in combustion chamber, as it hasn't been burnt
+  double nO2prim = 0.5 * nO2; // [mol]
 
   // We know air is not only composed by oxygen, but also N2
   // we neglect all other trace elements
@@ -328,7 +353,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // and we want [kg]
   double mO2prim = nO2prim * MWO2 / 1000; // [kg]
 
-  // to get mass of N2, we first calulate nN2 with Ideal Gas law
+  // to get mass of N2, we first calculate nN2 with Ideal Gas law
   // nN2 = P * V / (R * Tignition)
   double nN2 = P * VN2 / (R * Tignition); // [mol]
 
@@ -342,6 +367,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // We can add mflue and mprim to get total air: Mtot
   double Mtot = mflue + mprim;
 
+  // 3.3 : final temperature
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
   // we need to find Cp of our mixture:
   // to do so, we calculate the average of Cp of our components
@@ -356,14 +382,14 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   }
 
   // We solve for Tf : Tf = Qnet/(Cp * Mtot) + Tignition
-  double Tfinal = Qnet / (Cptot * mprim) + Tignition;
+  double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
 
   return Tfinal;
 
 }
 
 
-// Part 4 : energy harvesting
+// Part 4 : Heat exchanger
 
 // We're calculating the energy flow according to this equation:
   // Qflow = k * A * LMTD
@@ -398,6 +424,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   return Qdot;
 }
 
+// Part 5 : Energy harvesting
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
   // we know that Wdot = mdot * deltaH
@@ -419,7 +446,39 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   return Wdot; // [kJ/day]
 }
 
-// Part 7: creating a CSV writer
+//Part 7: creating a new table adding variance
+void stochastiser(double mu, double *negativeOutput, double *PowerVarTable, double *negativeOutputSum){
+
+  double TAU = 8 * atan(1);
+  double max = 0, sigma=1.25, r;
+
+  r = sqrt(-2*log(rand()/(RAND_MAX+1.0))) * cos(TAU*rand()/(RAND_MAX+1.0));
+  r = r * sigma + mu;
+
+  *PowerVarTable = r;
+
+  if (r < 0){
+    *negativeOutput = fabs(r);
+    *negativeOutputSum += r;
+  }
+
+  else{
+    *negativeOutput = 0;
+  }
+
+}
+
+
+double NeededPetrol(double negativeOutputSum){
+
+  negativeOutputSum = fabs(negativeOutputSum);
+  double NeededPetrol = negativeOutputSum / 46; //[kg]
+
+  return NeededPetrol;
+}
+
+
+// Part 8: creating a CSV writer
 
 void write_csv(char * filename, double * table) {
   printf("\n Creating a %s file", filename);
@@ -431,21 +490,4 @@ void write_csv(char * filename, double * table) {
 
   }
   fclose(file);
-}
-
-//kinda dusty stochastiser function
-TAU (8*atan(1))
-double stochastiser(double value){
-  double TAU = (8*atan(1));
-  int n=365;
-  float max = 0, mu=0.878,sigma=2.5, r;
-  double * F = calloc(365, sizeof(double));
-
-  for(int j=0;j<n;j++)
-  {
-      r=sqrt(-2*log(rand()/(RAND_MAX+1.0)))*cos(TAU*rand()/(RAND_MAX+1.0));
-      r=r*sigma+mu;
-      printf("%f\n",r);
-      }
-
 }
