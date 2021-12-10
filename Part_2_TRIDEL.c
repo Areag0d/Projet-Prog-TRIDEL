@@ -32,9 +32,9 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 //Part 5
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
-//(Part 6: in the main) Part 7: creating a new table adding variance 
+//(Part 6: in the main)
+// Part 7: creating a new table adding variance 
 void stochastiser(double value, double * PowerVarTable, double * negativeOutputSum);
-double NeededPetrol(double negativeOutputSum);
 // Part 8: creating a CSV writer
 void write_csv(char * filename, double * table);
 
@@ -118,10 +118,10 @@ int main(int argc, char * argv[]) {
   // Part 7: Implementing a variance following a normal distribution
 
   double VarPowerTable[365];
-  double PetrolNeededDay[365];
+  double FuelNeededDay[365];
 
   for (int day = 0; day < 365; day++){
-    stochastiser(PowerTable[day], &VarPowerTable[day], &PetrolNeededDay[day]);
+    stochastiser(PowerTable[day], &VarPowerTable[day], &FuelNeededDay[day]);
   }
 
   // Part 8: Outputing CSV files
@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
   // CSV file for varPowerTable
   write_csv("VarPowerTable.csv", VarPowerTable);
   // CSV file for negative outputs
-  write_csv("PetrolNeededDay.csv", PetrolNeededDay);
+  write_csv("FuelNeededDay.csv", FuelNeededDay);
   return 0;
 }
 
@@ -402,7 +402,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
 // Part 4 : Heat exchanger
 
-// We're calculating the energy flow according to this equation:
+  // We're calculating the energy flow according to this equation:
   // Qflow = k * A * LMTD
   // Where Q = Energy flow, k = heat transfer coefficient,
   // A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
@@ -474,12 +474,10 @@ void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
   *PowerVarTable = r;
 
   if (r < 0){
-
     *NeededPetrol = fabs(r);
     *NeededPetrol = *NeededPetrol / 46; //[Kg/s]
     *NeededPetrol = *NeededPetrol * (3600 * 24); //[Kg/j]
     *NeededPetrol = *NeededPetrol / 1000; //[T/j]
-
   }
 
   else{
