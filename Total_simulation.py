@@ -145,7 +145,7 @@ for i in range(len(TridelValues)):
 
 
 """Part 3 energy output plot"""
-# We divide our plot into two subplots:
+# We divide our plot into four subplots:
 # we start by plotting our energy output vs the official energy output of Tridel
 
 days = np.array([day + 1 for day in range(365)])
@@ -153,49 +153,27 @@ days = np.array([day + 1 for day in range(365)])
 wstDay = np.array(wasteDayLst)
 Pwr = PowerTable
 TridelDay = DayTridelVal
+varPwr = varPowerTable
 
-plt.figure()
+Fueltest = np.zeros(365)
+fig, axs = plt.subplots(2, 2)
 
-plt.subplot(1, 1, 1)
-plt.plot(days, TridelDay, label = 'Official daily Power production')
-plt.plot(days, Pwr, label = 'Daily calculated Power production')
-plt.ylabel("[MW]")
-plt.legend()
+axs[0, 0].plot(days, Pwr, 'tab:orange', label="Calculated Power")
+axs[0, 0].plot(days, TridelDay, 'tab:red', label="Official Power production")
+axs[0, 0].set_title('Calc. and true Power output')
+axs[0, 0].set(ylabel="[MW]")
+axs[0, 0].set_xticks([])
 
-# We then plot the total waste taken up by TRIDEL as a function of
-# the number of people chosen by the user in part 1.
+axs[1, 0].plot(days, wstDay)
+axs[1, 0].set_title('Waste weight')
+axs[1, 0].set(ylabel="[tons]")
+axs[1, 0].set(xlabel="[days]")
 
-plt.subplot(1, 2, 1)
+axs[0, 1].plot(days, varPwr, 'tab:green', label="Calc. Power with variance")
+axs[0, 1].plot(days,TridelDay, 'tab:red', label="Official Power production")
+axs[0, 1].set_title('Calc. variance and true output')
+axs[0, 1].set_xticks([])
 
-plt.plot(days, wstDay, label = 'Daily Waste weight')
-plt.legend()
-plt.xlabel("Days")
-plt.ylabel("[tons]")
-
-
-
-
-# Finally, we plot the power output with the variance 
-# we imposed, which is directly related to the inner working
-# of the TRIDEL incineration plant. 
-
-
-
-
-
-plt.subplot(2, 1, 1)
-plt.plot(days, varPowerTable, label = 'Daily Power production with Variance')
-plt.legend()
-plt.xlabel('')
-plt.ylabel('')
-
-"""
-c, d = 0
-plt.subplot(2, 2, 1)
-plt.plot(c, d, label = 'Daily Power production with Variance')
-plt.legend()
-plt.xlabel('')
-plt.ylabel('')
-"""
-plt.show()
-
+axs[1, 1].plot(days, Fueltest, 'tab:brown')
+axs[1, 1].set_title('Minimal fuel needed')
+axs[1, 1].set(xlabel="[days]")
