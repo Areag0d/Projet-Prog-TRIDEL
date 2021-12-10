@@ -25,7 +25,7 @@ double Qignition(double mC2H4, double mMoist, double mInert);
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
-void stochastiser(double value, double *negativeOutput, double * PowerVarTable, double * negativeOutputSum);
+void stochastiser(double value, double * PowerVarTable, double * negativeOutputSum);
 double NeededPetrol(double negativeOutputSum);
 void write_csv(char * filename, double * table);
 
@@ -86,7 +86,7 @@ int main(int argc, char * argv[]) {
   // steam turbines. To do so, we implemented WdotCalculator function.
 
   // Part 6: final energy output
-  
+
   // We iterate our final function (WdotCalculator) on all the entries
   // of our table and fill up our output table
 
@@ -108,16 +108,11 @@ int main(int argc, char * argv[]) {
   // Part 7: Implementing a variance following a normal distribution
 
   double PowerVarTable[365];
-  double negativeOutput[365];
-  double negativeOutputSum;
+  double PetrolNeededDay[365];
 
   for (int day = 0; day < 365; day++){
-    stochastiser(PowerTable[day], &negativeOutput[day], &PowerVarTable[day], &negativeOutputSum);
+    stochastiser(PowerTable[day], &PowerVarTable[day], &PetrolNeededDay[day]);
   }
-  printf("negative output sum = %f\n", negativeOutputSum);
-  double PetrolQuantity;
-  PetrolQuantity = NeededPetrol(negativeOutputSum);
-  printf("%f\n", PetrolQuantity);
 
   // Part 8: Outputing CSV files
 
@@ -126,7 +121,7 @@ int main(int argc, char * argv[]) {
   // CSV file for varPowerTable
   write_csv("varPowerTable.csv", PowerVarTable);
   // CSV file for negative outputs
-  write_csv("negativeOutput.csv", negativeOutput);
+  write_csv("PetrolNeededDay.csv", PetrolNeededDay);
   return 0;
 }
 
@@ -251,6 +246,7 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
 
   return Qh;
 }
+
  // we define Tignition for PE to be 350°C
  // we define it as a global variable, because we use it in different
  // functions multiple times
@@ -424,6 +420,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   return Qdot;
 }
 
+
 // Part 5 : Energy harvesting
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
@@ -446,8 +443,11 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
   return Wdot; // [kJ/day]
 }
 
+//Part 6: in the main
+
 //Part 7: creating a new table adding variance
-void stochastiser(double mu, double *negativeOutput, double *PowerVarTable, double *negativeOutputSum){
+
+void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
 
   double TAU = 8 * atan(1);
   double max = 0, sigma=1.25, r;
@@ -458,23 +458,18 @@ void stochastiser(double mu, double *negativeOutput, double *PowerVarTable, doub
   *PowerVarTable = r;
 
   if (r < 0){
-    *negativeOutput = fabs(r);
-    *negativeOutputSum += r;
+
+    *NeededPetrol = fabs(r);
+    *NeededPetrol = *NeededPetrol / 46; //[Kg/s]
+    *NeededPetrol = *NeededPetrol * (3600 * 24); //[Kg/j]
+    *NeededPetrol = *NeededPetrol / 1000; //[T/j]
+
   }
 
   else{
-    *negativeOutput = 0;
+    *NeededPetrol = 0;
   }
 
-}
-
-
-double NeededPetrol(double negativeOutputSum){
-
-  negativeOutputSum = fabs(negativeOutputSum);
-  double NeededPetrol = negativeOutputSum / 46; //[kg]
-
-  return NeededPetrol;
 }
 
 
