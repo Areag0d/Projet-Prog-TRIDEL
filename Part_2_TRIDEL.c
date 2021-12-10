@@ -464,17 +464,19 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 //Part 7: creating a new table adding variance
 
 void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
-
+  // We create normally distributed random values
   double TAU = 8 * atan(1);
   double max = 0, sigma=1.25, r;
 
-  r = sqrt(-2*log(rand()/(RAND_MAX+1.0))) * cos(TAU*rand()/(RAND_MAX+1.0));
-  r = r * sigma + mu;
+  incr = sqrt(-2*log(rand()/(RAND_MAX+1.0))) * cos(TAU*rand()/(RAND_MAX+1.0));
+  var = incr * sigma + mu;
+  // Placing these values in a table
+  *PowerVarTable = var;
 
-  *PowerVarTable = r;
-
-  if (r < 0){
-    *NeededPetrol = fabs(r);
+  // If values are under 0, it means we need fuel to conduct combustion
+  // We create a table to quantify this
+  if (var < 0){
+    *NeededPetrol = fabs(var);
     *NeededPetrol = *NeededPetrol / 46; //[Kg/s]
     *NeededPetrol = *NeededPetrol * (3600 * 24); //[Kg/j]
     *NeededPetrol = *NeededPetrol / 1000; //[T/j]

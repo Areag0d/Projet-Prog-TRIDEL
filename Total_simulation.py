@@ -176,3 +176,5 @@ axs[0, 1].set_xticks([])
 axs[1, 1].plot(days, FuelNeededDay, 'tab:brown')
 axs[1, 1].set_title('Minimal fuel needed')
 axs[1, 1].set(xlabel="[days]")
+
+plt.show()
