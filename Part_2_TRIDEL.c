@@ -115,7 +115,13 @@ int main(int argc, char * argv[]) {
     PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
   }
 
-  // Part 7: Implementing a variance following a normal distribution
+  // Part 7: Implementing a new table of values given by calculated outputs
+  // added with variance.
+  // Because our mean (calculated) value is close to 1 MW our use of
+  // sigma = 1.25, we obtain negative values.
+  // These negatives values are deficits in energy production,
+  // hence we calculate how much minimum fuel is needed in order to
+  // conduct complete combustion and so a net zero ouput.
 
   double VarPowerTable[365];
   double FuelNeededDay[365];

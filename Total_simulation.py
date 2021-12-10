@@ -118,8 +118,8 @@ time.sleep(0.5)
 
 import matplotlib.pyplot as plt
 
-"""Part 1: CSV file reading""" 
-# 1st we need to import the CSV file of Power outputs into a table 
+"""Part 1: CSV file reading"""
+# 1st we need to import the CSV file of Power outputs into a table
 
 PowerTable = np.genfromtxt('PowerTable.csv', delimiter = ',', dtype = 'float64') # [MW]
 
@@ -149,7 +149,6 @@ for i in range(len(TridelValues)):
 
 """Part 3 energy output plot"""
 # We divide our plot into four subplots:
-# we start by plotting our energy output vs the official energy output of Tridel
 
 days = np.array([day + 1 for day in range(365)])
 
@@ -157,30 +156,28 @@ wasteDay = np.array(wasteDayLst)
 
 Fueltest = np.zeros(365)
 fig, axs = plt.subplots(2, 2)
-
+# Plotting calculated output values against true values
 axs[0, 0].plot(days, PowerTable, 'tab:orange', label="Calculated Power")
 axs[0, 0].plot(days, DayTridelVal, 'tab:red', label="Official Power production")
 axs[0, 0].set_title('Calc. and true Power output')
 axs[0, 0].set(ylabel="[MW]")
 
-
+# Plotting mass of waste per day
 axs[1, 0].plot(days, wasteDay)
 axs[1, 0].set_title('Waste weight')
 axs[1, 0].set(ylabel="[tons]")
 axs[1, 0].set(xlabel="[days]")
 
+# Plotting calculated output values with variance against true values
 axs[0, 1].plot(days, varPowerTable, 'tab:green', label="Calc. Power with variance")
 axs[0, 1].plot(days,DayTridelVal, 'tab:red', label="Official Power production")
 axs[0, 1].set_title('Calc. variance and true output')
 
-
+# Plotting minimal fuel mass in order to conduct combustion
+# with our added variance model
 axs[1, 1].plot(days, FuelNeededDay, 'tab:brown')
 axs[1, 1].set_title('Minimal fuel needed')
 axs[1, 1].set(xlabel="[days]")
 
-<<<<<<< HEAD
-plt.show()
-=======
 plt.tight_layout()
 plt.show()
->>>>>>> 298e214d91f39c38a774f98611496cf1bc16fc6d
