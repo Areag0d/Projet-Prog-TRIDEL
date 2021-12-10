@@ -15,7 +15,7 @@ import csv
 # inhabitants per region:
 # inputting the number of inhabitants
 print("Estimate the current population of the canton of Vaud.")
-habTotalEstim = input("If you do not care.. press Enter: ")
+habTotalEstim = int(input("If you do not care.. press Enter: "))
 habTotal = 815300
 
 # making sure that the population value input is relevant
@@ -23,7 +23,7 @@ if habTotalEstim == "":
     print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
-elif np.abs(float(habTotalEstim) - habTotal) > 100000:
+elif np.abs(habTotalEstim - habTotal) > 100000:
     print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
