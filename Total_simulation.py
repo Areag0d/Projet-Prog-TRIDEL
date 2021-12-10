@@ -169,7 +169,7 @@ axs[1, 0].set(ylabel="[tons]")
 axs[1, 0].set(xlabel="[days]")
 
 # Plotting calculated output values with variance against true values
-axs[0, 1].plot(days, varPowerTable, 'tab:green', label="Calc. Power with variance")
+axs[0, 1].plot(days, varPowerTable, 'tab:orange', label="Calc. Power with variance")
 axs[0, 1].plot(days,DayTridelVal, 'tab:red', label="Official Power production")
 axs[0, 1].set_title('Calc. variance and true output')
 
