@@ -18,7 +18,7 @@ and each function that goes along with each of these steps
 // So we start by defining all the functions before the main
 
 //Importing the WasteDay table created in python to start
-void read_csv(char * filename, double * table); 
+void read_csv(char * filename, double * table);
 
 //Part 1
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
@@ -32,7 +32,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 //Part 5
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
-//(Part 6: in the main) Part 7: creating a new table adding variance 
+//(Part 6: in the main) Part 7: creating a new table adding variance
 void stochastiser(double value, double * PowerVarTable, double * negativeOutputSum);
 double NeededPetrol(double negativeOutputSum);
 // Part 8: creating a CSV writer
