@@ -32,12 +32,8 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
 //Part 5
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
-<<<<<<< HEAD
-//(Part 6: in the main) Part 7: creating a new table adding variance
-=======
 //(Part 6: in the main)
-// Part 7: creating a new table adding variance 
->>>>>>> aad67f8e42bae0396188ccee72134c3a6dd8885d
+// Part 7: creating a new table adding variance
 void stochastiser(double value, double * PowerVarTable, double * negativeOutputSum);
 // Part 8: creating a CSV writer
 void write_csv(char * filename, double * table);

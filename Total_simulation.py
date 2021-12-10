@@ -154,11 +154,7 @@ for i in range(len(TridelValues)):
 days = np.array([day + 1 for day in range(365)])
 
 wasteDay = np.array(wasteDayLst)
-Pwr = PowerTable
-TridelDay = DayTridelVal
-varPwr = varPowerTable
 
-Fueltest = np.zeros(365)
 fig, axs = plt.subplots(2, 2)
 
 axs[0, 0].plot(days, PowerTable, 'tab:orange', label="Calculated Power")
