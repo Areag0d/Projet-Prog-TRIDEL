@@ -48,7 +48,8 @@ else:
 if np.abs(int(habTotalEstim) - habTotal) > 100000:
         print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
-
+else:
+    print("Received value is within a reasonable range from official values, we shall then base all our calculation on this value")
 """
 else:
 
