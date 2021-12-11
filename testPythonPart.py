@@ -18,20 +18,83 @@ print("Estimate the current population of the canton of Vaud.")
 habTotalEstim = input("If you do not care.. press Enter: ")
 habTotal = 815300
 
-# making sure that the population value input is relevant
+# making sure that the population value input is relevant:
+
+numberslist = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+decimalChar = [",", "."]
+
 if habTotalEstim == "":
+
     print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
-elif np.abs(int(habTotalEstim) - habTotal) > 100000:
-    print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
-    habTotalEstim = habTotal
+else:
+    for char in habTotalEstim:
 
-habTotalEstim = int(habTotalEstim)
+        if (char in numberslist) == True:
 
-if type(habTotalEstim) != int:
-    print("Invalid value: you can not have a decimal citizen!")
+            if (char in decimalChar== True):
+                
+                print("Received value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+                habTotalEstim = habTotal
 
+        else:
+
+            print("Received value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+            habTotalEstim = habTotal
+            break    
+
+
+if np.abs(int(habTotalEstim) - habTotal) > 100000:
+        print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
+        habTotalEstim = habTotal
+
+"""
+else:
+
+    numberslist = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    decimalChar = [".", ","]
+    counter = 0
+
+    for i in habTotalEstim:
+        print('ana hena 33')
+        print(i)
+        if (i in numberslist == True) and (i in decimalChar == False):
+            print(1)
+            habTotalEstim = int(habTotalEstim)
+            
+
+        elif (i in decimalChar == True) and (i in numberslist == True):
+
+            print("ana hena 41 w 3aref a access el counter")
+            if i in decimalChar:
+                counter += 1
+                print("counter =", counter)
+
+            if counter == 1:
+                habTotalEstim = int(habTotalEstim)
+                print("Invalid value: you can not have a decimal citizen! We will then take the biggest integer number below your input")
+                break
+
+            elif counter > 1:
+                habTotalEstim = habTotal
+                print("Invalid value: you must have integer values in your input, we will take the official value of 2020 which is 815300 person.")
+                
+            
+        elif i in numberslist == False:
+            habTotalEstim = habTotal
+            print("Invalid value: you must have integer values in your input, we will take the official value of 2020 which is 815300 person.")
+            break
+
+if habTotalEstim != "":
+
+    if np.abs(int(habTotalEstim) - habTotal) > 100000:
+        print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
+        habTotalEstim = habTotal
+
+    else:
+        print("Received value is within a reasonable range from official values, we shall take this value  and compute everything based on it.\n")
+"""
 
 # we have the inhabitance percentage of the inhabitants
 # of a region with respect to the canton
@@ -104,6 +167,8 @@ import os
 os.startfile(r"Part_2_TRIDEL.exe")
 
 print("Creating a CSV file of calculated Power output...\n")
+print("Creating a CSV file of Variance calculated Power output...\n")
+print("Creating a CSV file of the needed fuel if the output is negative...\n")
 
 
 # waiting for the PowerOutput CSV file to be written
