@@ -18,14 +18,15 @@ print("Estimate the current population of the canton of Vaud.")
 habTotalEstim = input("If you do not care.. press Enter: ")
 habTotal = 815300
 
-# making sure that the population value input is relevant:
+# making sure that the population value input is relevant
+# (that it is an integer and that it is not too far from the current population of the canton):
 
 numberslist = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 decimalChar = [",", "."]
 decimalCharCounter = 0
 
 if habTotalEstim == "":
-
+    
     print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
@@ -47,7 +48,6 @@ else:
                     habTotalEstim = int(habTotalEstim)
 
         else:
-
             print("Received value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
             habTotalEstim = habTotal
             break    
