@@ -14,20 +14,20 @@ import csv
 
 # inhabitants per region:
 # inputting the number of inhabitants
-print("Estimate the current population of the canton of Vaud.")
-habTotalEstim = input("If you do not care.. press Enter: ")
+print("\nEstimate the current population of the canton of Vaud.")
+habTotalEstim = input("\nIf you do not care.. press Enter: ")
 habTotal = 815300
 
 # making sure that the population value input is relevant
 # (that it is an integer and that it is not too far from the current population of the canton):
 
-numberslist = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-decimalChar = [",", "."]
+numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-']
+specialChar = [",", ".", 'j', '+']
 decimalCharCounter = 0
 
 if habTotalEstim == "":
     
-    print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
+    print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
 elif habTotalEstim[0] == "-":
@@ -36,13 +36,21 @@ elif habTotalEstim[0] == "-":
     
 else:
     for char in habTotalEstim:
+        
+        if char in numberslist:
 
-        if (char in numberslist) == True:
+            continue
 
-            if (char in decimalChar == True):
+        elif char in specialChar:
 
-                decimalCharCounter += 1
+            decimalCharCounter += 1
+                
+            if (char == 'j'):
+                print("\nReceived value is complex, we shall take the value of 2020 which is 815300 person.\n")
+                habTotalEstim = habTotal
+                break
 
+<<<<<<< HEAD
                 if decimalCharCounter > 1:
                     print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
                     habTotalEstim = habTotal
@@ -53,17 +61,38 @@ else:
 
         else:
             print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+=======
+            elif decimalCharCounter > 1:
+                print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+                habTotalEstim = habTotal
+                break
+
+        else:
+            print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
+>>>>>>> 339d7fc4b66213277541d6e60d0e234c31f864ea
             habTotalEstim = habTotal
             break    
 
 if habTotalEstim != habTotal:
 
+<<<<<<< HEAD
     if np.abs(int(habTotalEstim) - habTotal) > 100000:
+=======
+    if float(habTotalEstim) < 0:
+        print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
+        habTotalEstim = habTotal
+
+    elif np.abs(int(habTotalEstim) - habTotal) > 100000:
+>>>>>>> 339d7fc4b66213277541d6e60d0e234c31f864ea
         print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 
     else:
+<<<<<<< HEAD
         print("\nReceived value is within a reasonable range from official values, we shall then base all our calculation on this value")
+=======
+        print("\nReceived value is within a reasonable range from official values, we shall then base all our calculation on this value.\n")
+>>>>>>> 339d7fc4b66213277541d6e60d0e234c31f864ea
 
 
 # we have the inhabitance percentage of the inhabitants
