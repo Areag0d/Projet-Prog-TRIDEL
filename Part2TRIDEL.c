@@ -168,10 +168,12 @@ void read_csv(char * filename, double * table) {
 
 // Part 1: waste composition
 
-// This function calculates the relative mass of an element before a reaction.
-// So from the tabulated proportions of oxidized metals in Machefer, we
-// We use this function for calculus in the oxidation of metals and
-// combustion of Polyethylene.
+/* 
+This function calculates the relative mass of an element before a reaction.
+  So from the tabulated proportions of oxidized metals in Machefer, we
+  We use this function for calculus in the oxidation of metals and
+  combustion of Polyethylene.
+*/
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient){
 
     // we first calculate the final number of moles
@@ -186,11 +188,13 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
 }
 
 
-// This function takes in argument the massic proportions of the compostion of
-// machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
-// Knowing relative proportions of components of the inert part of waste,
-// we can calculate its specific heat, which is essential for downstream calculus
-// We neglect the contribution of trace elements, as their proportion is insignificant.
+/* 
+  This function takes in argument the massic proportions of the compostion of
+  machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
+  Knowing relative proportions of components of the inert part of waste,
+  we can calculate its specific heat, which is essential for downstream calculus
+  We neglect the contribution of trace elements, as their proportion is insignificant.
+*/
 double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
 
   // Except for SiO2, which is glass, Carbon and Chlorine, all the other components
@@ -408,11 +412,12 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
 // Part 4 : Heat exchanger
 
-  // We're calculating the energy flow according to this equation:
-  // Qflow = k * A * LMTD
-  // Where Q = Energy flow, k = heat transfer coefficient,
-  // A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
-
+/*
+  We're calculating the energy flow according to this equation:
+  Qflow = k * A * LMTD
+  Where Q = Energy flow, k = heat transfer coefficient,
+  A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
+*/
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
   double lambda = 45; // λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it is only made of steel
@@ -477,12 +482,13 @@ void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
 
   randomiser = sqrt(-2*log(rand()/(RAND_MAX+1.0))) * cos(TAU*rand()/(RAND_MAX+1.0));
   double stochastEnergyVal = randomiser * sigma + mu;
+
   // Placing these varied energetic values in a table
   *PowerVarTable = stochastEnergyVal;
 
-  // If randomised enrgetic values are under 0, it means we need fuel to conduct combustion
+  // If randomised enrgetic values are under 0, it means that we need fuel to fully conduct the combustion.
   // To quantify this, we create a new table which we call FuelTable. (see main)
-  // And to do so, we first need to do some calculations to adjust the units .
+  // And to do so, we first need to do some calculations to adjust the units.
   if (stochastEnergyVal < 0){
     *NeededPetrol = fabs(stochastEnergyVal);
     *NeededPetrol = *NeededPetrol / 46; //[Kg/s]

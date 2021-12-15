@@ -14,23 +14,59 @@ import csv
 
 # inhabitants per region:
 # inputting the number of inhabitants
-print("Estimate the current population of the canton of Vaud.")
-habTotalEstim = input("If you do not care.. press Enter: ")
+print("\nEstimate the current population of the canton of Vaud.")
+habTotalEstim = input("\nIf you do not care.. press Enter: ")
 habTotal = 815300
 
 # making sure that the population value input is relevant
+# (that it is an integer and that it is not too far from the current population of the canton):
+
+numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-']
+specialChar = [",", ".", 'j', '+']
+decimalCharCounter = 0
+
 if habTotalEstim == "":
-    print("No received value, we shall then take the value of 2020 which is 815300 person.\n")
+    
+    print("\nNo received value, we shall then take the value of 2020 which is 815300 people.\n")
     habTotalEstim = habTotal
 
-elif np.abs(int(habTotalEstim) - habTotal) > 100000:
-    print("Received value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
-    habTotalEstim = habTotal
+else:
+    for char in habTotalEstim:
+        
+        if char in numberslist:
+            continue
 
-habTotalEstim = int(habTotalEstim)
+        elif char in specialChar:
 
-if type(habTotalEstim) != int:
-    print("Invalid value: you can not have a decimal citizen!")
+            decimalCharCounter += 1
+                
+            if (char == 'j'):
+                print("\nReceived value is complex, we shall take the value of 2020 which is 815300 people.\n")
+                habTotalEstim = habTotal
+                break
+
+            elif decimalCharCounter > 1:
+                print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 people.\n")
+                habTotalEstim = habTotal
+                break
+
+        else:
+            print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 people.\n")
+            habTotalEstim = habTotal
+            break    
+
+if habTotalEstim != habTotal:
+
+    if float(habTotalEstim) < 0:
+        print("\nReceived value is negative, we shall take the value of 2020 which is 815300 people.\n")
+        habTotalEstim = habTotal
+
+    elif np.abs(int(habTotalEstim) - habTotal) > 100000:
+        print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 people.\n")
+        habTotalEstim = habTotal
+
+    else:
+        print("\nReceived value is within a reasonable range from official values, we shall then base all our calculation on this value.\n")
 
 
 # we have the inhabitance percentage of the inhabitants
@@ -99,11 +135,13 @@ with open("wasteDayLst.csv", "w", newline= "") as file:
 """We run the second part of the code, written in C."""
 
 print("Running the program computing the values...\n")
-import os
 
-os.startfile(r"Part_2_TRIDEL.exe")
+import os
+os.startfile(r"Part2TRIDEL.exe")
 
 print("Creating a CSV file of calculated Power output...\n")
+print("Creating a CSV file of Variance calculated Power output...\n")
+print("Creating a CSV file of the needed fuel if the output is negative...\n")
 
 
 # waiting for the PowerOutput CSV file to be written
