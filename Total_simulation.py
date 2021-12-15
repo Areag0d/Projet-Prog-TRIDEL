@@ -21,8 +21,8 @@ habTotal = 815300
 # making sure that the population value input is relevant
 # (that it is an integer and that it is not too far from the current population of the canton):
 
-numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-']
-specialChar = [",", ".", 'j', '+']
+numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+specialChar = [",", ".", 'j', '+', '-']
 decimalCharCounter = 0
 
 if habTotalEstim == "":
@@ -49,6 +49,20 @@ else:
                 print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
                 habTotalEstim = habTotal
                 break
+
+            elif char == ',' or char == '.':
+
+                if habTotalEstim[0] == char:
+                    print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+                    habTotalEstim = habTotal
+                    break
+
+            elif char == '+' or char == '-':
+
+                if habTotalEstim[0] != char:
+                    print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+                    habTotalEstim = habTotal
+                    break
 
         else:
             print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
@@ -141,10 +155,11 @@ print("Running the program computing the values...\n")
 import os
 
 # testing whether the executable file is at the right place
+# The program then waits for the user to execute part 2 to resume
 
 while not os.path.exists("Part2TRIDEL.exe"):
    print("\nPart2TRIDEL.exe does not exist or isn't in the same folder as the program.\n")
-   print("Please, compile Part2TRIDEL.c or add the .exe file in the same folder.\n")
+   print("Please, compile Part2TRIDEL.c or add the .exe file in the same folder,\n")
    input("Then, come back and press enter to continue...")
    print("\n")
 
