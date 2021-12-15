@@ -75,7 +75,6 @@ if habTotalEstim != habTotal:
         habTotalEstim = habTotal
 
     elif np.abs(int(habTotalEstim) - habTotal) > 100000:
-
         print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 
