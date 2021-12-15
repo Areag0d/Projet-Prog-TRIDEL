@@ -168,7 +168,7 @@ void read_csv(char * filename, double * table) {
 
 // Part 1: waste composition
 
-/* 
+/*
 This function calculates the relative mass of an element before a reaction.
   So from the tabulated proportions of oxidized metals in Machefer, we
   We use this function for calculus in the oxidation of metals and
@@ -188,7 +188,7 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
 }
 
 
-/* 
+/*
   This function takes in argument the massic proportions of the compostion of
   machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
   Knowing relative proportions of components of the inert part of waste,
