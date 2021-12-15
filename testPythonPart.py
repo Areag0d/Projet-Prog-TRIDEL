@@ -70,7 +70,7 @@ else:
             print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
             habTotalEstim = habTotal
             break    
-
+#
 if habTotalEstim != habTotal:
 
 
