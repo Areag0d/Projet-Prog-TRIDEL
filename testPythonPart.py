@@ -143,11 +143,11 @@ import os
 # testing whether the executable file is at the right place
 
 while not os.path.exists("Part2TRIDEL.exe"):
-
    print("\nPart2TRIDEL.exe does not exist or isn't in the same folder as the program.\n")
    print("Please, compile Part2TRIDEL.c or add the .exe file in the same folder.\n")
    input("Then, come back and press enter to continue...")
    print("\n")
+
 os.startfile(r"Part2TRIDEL.exe")
 
 print("Creating a CSV file of calculated Power output...\n")
