@@ -15,7 +15,7 @@ import csv
 # inhabitants per region:
 # inputting the number of inhabitants
 print("\nEstimate the current population of the canton of Vaud.")
-habTotalEstim = input("\nIf you do not care.. press Enter: ")
+habTotalEstim = input("\nIf you do not care... press Enter: ")
 habTotal = 815300
 
 # making sure that the population value input is relevant
@@ -26,20 +26,20 @@ specialChar = [",", ".", 'j', '+']
 decimalCharCounter = 0
 
 if habTotalEstim == "":
-    
+
     print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
 else:
     for char in habTotalEstim:
-        
+
         if char in numberslist:
             continue
 
         elif char in specialChar:
 
             decimalCharCounter += 1
-                
+
             if (char == 'j'):
                 print("\nReceived value is complex, we shall take the value of 2020 which is 815300 person.\n")
                 habTotalEstim = habTotal
@@ -53,7 +53,7 @@ else:
         else:
             print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
             habTotalEstim = habTotal
-            break    
+            break
 
 if habTotalEstim != habTotal:
 
