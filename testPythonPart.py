@@ -30,15 +30,10 @@ if habTotalEstim == "":
     print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
-elif habTotalEstim[0] == "-":
-    print("\nReceived value is negative, we shall then take the value of 2020 which is 815300 person.\n ")
-    habTotalEstim = habTotal
-    
 else:
     for char in habTotalEstim:
         
         if char in numberslist:
-
             continue
 
         elif char in specialChar:
@@ -50,17 +45,6 @@ else:
                 habTotalEstim = habTotal
                 break
 
-                if decimalCharCounter > 1:
-                    print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
-                    habTotalEstim = habTotal
-
-                elif decimalCharCounter == 1:
-                    print("\nReceived value is a decimal number, you can not have a decimal citizen! we shall take the closest integer from your input.\n")
-                    habTotalEstim = int(habTotalEstim)
-
-        else:
-            print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
-
             elif decimalCharCounter > 1:
                 print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
                 habTotalEstim = habTotal
@@ -70,11 +54,8 @@ else:
             print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
             habTotalEstim = habTotal
             break    
-#
+
 if habTotalEstim != habTotal:
-
-
-    if np.abs(int(habTotalEstim) - habTotal) > 100000:
 
     if float(habTotalEstim) < 0:
         print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
@@ -86,10 +67,7 @@ if habTotalEstim != habTotal:
         habTotalEstim = habTotal
 
     else:
-
-        print("\nReceived value is within a reasonable range from official values, we shall then base all our calculation on this value")
-
-        print("\nReceived value is within a reasonable range from official values, we shall then base all our calculation on this value.\n")
+        print("\nReceived value is within a reasonable range from official values, we shall then base all our calculations on this value.\n")
 
 
 
@@ -159,9 +137,13 @@ with open("wasteDayLst.csv", "w", newline= "") as file:
 """We run the second part of the code, written in C."""
 
 print("Running the program computing the values...\n")
+
 import os
+
 # testing whether the executable file is at the right place
+
 while not os.path.exists("Part2TRIDEL.exe"):
+
    print("\nPart2TRIDEL.exe does not exist or isn't in the same folder as the program.\n")
    print("Please, compile Part2TRIDEL.c or add the .exe file in the same folder.")
    input("If Part2TRIDEL.exe is in the same folder as the program, press any key to continue...")
