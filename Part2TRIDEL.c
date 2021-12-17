@@ -22,9 +22,9 @@ void read_csv(char * filename, double * table);
 
 //Part 1
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
-double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
+double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
 //Part 2
-double Qcalculator(double m, double Cm, double Tfinal, double Tinitial);
+double Qcalculator(double m, double Cp, double Tfinal, double Tinitial);
 double Qignition(double mC2H4, double mMoist, double mInert);
 //Part 3
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
@@ -116,11 +116,11 @@ int main(int argc, char * argv[]) {
   }
 
   // Part 7
-  
+
   //Implementing a new table of values given by calculated outputs
   // added with variance.
   // Because our mean (calculated) value is close to 1 MW, and our choice of
-  // sigma = 1.25, (based on official values), we obtain negative energy outputs 
+  // sigma = 1.25, (based on official values), we obtain negative energy outputs
   //from our model with the added variance.
   // These negatives values are deficits in energy production,
   // hence we calculate how much minimum fuel is needed in order to
@@ -197,8 +197,10 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
   Knowing relative proportions of components of the inert part of the waste,
   we can calculate it's specific heat, which is essential for downstream calculations.
   We neglect the contribution of trace elements, as their proportion is insignificant.
+
+  These proportions are taken from tables! see line 300
 */
-double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
+double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
 
   // Except for SiO2, which is glass, Carbon and Chlorine, all the other components
   // are in their oxidized form, which means there were burnt.
@@ -249,24 +251,24 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   // we give specific heat values (tabulated) of each component:
   // SiO2, Al, Fe, Ca, C, Cl respectively [J/(g*K)]:
 
-  double  CmTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
+  double  CpTable [] = {0.84, 0.894, 0.412, 0.63, 0.710, 0.48};
 
   // weighted average given by:
 
-  double CmInert = 0;
-  for (int i = 0; i < 6; i ++) CmInert += relmassTable[i] * CmTable[i];
+  double CpInert = 0;
+  for (int i = 0; i < 6; i ++) CpInert += relmassTable[i] * CpTable[i];
 
-  return CmInert; // [J/(g*K)]
+  return CpInert; // [J/(g*K)]
 
 }
 
 
 // Part 2: energy required to heat up waste to ignition
 
-double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
+double Qcalculator(double m, double Cp, double Tfinal, double Tinitial) {
 
   double deltaT = Tfinal -Tinitial;
-  double Qh = m * Cm * deltaT;
+  double Qh = m * Cp * deltaT;
 
   return Qh;
 }
@@ -281,26 +283,27 @@ double Qignition(double mC2H4, double mMoist, double mInert){
   // Starting from the global equation that gives the total heat required
   // to evaporate moisture and heat up waste:
   // Qignition = Qwaste + Qeva + Qsteam = (QC2H4 + Qinert + Qmoist) + Qeva + Qsteam
-  // And noting that Q = m * Cm * ΔT, unless it is for latent heat where Q = m * Cm,
+  // And noting that Q = m * Cp * ΔT, unless it is for latent heat where Q = m * Cp,
   // we have the following equations:
 
   // QC2H4
-  double CmC2H4x = 2.25; // [KJ/Kg/K]
+  double CpC2H4x = 2.25; // [KJ/Kg/K]
   double Tinitial = 20; // T°C at which waste enters combustion room
-  double QC2H4T = Qcalculator(mC2H4, CmC2H4x, Tignition, Tinitial);
+  double QC2H4T = Qcalculator(mC2H4, CpC2H4x, Tignition, Tinitial);
 
-  double Cmfus = 230;// [kJ/Kg]
-  double QC2H4Fusion =  Cmfus * mC2H4;
+  double Cpfus = 230;// [kJ/Kg]
+  double QC2H4Fusion =  Cpfus * mC2H4;
   double QC2H4 = QC2H4T + QC2H4Fusion;
 
   // Qinert
-  double Cminert = CmInert(0.56, 0.10, 0.14, 7.5, 1.8, 1.5);
-  double Qinert = Qcalculator(mInert, Cminert, Tignition, Tinitial);
+  // Values used below are taken from tables
+  double Cpinert = CpInert(0.56, 0.10, 0.14, 0.75, 0.18, 0.15);
+  double Qinert = Qcalculator(mInert, Cpinert, Tignition, Tinitial);
 
   // Qmoist
-  double CmWater = 4.184; // [kJ/kg]
+  double CpWater = 4.184; // [kJ/kg]
   double Tboiling = 100;
-  double Qmoist = Qcalculator(mMoist, CmWater, Tboiling, Tinitial);
+  double Qmoist = Qcalculator(mMoist, CpWater, Tboiling, Tinitial);
 
   double Qwaste = QC2H4 + Qinert + Qmoist;
 
@@ -380,7 +383,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // nN2 = P * V / (R * Tignition)
   double nN2 = P * VN2 / (R * Tignition); // [mol]
 
-  // then we get the mass as usual in grams from mN2 = nN2 * MW and dividing by 1000 
+  // then we get the mass as usual in grams from mN2 = nN2 * MW and dividing by 1000
   double MWN2 = 28;
   double mN2 = nN2 *  MWN2 /1000; //[Kg]
 
@@ -398,10 +401,10 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // weighted by their mass proportions:
   // tables made for O2, N2, CO2, H2O
   double massTable [] = {mO2prim, mN2, mCO2, mH2O};
-  double CmTable [] = {0.919, 1.04, 0.844, 1.93};
+  double CpTable [] = {0.919, 1.04, 0.844, 1.93};
   double Cptot = 0;
   for (int i = 0; i < 4; i++) {
-    Cptot += massTable[i] * CmTable[i];
+    Cptot += massTable[i] * CpTable[i];
     Cptot /= Mtot;
   }
 
@@ -423,7 +426,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 */
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
-  double lambda = 45; // λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that 
+  double lambda = 45; // λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that
                       //the heat exchanger wall is only made of steel
   double thickness = 0.00833; // plate thickness of the heat exchanger [m]
   double alphaHot = 3500; // average of the tabulated values
@@ -456,11 +459,11 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
   // we know that Wdot = mdot * deltaH
-  // we can calculte mdot with mdot = Qdot / (CmSteam * dT)
+  // we can calculte mdot with mdot = Qdot / (CpSteam * dT)
   double Qdot = QdotCalculator(mC2H4, mMoist, mInert, massMoyC2H4); // [J/s]
-  double CmSteam = 2000; // [J/kg/K]
+  double CpSteam = 2000; // [J/kg/K]
   double dT = 450 - 30; // [K]
-  double mdot = Qdot / (CmSteam * dT) ; // [kg/s]
+  double mdot = Qdot / (CpSteam * dT) ; // [kg/s]
 
   // delaH = Hi - Hf, which are given in tables for our specific temperatures
   // The specific tempeartures were chosen upon what is common in litterture
