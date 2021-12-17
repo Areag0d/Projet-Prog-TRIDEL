@@ -17,20 +17,30 @@ and each function that goes along with each of these steps
 
 // So we start by defining all the functions before the main
 
-void read_csv(char * filename, double * table); //do I put the parts here too..?
+//Importing the WasteDay table created in python to start
+void read_csv(char * filename, double * table);
+
+//Part 1
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
 double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
+//Part 2
 double Qcalculator(double m, double Cm, double Tfinal, double Tinitial);
 double Qignition(double mC2H4, double mMoist, double mInert);
+//Part 3
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+//Part 4
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+//Part 5
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+//(Part 6: in the main)
+// Part 7: creating a new table adding variance
 void stochastiser(double value, double * PowerVarTable, double * negativeOutputSum);
-double NeededPetrol(double negativeOutputSum);
+// Part 8: creating a CSV writer
 void write_csv(char * filename, double * table);
 
 
 int main(int argc, char * argv[]) {
+
   // importing data from csv file into a table
   // create a recieving table for data of dimension 365 * years
   // int years = 1;
@@ -102,16 +112,22 @@ int main(int argc, char * argv[]) {
   for (int day = 0; day < 365; day++){
 
     WorkOutput[day] = WdotCalculator(mC2H4Table[day], mMoistTable[day], mInertTable[day], massMoyC2H4);
-    PowerTable[day] = WorkOutput[day] / (3600*24*1000); // [MW]
+    PowerTable[day] = WorkOutput[day] / (3600 * 24 * 1000); // [MW]
   }
 
-  // Part 7: Implementing a variance following a normal distribution
+  // Part 7: Implementing a new table of values given by calculated outputs
+  // added with variance.
+  // Because our mean (calculated) value is close to 1 MW our use of
+  // sigma = 1.25, we obtain negative values.
+  // These negatives values are deficits in energy production,
+  // hence we calculate how much minimum fuel is needed in order to
+  // conduct complete combustion and so a net zero ouput.
 
-  double PowerVarTable[365];
-  double PetrolNeededDay[365];
+  double VarPowerTable[365];
+  double FuelNeededDay[365];
 
   for (int day = 0; day < 365; day++){
-    stochastiser(PowerTable[day], &PowerVarTable[day], &PetrolNeededDay[day]);
+    stochastiser(PowerTable[day], &VarPowerTable[day], &FuelNeededDay[day]);
   }
 
   // Part 8: Outputing CSV files
@@ -119,9 +135,9 @@ int main(int argc, char * argv[]) {
   // CSV file for PowerTable
   write_csv("PowerTable.csv", PowerTable);
   // CSV file for varPowerTable
-  write_csv("varPowerTable.csv", PowerVarTable);
+  write_csv("VarPowerTable.csv", VarPowerTable);
   // CSV file for negative outputs
-  write_csv("PetrolNeededDay.csv", PetrolNeededDay);
+  write_csv("FuelNeededDay.csv", FuelNeededDay);
   return 0;
 }
 
@@ -152,10 +168,12 @@ void read_csv(char * filename, double * table) {
 
 // Part 1: waste composition
 
-// This function calculates the relative mass of an element before a reaction.
-// So from the tabulated proportions of oxidized metals in Machefer, we
-// We use this function for calculus in the oxidation of metals and
-// combustion of Polyethylene.
+/*
+This function calculates the relative mass of an element before a reaction.
+  So from the tabulated proportions of oxidized metals in Machefer, we
+  We use this function for calculus in the oxidation of metals and
+  combustion of Polyethylene.
+*/
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient){
 
     // we first calculate the final number of moles
@@ -170,17 +188,20 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
 }
 
 
-// This function takes in argument the massic proportions of the compostion of
-// machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
-// Knowing relative proportions of components of the inert part of waste,
-// we can calculate its specific heat, which is essential for downstream calculus
-// We neglect the contribution of trace elements, as their proportion is insignificant.
+/*
+  This function takes in argument the massic proportions of the compostion of
+  machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
+  Knowing relative proportions of components of the inert part of waste,
+  we can calculate its specific heat, which is essential for downstream calculus
+  We neglect the contribution of trace elements, as their proportion is insignificant.
+*/
 double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
+
   // Except for SiO2, which is glass, Carbon and Chlorine, all the other components
   // are in their oxidized form, which means there were burnt.
   // therefore to calculate their proportions in incoming waste,
   // we need to calculate their proportions before oxidation (metallic)
-
+  printf("propSiO2 = %f\n", propSiO2); //comment il sait..?
   // for one gram of Machefer
   // Glass (SiO2)
   double mSiO2 = propSiO2 * 1; // [g]
@@ -236,6 +257,12 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
 
 }
 
+double QMetalOxi(double mInert){
+
+  double QmetalOxi = mInert * 0;
+  return QmetalOxi;
+}
+
 
 // Part 2: energy required to heat up waste to ignition
 
@@ -253,6 +280,7 @@ double Qcalculator(double m, double Cm, double Tfinal, double Tinitial) {
 double Tignition = 350;
 
 double Qignition(double mC2H4, double mMoist, double mInert){
+
   // Starting from the global equation that gives the total heat required
   // to evaporate moisture and heat up waste:
   // Qignition = Qwaste + Qeva + Qsteam = (QC2H4 + Qinert + Qmoist) + Qeva + Qsteam
@@ -297,7 +325,9 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 // Part 3: heat released by waste combustion
 
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
+
   // 3.1 : heat released by PE combustion
+
   // We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; // [kJ/kg] tabulated value
   double Qheat = QcC2H4x * mC2H4; // [KJ]
@@ -364,6 +394,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double Mtot = mflue + mprim;
 
   // 3.3 : final temperature
+
   // To get Tfinal, we use the equation Qnet = Cp * Mtot * (Tf - Ti)
   // we need to find Cp of our mixture:
   // to do so, we calculate the average of Cp of our components
@@ -387,11 +418,12 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
 // Part 4 : Heat exchanger
 
-// We're calculating the energy flow according to this equation:
-  // Qflow = k * A * LMTD
-  // Where Q = Energy flow, k = heat transfer coefficient,
-  // A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
-
+/*
+  We're calculating the energy flow according to this equation:
+  Qflow = k * A * LMTD
+  Where Q = Energy flow, k = heat transfer coefficient,
+  A = heat transfer area, LMTD = logarithmic Mean Temperature Difference
+*/
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
   double lambda = 45; // λ = thermal conductivity, [W/(mK)] (=45 W/(mK) making the assumption that it is only made of steel
@@ -424,6 +456,7 @@ double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 // Part 5 : Energy harvesting
 
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
+
   // we know that Wdot = mdot * deltaH
   // we can calculte mdot with mdot = Qdot / (CmSteam * dT)
   double Qdot = QdotCalculator(mC2H4, mMoist, mInert, massMoyC2H4); // [J/s]
@@ -449,21 +482,24 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 
 void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
 
+  // We create normally distributed energetic outputs based on our daily energetic output
   double TAU = 8 * atan(1);
-  double max = 0, sigma=1.25, r;
+  double max = 0, sigma=1250, randomiser;
 
-  r = sqrt(-2*log(rand()/(RAND_MAX+1.0))) * cos(TAU*rand()/(RAND_MAX+1.0));
-  r = r * sigma + mu;
+  randomiser = sqrt(-2*log(rand()/(RAND_MAX+1.0))) * cos(TAU*rand()/(RAND_MAX+1.0));
+  double stochastEnergyVal = randomiser * sigma + mu;
 
-  *PowerVarTable = r;
+  // Placing these varied energetic values in a table
+  *PowerVarTable = stochastEnergyVal;
 
-  if (r < 0){
-
-    *NeededPetrol = fabs(r);
+  // If randomised enrgetic values are under 0, it means that we need fuel to fully conduct the combustion.
+  // To quantify this, we create a new table which we call FuelTable. (see main)
+  // And to do so, we first need to do some calculations to adjust the units.
+  if (stochastEnergyVal < 0){
+    *NeededPetrol = fabs(stochastEnergyVal);
     *NeededPetrol = *NeededPetrol / 46; //[Kg/s]
     *NeededPetrol = *NeededPetrol * (3600 * 24); //[Kg/j]
     *NeededPetrol = *NeededPetrol / 1000; //[T/j]
-
   }
 
   else{

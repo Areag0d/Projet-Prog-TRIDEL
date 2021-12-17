@@ -20,18 +20,29 @@ habTotal = 815300
 
 # making sure that the population value input is relevant
 # (that it is an integer and that it is not too far from the current population of the canton):
-
+'''
 numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 specialChar = [",", ".", 'j', '+', '-']
 decimalCharCounter = 0
-
+'''
 if habTotalEstim == "":
 
     print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
 else:
-    for char in habTotalEstim:
+    try:
+        habTotalEstim = int(habTotalEstim)
+
+    except ValueError:
+        print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+        habTotalEstim = habTotal
+
+    if habTotalEstim < 0:
+        print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
+        habTotalEstim = habTotal
+
+    '''for char in habTotalEstim:
 
         if char in numberslist:
             continue
@@ -66,15 +77,15 @@ else:
         else:
             print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
             habTotalEstim = habTotal
-            break
+            break'''
 
 if habTotalEstim != habTotal:
 
-    if float(habTotalEstim) < 0:
+    '''if float(habTotalEstim) < 0:
         print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
-        habTotalEstim = habTotal
+        habTotalEstim = habTotal'''
 
-    elif np.abs(int(habTotalEstim) - habTotal) > 100000:
+    if np.abs('''int'''(habTotalEstim) - habTotal) > 100000:
         print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 

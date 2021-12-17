@@ -15,54 +15,31 @@ import csv
 # inhabitants per region:
 # inputting the number of inhabitants
 print("\nEstimate the current population of the canton of Vaud.")
-habTotalEstim = input("\nIf you do not care.. press Enter: ")
+habTotalEstim = input("\nIf you do not care... press Enter: ")
 habTotal = 815300
 
 # making sure that the population value input is relevant
 # (that it is an integer and that it is not too far from the current population of the canton):
 
-numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-']
-specialChar = [",", ".", 'j', '+']
-decimalCharCounter = 0
-
 if habTotalEstim == "":
-    
     print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
     habTotalEstim = habTotal
 
 else:
-    for char in habTotalEstim:
-        
-        if char in numberslist:
-            continue
+    try:
+        habTotalEstim = int(habTotalEstim)
 
-        elif char in specialChar:
+    except ValueError:
+        print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+        habTotalEstim = habTotal
 
-            decimalCharCounter += 1
-                
-            if (char == 'j'):
-                print("\nReceived value is complex, we shall take the value of 2020 which is 815300 person.\n")
-                habTotalEstim = habTotal
-                break
-
-            elif decimalCharCounter > 1:
-                print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
-                habTotalEstim = habTotal
-                break
-
-        else:
-            print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
-            habTotalEstim = habTotal
-            break    
-
-if habTotalEstim != habTotal:
-
-    if float(habTotalEstim) < 0:
+    if habTotalEstim < 0:
         print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 
-    elif np.abs(int(habTotalEstim) - habTotal) > 100000:
+if habTotalEstim != habTotal:
 
+    if np.abs(habTotalEstim - habTotal) > 100000:
         print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 
@@ -141,10 +118,11 @@ print("Running the program computing the values...\n")
 import os
 
 # testing whether the executable file is at the right place
+# The program then waits for the user to execute part 2 to resume
 
 while not os.path.exists("Part2TRIDEL.exe"):
    print("\nPart2TRIDEL.exe does not exist or isn't in the same folder as the program.\n")
-   print("Please, compile Part2TRIDEL.c or add the .exe file in the same folder.\n")
+   print("Please, compile Part2TRIDEL.c or add the .exe file in the same folder,\n")
    input("Then, come back and press enter to continue...")
    print("\n")
 
@@ -184,7 +162,7 @@ FuelNeededDay = np.genfromtxt('FuelNeededDay.csv', delimiter = ',', dtype = 'flo
 # These values are given in [MWh] per month
 
 TridelValues = np.array([4942.84, 4909.77, 4959.43, 5041.34, 5876.92, 1396.43, 7550.33, 8926.98, 8242.48, 6819.23, 5744.39, 5439.18]) #[MWh / month]
-TridelValues = TridelValues / (30.4 * 24) # converting [MWh] to [MW]
+TridelValues = TridelValues / (30.4* 24) # converting [MWh] to [MW]
 
 # Modifying the dimension of the arrays, in order for it to be possible
 # to plot official and calculated values together
@@ -231,3 +209,5 @@ axs[1, 1].set(xlabel="[days]")
 
 plt.tight_layout()
 plt.show()
+
+print("\nTHE END\n")
