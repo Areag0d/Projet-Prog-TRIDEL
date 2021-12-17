@@ -1,20 +1,37 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+# waiting for the PowerOutput CSV file to be written
+# before running the last part
+
+import time
+time.sleep(0.5)
+
+###########################################################################
+###########################################################################
+
+"""Interpreting the results"""
+
+import matplotlib.pyplot as plt
+
 """Part 1: CSV file reading"""
 # 1st we need to import the CSV file of Power outputs into a table
 
 PowerTable = np.genfromtxt('PowerTable.csv', delimiter = ',', dtype = 'float64') # [MW]
 
-varPowerTable = np.genfromtxt('varPowerTable.csv', delimiter = ',', dtype = 'float64') # [MW]
-
 wasteDayLst = np.genfromtxt('wasteDayLst.csv', delimiter = ',', dtype = 'float64') # [Kg]
 wasteDayLst /= 1000 # conversion from [kg] to [tonnes]
 
+varPowerTable = np.genfromtxt('varPowerTable.csv', delimiter = ',', dtype = 'float64') # [MW]
+
+FuelNeededDay = np.genfromtxt('FuelNeededDay.csv', delimiter = ',', dtype = 'float64') # [Tons]
+
 """Part 2: initializing reference values"""
-# These values are given in [MWh] for per month
+# These values are given in [MWh] per month
+
 TridelValues = np.array([4942.84, 4909.77, 4959.43, 5041.34, 5876.92, 1396.43, 7550.33, 8926.98, 8242.48, 6819.23, 5744.39, 5439.18]) #[MWh / month]
-TridelValues = TridelValues / (30.4 * 24) # converting [MWh] to [MW]
+TridelValues = TridelValues / (30.4* 24) # converting [MWh] to [MW]
 
 # Modifying the dimension of the arrays, in order for it to be possible
 # to plot official and calculated values together
@@ -28,55 +45,38 @@ for i in range(len(TridelValues)):
 
 
 """Part 3 energy output plot"""
-
-#We divide our plot into two subplots:
-#we start by plotting our energy output vs the official energy output of Tridel
+# We divide our plot into four subplots:
 
 days = np.array([day + 1 for day in range(365)])
 
-wstDay = np.array(wasteDayLst)
-Pwr = PowerTable
-TridelDay = DayTridelVal
-varPwr = varPowerTable
+wasteDay = np.array(wasteDayLst)
 
-plt.figure()
+Fueltest = np.zeros(365)
+fig, axs = plt.subplots(2, 2)
+# Plotting calculated output values against true values
+axs[0, 0].plot(days, PowerTable, 'tab:orange', label="Calculated Power")
+axs[0, 0].plot(days, DayTridelVal, 'tab:red', label="Official Power production")
+axs[0, 0].set_title('Calc. and true Power output')
+axs[0, 0].set(ylabel="[MW]")
 
-plt.subplot(2, 1, 1)
-plt.plot(days, TridelDay, label = 'Official daily Power production')
-plt.plot(days, Pwr, label = 'Daily calculated Power production')
-plt.ylabel("[MW]")
-plt.legend()
+# Plotting mass of waste per day
+axs[1, 0].plot(days, wasteDay)
+axs[1, 0].set_title('Waste weight')
+axs[1, 0].set(ylabel="[tons]")
+axs[1, 0].set(xlabel="[days]")
 
-#We then plot the total waste taken up by TRIDEL as a function of
-#the number of people chosen by the user in part 1.
+# Plotting calculated output values with variance against true values
+axs[0, 1].plot(days, varPowerTable, 'tab:orange', label="Calc. Power with variance")
+axs[0, 1].plot(days,DayTridelVal, 'tab:red', label="Official Power production")
+axs[0, 1].set_title('Calc. variance and true output')
 
-plt.subplot(2, 1, 2)
+# Plotting minimal fuel mass in order to conduct combustion
+# with our added variance model
+axs[1, 1].plot(days, FuelNeededDay, 'tab:brown')
+axs[1, 1].set_title('Minimal fuel needed')
+axs[1, 1].set(xlabel="[days]")
 
-plt.plot(days, wstDay, label = 'Daily Waste weight [tons]')
-plt.legend()
-plt.xlabel("Days")
-plt.ylabel("[tons]")
+plt.tight_layout()
 plt.show()
 
-
-# Finally, we plot the power output with the variance 
-# we imposed, which is directly related to the inner working
-# of the TRIDEL incineration plant. 
-
-
-a, b = 0
-print(a, b)
-plt.subplot(2, 2, 1)
-plt.plot(a, b, label = 'Daily Power production with Variance')
-plt.legend()
-plt.xlabel('')
-plt.ylabel('')
-
-c, d = 0
-plt.subplot(2, 2, 2)
-plt.plot(c, d, label = 'Daily Power production with Variance')
-plt.legend()
-plt.xlabel('')
-plt.ylabel('')
-
-plt.show
+print("\nTHE END\n")
