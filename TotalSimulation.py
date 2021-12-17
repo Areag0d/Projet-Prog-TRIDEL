@@ -20,11 +20,8 @@ habTotal = 815300
 
 # making sure that the population value input is relevant
 # (that it is an integer and that it is not too far from the current population of the canton):
-'''
-numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-specialChar = [",", ".", 'j', '+', '-']
-decimalCharCounter = 0
-'''
+
+
 if habTotalEstim == "":
 
     print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
