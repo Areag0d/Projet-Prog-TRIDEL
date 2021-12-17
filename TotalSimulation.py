@@ -42,53 +42,10 @@ else:
         print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 
-    '''for char in habTotalEstim:
-
-        if char in numberslist:
-            continue
-
-        elif char in specialChar:
-
-            decimalCharCounter += 1
-
-            if (char == 'j'):
-                print("\nReceived value is complex, we shall take the value of 2020 which is 815300 person.\n")
-                habTotalEstim = habTotal
-                break
-
-            elif decimalCharCounter > 1:
-                print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
-                habTotalEstim = habTotal
-                break
-
-            elif char == ',' or char == '.':
-<<<<<<< HEAD
-=======
-
->>>>>>> 0a0d60a3dbb849db878840962085029058e2b51f
-                print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
-                habTotalEstim = habTotal
-                break
-
-            elif char == '+' or char == '-':# to be sure that the '+' or '-' signs are not in the middle of the string
-
-                if habTotalEstim[0] != char:
-                    print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
-                    habTotalEstim = habTotal
-                    break
-
-        else:
-            print("\nReceived value is not a number (#NAN), we shall take the value of 2020 which is 815300 person.\n")
-            habTotalEstim = habTotal
-            break'''
 
 if habTotalEstim != habTotal:
 
-    '''if float(habTotalEstim) < 0:
-        print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
-        habTotalEstim = habTotal'''
-
-    if np.abs('''int'''(habTotalEstim) - habTotal) > 100000:
+    if np.abs((habTotalEstim) - habTotal) > 100000:
         print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 
