@@ -51,11 +51,9 @@ else:
                 break
 
             elif char == ',' or char == '.':
-
-                if habTotalEstim[0] == char:
-                    print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
-                    habTotalEstim = habTotal
-                    break
+                print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+                habTotalEstim = habTotal
+                break
 
             elif char == '+' or char == '-':
 
