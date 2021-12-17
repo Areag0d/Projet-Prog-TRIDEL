@@ -69,7 +69,6 @@ habOuest = habTotal * prophabOuest
 habLaCote = habTotal * 0.5 * prophabLaCote
 habNord = habTotal * 0.5 * prophabNord
 habChargTot = habLausanne + habOuest + habLaCote + habNord
-
 habChargLst = np.array([habLausanne, habOuest, habLaCote, habNord])
 
 #waste per person per region [kg/year] : wastehabRegion
