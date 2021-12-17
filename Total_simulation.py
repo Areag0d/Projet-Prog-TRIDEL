@@ -51,11 +51,15 @@ else:
                 break
 
             elif char == ',' or char == '.':
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0a0d60a3dbb849db878840962085029058e2b51f
                 print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
                 habTotalEstim = habTotal
                 break
 
-            elif char == '+' or char == '-':
+            elif char == '+' or char == '-':# to be sure that the '+' or '-' signs are not in the middle of the string
 
                 if habTotalEstim[0] != char:
                     print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
@@ -74,7 +78,6 @@ if habTotalEstim != habTotal:
         habTotalEstim = habTotal
 
     elif np.abs(int(habTotalEstim) - habTotal) > 100000:
-
         print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
         habTotalEstim = habTotal
 
