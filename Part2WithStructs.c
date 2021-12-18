@@ -22,22 +22,33 @@ void read_csv(char * filename, double * table);
 
 //Part 1
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
+struct Mass;
+struct Masses;
+double mInitialMix(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
 double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
+
 //Part 2
 double Qcalculator(double m, double Cp, double Tfinal, double Tinitial);
 double Qignition(double mC2H4, double mMoist, double mInert);
+
 //Part 3
-double QMetalOxi(double mInert);
+double QMetalOxi(double mInert, double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+
 //Part 4
 double QdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+
 //Part 5
 double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4);
+
 //(Part 6: in the main)
-// Part 7: creating a new table adding variance
+
+// Part 7: creating a new table adding variance and needed Fuel if the energetic output is negative
 void stochastiser(double value, double * PowerVarTable, double * negativeOutputSum);
+
 // Part 8: creating a CSV writer
 void write_csv(char * filename, double * table);
+
 
 
 int main(int argc, char * argv[]) {
@@ -192,6 +203,75 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
 }
 
 
+struct Mass { 
+  double oxiMass;
+  double originalMass;
+};
+
+struct Mass inertMaterialMass(double metalProp, double mass1, double MW1, double MW2, double StoichCoefficient){
+
+  struct  Mass mass;
+
+  mass.oxiMass = metalProp * 1;
+
+  if((mass1 > 0) && (MW1 > 0) && (MW2 > 0) && (StoichCoefficient > 0)){
+      mass.originalMass = OriginalMass(mass1, MW1, MW2, StoichCoefficient);
+  } 
+  else(mass.originalMass = mass.oxiMass);
+
+  return mass;
+}
+
+struct Masses{
+    
+  struct Mass mSiO2;
+  struct Mass mC;
+  struct Mass mCl;
+  struct Mass mAl;
+  struct Mass mFe;
+  struct Mass mCa;
+
+} ; // [g]
+
+struct Masses massesStructBuilder(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
+
+  // Except for SiO2, which is glass, Carbon and Chlorine, all the other components
+  // are in their oxidized form, which means there were burnt.
+  // therefore to calculate their proportions in incoming waste,
+  // we need to calculate their proportions before oxidation (metallic)
+
+  // for one gram of Machefer
+  // Glass (SiO2)
+  struct Mass mSiO2 =  inertMaterialMass(propSiO2, 0, 0, 0, 0);// [g]
+
+  // Carbon
+  struct Mass mC =  inertMaterialMass(propC, 0, 0, 0, 0);// [g]
+
+  // Chlorine
+  struct Mass mCl =  inertMaterialMass(propCl, 0, 0, 0, 0); // [g]
+
+  // Aluminium
+  // Tabulated Molar Weight of Al2O3 = 102 [g/mol], Al = 27 [g/mol]
+  // Oxidation reaction: 2Al + 3O --> Al2O3
+  struct Mass mAl =  inertMaterialMass(propAl2O3, propAl2O3, 102, 27, 2); // [g]
+
+  // Iron
+  // Tabulated Molar Weight of Fe2O3 = 159.6 [g/mol],  Fe = 55.8 [g/mol]
+  // Oxidation reaction: 2Fe + 3O --> Fe2O3
+  struct Mass mFe = inertMaterialMass(propFe2O3, propFe2O3, 159.6, 55.8, 2); // [g]
+
+  // Calcium
+  // Tabulated Molar Weight of CaO = 56 [g/mol], Ca = 40 [g/mol]
+  // Oxidation reaction: Ca + O --> CaO
+  struct Mass mCa = inertMaterialMass(propCaO, propCaO, 56, 40, 1); // [g]
+
+  // initial mass of mixed metals that produced Machefer during combustion
+  struct Masses masses = {mSiO2, mC, mCl, mAl, mFe, mCa};
+
+  return masses;
+}
+
+
 /*
   This function takes as arguments the mass proportions of the composition of
   machefer. It is assumed to be composed of SiO2, Al2O3, CaO, Fe2O3, C and Cl.
@@ -203,46 +283,15 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
 */
 double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
 
-  // Except for SiO2, which is glass, Carbon and Chlorine, all the other components
-  // are in their oxidized form, which means there were burnt.
-  // therefore to calculate their proportions in incoming waste,
-  // we need to calculate their proportions before oxidation (metallic)
-
-  // for one gram of Machefer
-  // Glass (SiO2)
-  double mSiO2 = propSiO2 * 1; // [g]
-
-  // Carbon
-  double mC = propC * 1; // [g]
-
-  // Chlorine
-  double mCl = propCl * 1; // [g]
-
-  // Aluminium
-  // Tabulated Molar Weight of Al2O3 = 102 [g/mol], Al = 27 [g/mol]
-  // Oxidation reaction: 2Al + 3O --> Al2O3
-  double mAl2O3 = propAl2O3 * 1; // [g]
-  double mAl = OriginalMass(mAl2O3, 102, 27, 2); // [g]
-
-  // Iron
-  // Tabulated Molar Weight of Fe2O3 = 159.6 [g/mol],  Fe = 55.8 [g/mol]
-  // Oxidation reaction: 2Fe + 3O --> Fe2O3
-  double mFe2O3 = propFe2O3 * 1; // [g]
-  double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2); // [g]
-
-  // Calcium
-  // Tabulated Molar Weight of CaO = 56 [g/mol], Ca = 40 [g/mol]
-  // Oxidation reaction: Ca + O --> CaO
-  double mCaO = propCaO * 1; // [g]
-  double mCa = OriginalMass(mCaO, 56, 40, 1); // [g]
-
   // initial mass of mixed metals that produced Machefer during combustion
-  double mInitialMix = mSiO2 + mAl + mFe + mCa + mC + mCl; // [g]
+  struct Masses masses =  massesStructBuilder(propSiO2, propAl2O3, propCaO, propFe2O3, propC, propCl);// [g]
+
+  double mInitialMix = masses.mSiO2.originalMass + masses.mC.originalMass + masses.mCl.originalMass + masses.mAl.originalMass + masses.mFe.originalMass + masses.mCa.originalMass;
 
   // now we can determine the relative proportions of metals
   // in the inert part of waste by normalizing each value
 
-  double relmassTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
+  double relmassTable [] = {masses.mSiO2.originalMass, masses.mC.originalMass, masses.mCl.originalMass, masses.mAl.originalMass, masses.mFe.originalMass, masses.mCa.originalMass};
   for (int i = 0; i < 6; i ++) relmassTable[i] /= mInitialMix;
 
   // Now that we have relative proportions, we can finally calculate
@@ -258,9 +307,8 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
 
   double CpInert = 0;
   for (int i = 0; i < 6; i ++) CpInert += relmassTable[i] * CpTable[i];
-
+  printf("CpInert = %f\n", CpInert);
   return CpInert; // [J/(g*K)]
-
 }
 
 
@@ -268,16 +316,19 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
 
 double Qcalculator(double m, double Cp, double Tfinal, double Tinitial) {
 
-  double deltaT = Tfinal -Tinitial;
+  double deltaT = Tfinal - Tinitial;
   double Qh = m * Cp * deltaT;
 
   return Qh;
 }
 
- // we define Tignition for PE to be 350°C
- // we define it as a global variable, because we use it in different
- // functions multiple times
+/*
+  we define Tignition for PE to be 350°C
+  we define it as a global variable, because we use it in different
+  functions multiple times
+*/
 double Tignition = 350;
+
 
 double Qignition(double mC2H4, double mMoist, double mInert){
 
@@ -298,7 +349,7 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
   // Qinert
   // Values used below are taken from tables
-  double Cpinert = CpInert(0.56, 0.10, 0.14, 0.075, 0.018, 0.015);
+  double Cpinert = CpInert(0.56, 0.10, 0.14, 0.076, 0.018, 0.015);
   double Qinert = Qcalculator(mInert, Cpinert, Tignition, Tinitial);
 
   // Qmoist
@@ -325,37 +376,17 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
 // Part 3: heat released by waste combustion
 
-// First, we calculate the heat released by metal oxidation
-// We do this in an analogous way to the CpInert function
-double QMetalOxi(double mInert){
-  double propTable [] = {0.56, 0.10, 0.14, 0.076, 0.018, 0.015};
-  // Glass (SiO2)
-  double mSiO2 = propTable[0]; // [kg]
+/* First, we calculate the heat released by metal oxidation
+   We do this in an analogous way to the CpInert function */
+double QMetalOxi(double mInert, double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
 
-  // Carbon
-  double mC = propTable[4]; // [kg]
-
-  // Chlorine
-  double mCl = propTable[5]; // [kg]
-
-  // Aluminium
-  double mAl2O3 = propTable[1]; // [kg]
-  double mAl = OriginalMass(mAl2O3, 102, 27, 2); // [kg]
-
-  // Iron
-  double mFe2O3 = propTable[3]; // [kg]
-  double mFe = OriginalMass(mFe2O3, 159.6, 55.8, 2); // [kg]
-
-  // Calcium
-  double mCaO = propTable[2]; // [kg]
-  double mCa = OriginalMass(mCaO, 56, 40, 1); // [kg]
-
-  // initial mass of the mixed metals that produced the Machefer during the combustion
-  double mInitialMix = mSiO2 + mAl + mFe + mCa + mC + mCl; // [kg]
+  struct Masses masses =  massesStructBuilder(propSiO2, propAl2O3, propCaO, propFe2O3, propC, propCl);// [g]
+  double mInitialMix = masses.mSiO2.originalMass + masses.mC.originalMass + masses.mCl.originalMass + masses.mAl.originalMass + masses.mFe.originalMass + masses.mCa.originalMass;
 
   // we get the initial relative proportions
   // and at the same time, the mass of each metal for a given mInert
-  double metalmassTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
+  double metalmassTable [] = {masses.mSiO2.originalMass, masses.mC.originalMass, masses.mCl.originalMass, masses.mAl.originalMass, masses.mFe.originalMass, masses.mCa.originalMass};
+
   for (int i = 0; i < 6; i ++) {
     metalmassTable[i] /= mInitialMix;
     metalmassTable[i] *= mInert;
@@ -374,16 +405,20 @@ double QMetalOxi(double mInert){
   // Aluminium : MW = 27 [g/mol]
   double nAl = 1000 * metalmassTable[1]/27;
   double QAl = nAl * 1.669 / 2; // [kJ]
+
   // Iron : MW = 55.8 [g/mol]
   double nFe = 1000 * metalmassTable[2]/55.8;
   double QFe = nFe * 824 / 2; // [kJ]
+
   // Calcium : MW = 40 [g/mol]
   double nCa = 1000 * metalmassTable[3]/40;
   double QCa = nCa * 635; // [kJ]
 
   // We finally get the total energy produced by all the metals' combustion by adding up
   // all the individual combustion energies
-  return QAl + QFe + QCa;
+  double QMetalOxi = QAl + QFe + QCa;
+  
+  return QMetalOxi;
 }
 
 
@@ -391,9 +426,11 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // 3.1 : heat released by PE combustion and metal oxidation
 
+  double propTable [] = {0.56, 0.10, 0.14, 0.076, 0.018, 0.015};
+
   // We assume the combustible part of waste is Polyethylene (PE)
   double QcC2H4x = 47000; // [kJ/kg] tabulated value
-  double Qheat = QcC2H4x * mC2H4 + QMetalOxi(mInert); // [KJ]
+  double Qheat = QcC2H4x * mC2H4 + QMetalOxi(mInert, propTable[0], propTable[1], propTable[2], propTable[3], propTable[4], propTable[5]); // [KJ]
 
   double Qignit = Qignition(mC2H4, mMoist, mInert); // mCombustible = mC2H4
   double Qnet = Qheat - Qignit;
@@ -404,6 +441,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
 
   // mflue = mass of flue gases
   double MWC2H4 = 28;
+
   // mC2H4 is given in main
   double mCO2 = OriginalMass(1000*mC2H4, MWC2H4, 44, 2)/1000; // [kg]
   double mH2O = OriginalMass(1000*mC2H4, MWC2H4, 18, 2)/1000; // [kg]
@@ -465,6 +503,7 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   // tables made for O2, N2, CO2, H2O
   double massTable [] = {mO2prim, mN2, mCO2, mH2O};
   double CpTable [] = {0.919, 1.04, 0.844, 1.93};
+
   double Cptot = 0;
   for (int i = 0; i < 4; i++) {
     Cptot += massTable[i] * CpTable[i];
@@ -475,7 +514,6 @@ double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massM
   double Tfinal = Qnet / (Cptot * Mtot) + Tignition;
 
   return Tfinal;
-
 }
 
 
@@ -542,7 +580,8 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 
 //Part 6: in the main
 
-//Part 7: creating a new table adding variance
+//Part 7: creating a new energy table adding variance 
+// and a NeededFuel table if the result of adding the variance is a negartive energy output
 
 void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
 
@@ -560,6 +599,7 @@ void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
   // As there is still waste that wasn't completely burnt due to insufficient energy.
   // To quantify this, we create a new table which we call FuelTable. (see main)
   // And to do so, we first need to do some calculations to adjust the units.
+
   if (stochastEnergyVal < 0){
     *NeededPetrol = fabs(stochastEnergyVal);
     *NeededPetrol = *NeededPetrol / 46; //[Kg/s]

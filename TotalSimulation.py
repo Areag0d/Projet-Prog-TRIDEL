@@ -211,3 +211,5 @@ axs[1, 1].set(xlabel="[days]")
 
 plt.tight_layout()
 plt.show()
+
+print("\nTHE END\n")
