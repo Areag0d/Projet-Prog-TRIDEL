@@ -15,7 +15,7 @@ import csv
 # inhabitants per region:
 # inputting the number of inhabitants
 print("\nEstimate the current population of the canton of Vaud.")
-habTotalEstim = input("\nIf you do not care... press Enter: ")
+habTotalEstim = input("\nIf you do not know, press Enter... ")
 habTotal = 815300
 
 # making sure that the population value input is relevant
@@ -86,7 +86,7 @@ wasteAvg = np.sum(wastePondLst)
 #print(wastePondLst, wasteAvg)
 
 """We compute the total waste quantity per day,
-for that, we estimate a sigma of 0.02% times wasteAvg,
+for that, we estimate a sigma of 20% times wasteAvg,
 and randomly (but following a normal distribution) generate
 a value of the total waste quantity each day [kg/day]"""
 
