@@ -611,7 +611,7 @@ void write_csv(char * filename, double * table) {
   // iterating on the whole table
   for (int i = 0; i < 365; i++) {
     fprintf(file, "%f\n", table[i]);
-
   }
+  
   fclose(file);
 }
