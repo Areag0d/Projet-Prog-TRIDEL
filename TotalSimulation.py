@@ -20,11 +20,8 @@ habTotal = 815300
 
 # making sure that the population value input is relevant
 # (that it is an integer and that it is not too far from the current population of the canton):
-'''
-numberslist = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-specialChar = [",", ".", 'j', '+', '-']
-decimalCharCounter = 0
-'''
+
+
 if habTotalEstim == "":
 
     print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
@@ -72,7 +69,6 @@ habOuest = habTotal * prophabOuest
 habLaCote = habTotal * 0.5 * prophabLaCote
 habNord = habTotal * 0.5 * prophabNord
 habChargTot = habLausanne + habOuest + habLaCote + habNord
-
 habChargLst = np.array([habLausanne, habOuest, habLaCote, habNord])
 
 #waste per person per region [kg/year] : wastehabRegion
@@ -215,3 +211,5 @@ axs[1, 1].set(xlabel="[days]")
 
 plt.tight_layout()
 plt.show()
+
+print("\nTHE END\n")
