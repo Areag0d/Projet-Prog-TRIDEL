@@ -208,14 +208,14 @@ struct Mass {
   double originalMass;
 };
 
-struct Mass inertMaterialMass(double metalProp, double mass1, double MW1, double MW2, double StoichCoefficient){
+struct Mass inertMaterialMass(double metalProp, double MW1, double MW2, double StoichCoefficient){
 
   struct  Mass mass;
 
   mass.oxiMass = metalProp * 1;
 
-  if((mass1 > 0) && (MW1 > 0) && (MW2 > 0) && (StoichCoefficient > 0)){
-    mass.originalMass = OriginalMass(mass1, MW1, MW2, StoichCoefficient);
+  if((metalProp > 0) && (MW1 > 0) && (MW2 > 0) && (StoichCoefficient > 0)){
+    mass.originalMass = OriginalMass(metalProp, MW1, MW2, StoichCoefficient);
   } 
   else(mass.originalMass = mass.oxiMass);
 
@@ -242,28 +242,28 @@ struct Masses massesStructBuilder(double propSiO2, double propAl2O3, double prop
 
   // for one gram of Machefer
   // Glass (SiO2)
-  struct Mass mSiO2 =  inertMaterialMass(propSiO2, 0, 0, 0, 0);// [g]
+  struct Mass mSiO2 =  inertMaterialMass(propSiO2, 0, 0, 0);// [g]
 
   // Carbon
-  struct Mass mC =  inertMaterialMass(propC, 0, 0, 0, 0);// [g]
+  struct Mass mC =  inertMaterialMass(propC, 0, 0, 0);// [g]
 
   // Chlorine
-  struct Mass mCl =  inertMaterialMass(propCl, 0, 0, 0, 0); // [g]
+  struct Mass mCl =  inertMaterialMass(propCl, 0, 0, 0); // [g]
 
   // Aluminium
   // Tabulated Molar Weight of Al2O3 = 102 [g/mol], Al = 27 [g/mol]
   // Oxidation reaction: 2Al + 3O --> Al2O3
-  struct Mass mAl =  inertMaterialMass(propAl2O3, propAl2O3, 102, 27, 2); // [g]
+  struct Mass mAl =  inertMaterialMass(propAl2O3, 102, 27, 2); // [g]
 
   // Iron
   // Tabulated Molar Weight of Fe2O3 = 159.6 [g/mol],  Fe = 55.8 [g/mol]
   // Oxidation reaction: 2Fe + 3O --> Fe2O3
-  struct Mass mFe = inertMaterialMass(propFe2O3, propFe2O3, 159.6, 55.8, 2); // [g]
+  struct Mass mFe = inertMaterialMass(propFe2O3, 159.6, 55.8, 2); // [g]
 
   // Calcium
   // Tabulated Molar Weight of CaO = 56 [g/mol], Ca = 40 [g/mol]
   // Oxidation reaction: Ca + O --> CaO
-  struct Mass mCa = inertMaterialMass(propCaO, propCaO, 56, 40, 1); // [g]
+  struct Mass mCa = inertMaterialMass(propCaO, 56, 40, 1); // [g]
 
   // initial mass of mixed metals that produced Machefer during combustion
   struct Masses masses = {mSiO2, mC, mCl, mAl, mFe, mCa};
@@ -409,15 +409,15 @@ double QMetalOxi(double mInert, double propSiO2, double propAl2O3, double propCa
   // n = m / MW
 
   // Aluminium : MW = 27 [g/mol]
-  double nAl = 1000 * metalmassTable[1]/27;
+  double nAl = 1000 * metalmassTable[1] / 27;
   double QAl = nAl * 1.669 / 2; // [kJ]
 
   // Iron : MW = 55.8 [g/mol]
-  double nFe = 1000 * metalmassTable[2]/55.8;
+  double nFe = 1000 * metalmassTable[2] / 55.8;
   double QFe = nFe * 824 / 2; // [kJ]
 
   // Calcium : MW = 40 [g/mol]
-  double nCa = 1000 * metalmassTable[3]/40;
+  double nCa = 1000 * metalmassTable[3] / 40;
   double QCa = nCa * 635; // [kJ]
 
   // We finally get the total energy produced by all the metals' combustion by adding up
