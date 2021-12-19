@@ -296,6 +296,10 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   for (int i = 0; i < 6; i ++){
     CpInert += relmassTable[i] * CpTable[i];
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 23b822a3b413cea21fb31593cee8c34e8fe91d9b
   return CpInert; // [J/(g*K)]
 }
 
