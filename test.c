@@ -191,15 +191,6 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
     return Mass2;
 }
 
-/*
-struct Mass InertMaterialMassStruct(double metalProp){
-
-  struct Mass mass;
-  mass.oxiMass = metalProp * 1; 
-  mass.realMass = 
-
-}
-*/
 
 /*
   This function takes as arguments the mass proportions of the composition of
@@ -252,8 +243,10 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   // in the inert part of waste by normalizing each value
 
   double relmassTable [] = {mSiO2, mAl, mFe, mCa, mC, mCl};
-  for (int i = 0; i < 6; i ++) relmassTable[i] /= mInitialMix;
-
+  for (int i = 0; i < 6; i ++) {
+    relmassTable[i] /= mInitialMix;
+    printf("relmassTable[i] = %f\n", relmassTable[i]);
+  }
   // Now that we have relative proportions, we can finally calculate
   // its specific heat value by taking the average of each heat capacity
   // weighted by its importance (proportion) in the inert part.
@@ -266,8 +259,10 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   // weighted average given by:
 
   double CpInert = 0;
-  for (int i = 0; i < 6; i ++) CpInert += relmassTable[i] * CpTable[i];
-  
+  for (int i = 0; i < 6; i ++){
+    CpInert += relmassTable[i] * CpTable[i];
+    //printf("CpInert = %f\n", CpInert);
+  }
   return CpInert; // [J/(g*K)]
 }
 
