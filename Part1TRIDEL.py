@@ -4,7 +4,6 @@ Created on Wed Dec  1 19:12:39 2021
 
 @author: Mikael & Seif
 
-Total simulation (all parts combined)
 """
 
 import numpy as np
