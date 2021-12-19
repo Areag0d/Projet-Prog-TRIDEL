@@ -200,9 +200,14 @@ double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficie
     double Mass2 = nbMol2 * MW2;
     return Mass2;
 }
+// Except for SiO2, which is glass, Carbon and Chlorine, all the other components
+// are in their oxidized form, which means there were burnt.
+// therefore to calculate their proportions in incoming waste,
+// we need to calculate their proportions before oxidation (metallic)
 
+// to mecanise repetitive tasks, we use a structure
 
-struct Masses{    
+struct Masses{
   double mSiO2;
   double mC;
   double mCl;
@@ -211,12 +216,9 @@ struct Masses{
   double mCa;
 } ; // [g]
 
+  // This function puts all the initial relative proportions of metals
+  // in a structure, for it to be used in two different functions downstream
 struct Masses massesStructBuilder(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
-
-  // Except for SiO2, which is glass, Carbon and Chlorine, all the other components
-  // are in their oxidized form, which means there were burnt.
-  // therefore to calculate their proportions in incoming waste,
-  // we need to calculate their proportions before oxidation (metallic)
 
   // for one gram of Machefer
   // Glass (SiO2)
@@ -260,7 +262,7 @@ struct Masses massesStructBuilder(double propSiO2, double propAl2O3, double prop
   we can calculate it's specific heat, which is essential for downstream calculations.
   We neglect the contribution of trace elements, as their proportion is insignificant.
 
-  These proportions are taken from tables! see line 300
+  These proportions of metals in machefer are taken from tables! see line 340
 */
 double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl){
 
@@ -275,7 +277,7 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   double relmassTable [] = {masses.mSiO2, masses.mC, masses.mCl, masses.mAl, masses.mFe, masses.mCa};
   for (int i = 0; i < 6; i ++) {
     relmassTable[i] /= mInitialMix;
-    //printf("relmassTable[i] = %f\n", relmassTable[i]);
+
   }
 
   // Now that we have relative proportions, we can finally calculate
@@ -290,12 +292,12 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   // weighted average given by:
 
   double CpInert = 0;
-  
+
   for (int i = 0; i < 6; i ++){
     CpInert += relmassTable[i] * CpTable[i];
   }
   printf("CpInert = %f\n", CpInert);
-  
+
   return CpInert; // [J/(g*K)]
 }
 
@@ -405,7 +407,7 @@ double QMetalOxi(double mInert, double propSiO2, double propAl2O3, double propCa
   // We finally get the total energy produced by all the metals' combustion by adding up
   // all the individual combustion energies
   double QMetalOxi = QAl + QFe + QCa;
-  
+
   return QMetalOxi;
 }
 
@@ -568,7 +570,7 @@ double WdotCalculator(double mC2H4, double mMoist, double mInert, double massMoy
 
 //Part 6: in the main
 
-//Part 7: creating a new energy table adding variance 
+//Part 7: creating a new energy table adding variance
 // and a NeededFuel table if the result of adding the variance is a negartive energy output
 
 void stochastiser(double mu, double *PowerVarTable, double *NeededPetrol){
@@ -612,6 +614,6 @@ void write_csv(char * filename, double * table) {
   for (int i = 0; i < 365; i++) {
     fprintf(file, "%f\n", table[i]);
   }
-  
+
   fclose(file);
 }
