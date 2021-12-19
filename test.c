@@ -201,7 +201,6 @@ double CmInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   // are in their oxidized form, which means there were burnt.
   // therefore to calculate their proportions in incoming waste,
   // we need to calculate their proportions before oxidation (metallic)
-  printf("propSiO2 = %f\n", propSiO2); //comment il sait..?
   // for one gram of Machefer
   // Glass (SiO2)
   double mSiO2 = propSiO2 * 1; // [g]
@@ -323,6 +322,15 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
 
 // Part 3: heat released by waste combustion
+
+// Finding heat released by Oxidation of metals
+
+double OxidationQ(double mInert){
+  // proportions of oxidized metals in the inert part
+  // 0.56, 0.10, 0.14, 0.075
+
+
+}
 
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
