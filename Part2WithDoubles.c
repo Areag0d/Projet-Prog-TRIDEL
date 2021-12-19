@@ -296,8 +296,6 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   for (int i = 0; i < 6; i ++){
     CpInert += relmassTable[i] * CpTable[i];
   }
-  printf("CpInert = %f\n", CpInert);
-
   return CpInert; // [J/(g*K)]
 }
 
