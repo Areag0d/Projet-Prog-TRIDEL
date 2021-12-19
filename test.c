@@ -207,7 +207,10 @@ double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2
   // are in their oxidized form, which means there were burnt.
   // therefore to calculate their proportions in incoming waste,
   // we need to calculate their proportions before oxidation (metallic)
+<<<<<<< HEAD
+=======
 
+>>>>>>> 9a4165da719670726502386b1b63a720bb6409e6
   // for one gram of Machefer
   // Glass (SiO2)
   double mSiO2 = propSiO2 * 1; // [g]
@@ -330,6 +333,17 @@ double Qignition(double mC2H4, double mMoist, double mInert){
 
 // Part 3: heat released by waste combustion
 
+<<<<<<< HEAD
+// Finding heat released by Oxidation of metals
+
+double OxidationQ(double mInert){
+  // proportions of oxidized metals in the inert part
+  // 0.56, 0.10, 0.14, 0.075
+
+
+}
+
+=======
 // First, we calculate the heat released by metal oxidation
 // We do this in an analogous way to the CpInert function
 double QMetalOxi(double mInert){
@@ -392,6 +406,7 @@ double QMetalOxi(double mInert){
 }
 
 
+>>>>>>> 9a4165da719670726502386b1b63a720bb6409e6
 double TfinalCalculator(double mC2H4, double mMoist, double mInert, double massMoyC2H4){
 
   // 3.1 : heat released by PE combustion and metal oxidation
