@@ -15,7 +15,7 @@ import csv
 # inhabitants per region:
 # inputting the number of inhabitants
 print("\nEstimate the current population of the canton of Vaud.")
-habTotalEstim = input("\nIf you do not care... press Enter: ")
+habTotalEstim = input("\nIf you do not know, press Enter...")
 habTotal = 815300
 
 # making sure that the population value input is relevant
@@ -24,7 +24,7 @@ habTotal = 815300
 
 if habTotalEstim == "":
 
-    print("\nNo received value, we shall then take the value of 2020 which is 815300 person.\n")
+    print("\nNo received value, we shall then take the value of 2020 which is 815300 people.\n")
     habTotalEstim = habTotal
 
 else:
@@ -32,18 +32,18 @@ else:
         habTotalEstim = int(habTotalEstim)
 
     except ValueError:
-        print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 person.\n")
+        print("\nReceived value is not an integer, we shall take the value of 2020 which is 815300 people.\n")
         habTotalEstim = habTotal
 
     if habTotalEstim < 0:
-        print("\nReceived value is negative, we shall take the value of 2020 which is 815300 person.\n")
+        print("\nReceived value is negative, we shall take the value of 2020 which is 815300 people.\n")
         habTotalEstim = habTotal
 
 
 if habTotalEstim != habTotal:
 
     if np.abs((habTotalEstim) - habTotal) > 100000:
-        print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 person.\n")
+        print("\nReceived value is too far from official values, we shall take the value of 2020 which is 815300 people.\n")
         habTotalEstim = habTotal
 
     else:
@@ -88,7 +88,7 @@ wasteAvg = np.sum(wastePondLst)
 #print(wastePondLst, wasteAvg)
 
 """We compute the total waste quantity per day,
-for that, we estimate a sigma of 0.02% times wasteAvg,
+for that, we estimate a sigma of 20% times wasteAvg,
 and randomly (but following a normal distribution) generate
 a value of the total waste quantity each day [kg/day]"""
 
