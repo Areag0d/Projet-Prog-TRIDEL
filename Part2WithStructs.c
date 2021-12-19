@@ -23,8 +23,9 @@ void read_csv(char * filename, double * table);
 //Part 1
 double OriginalMass(double mass1, double MW1, double MW2, double StoichCoefficient);
 struct Mass;
+struct Mass inertMaterialMass(double metalProp, double MW1, double MW2, double StoichCoefficient);
 struct Masses;
-double mInitialMix(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
+struct Masses massesStructBuilder(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
 double CpInert(double propSiO2, double propAl2O3, double propCaO, double propFe2O3, double propC, double propCl);
 
 //Part 2
